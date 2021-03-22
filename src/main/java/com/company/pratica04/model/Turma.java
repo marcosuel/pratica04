@@ -35,6 +35,7 @@ public class Turma {
 	public Turma(String nome, Integer quantidadeAlunos, Year anoLetivo) {
 		this.nome = nome;
 		this.quantidadeAlunos = quantidadeAlunos;
+		this.anoLetivo = anoLetivo;
 		this.mentores = new ArrayList<Mentor>();
 		this.alunos = new ArrayList<Aluno>();
 	}

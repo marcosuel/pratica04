@@ -1,5 +1,6 @@
 package com.company.pratica04.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -33,7 +34,8 @@ public class Mentor {
 		this.nome = nome;
 		this.sobrenome = sobrenome;
 		this.matricula = matricula;
-		
+		this.turmas = new ArrayList<Turma>();
+		this.mentorados = new ArrayList<Aluno>();
 	}
 
 	public Mentor(Long id, String nome, String sobrenome, Long matricula, List<Turma> turmas, List<Aluno> mentorados) {
