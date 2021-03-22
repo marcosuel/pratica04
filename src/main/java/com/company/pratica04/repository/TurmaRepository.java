@@ -8,6 +8,4 @@ import com.company.pratica04.model.Turma;
 @Repository
 public interface TurmaRepository extends JpaRepository<Turma, Long> {
 
-	public Turma save(Turma turma);
-	
 }

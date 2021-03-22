@@ -22,6 +22,12 @@ public class Aluno {
 	
 	public Aluno() {}
 
+	public Aluno(String nome, String sobrenome, Long matricula) {
+		this.nome = nome;
+		this.sobrenome = sobrenome;
+		this.matricula = matricula;
+	}
+	
 	public Aluno(String nome, String sobrenome, Long matricula, Turma turma) {
 		this.nome = nome;
 		this.sobrenome = sobrenome;

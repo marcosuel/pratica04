@@ -3,8 +3,6 @@ package com.company.pratica04.dto;
 import java.time.Year;
 import java.util.List;
 
-import com.company.pratica04.model.Aluno;
-import com.company.pratica04.model.Mentor;
 import com.company.pratica04.model.Turma;
 
 public class TurmaDto {
@@ -12,7 +10,6 @@ public class TurmaDto {
 	private String nome;
 	private int quantidadeAlunos;
 	private Year anoLetivo;
-	private List<Aluno> alunos;
 	
 	public TurmaDto() {}
 
@@ -21,7 +18,6 @@ public class TurmaDto {
 		this.nome = turma.getNome();
 		this.quantidadeAlunos = turma.getQuantidadeAlunos();
 		this.anoLetivo = turma.getAnoLetivo();
-		this.alunos = turma.getAlunos();
 	}
 
 	public Long getId() {
@@ -54,13 +50,5 @@ public class TurmaDto {
 
 	public void setAnoLetivo(Year anoLetivo) {
 		this.anoLetivo = anoLetivo;
-	}
-
-	public List<Aluno> getAlunos() {
-		return alunos;
-	}
-
-	public void setAlunos(List<Aluno> alunos) {
-		this.alunos = alunos;
 	}
 }
