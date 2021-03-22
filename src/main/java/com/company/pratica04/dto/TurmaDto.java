@@ -12,7 +12,6 @@ public class TurmaDto {
 	private String nome;
 	private int quantidadeAlunos;
 	private Year anoLetivo;
-	private List<Mentor> mentores;
 	private List<Aluno> alunos;
 	
 	public TurmaDto() {}
@@ -22,7 +21,6 @@ public class TurmaDto {
 		this.nome = turma.getNome();
 		this.quantidadeAlunos = turma.getQuantidadeAlunos();
 		this.anoLetivo = turma.getAnoLetivo();
-		this.mentores = turma.getMentores();
 		this.alunos = turma.getAlunos();
 	}
 
@@ -56,14 +54,6 @@ public class TurmaDto {
 
 	public void setAnoLetivo(Year anoLetivo) {
 		this.anoLetivo = anoLetivo;
-	}
-
-	public List<Mentor> getMentores() {
-		return mentores;
-	}
-
-	public void setMentores(List<Mentor> mentores) {
-		this.mentores = mentores;
 	}
 
 	public List<Aluno> getAlunos() {

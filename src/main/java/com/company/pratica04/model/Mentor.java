@@ -7,9 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 @Entity(name = "mentor")
@@ -21,11 +19,8 @@ public class Mentor {
 	private String nome;
 	private String sobrenome;
 	private Long matricula;
-	@ManyToMany
-	@JoinTable(name = "mentor_turma")
-	private List<Turma> turmas;
 	@OneToMany
-	@JoinColumn(name = "mentor_id")
+	@JoinTable(name = "tb_mentoria")
 	private List<Aluno> mentorados;
 	
 	public Mentor() {}
@@ -34,16 +29,14 @@ public class Mentor {
 		this.nome = nome;
 		this.sobrenome = sobrenome;
 		this.matricula = matricula;
-		this.turmas = new ArrayList<Turma>();
 		this.mentorados = new ArrayList<Aluno>();
 	}
 
-	public Mentor(Long id, String nome, String sobrenome, Long matricula, List<Turma> turmas, List<Aluno> mentorados) {
+	public Mentor(Long id, String nome, String sobrenome, Long matricula, List<Aluno> mentorados) {
 		this.id = id;
 		this.nome = nome;
 		this.sobrenome = sobrenome;
 		this.matricula = matricula;
-		this.turmas = turmas;
 		this.mentorados = mentorados;
 	}
 
@@ -77,14 +70,6 @@ public class Mentor {
 
 	public void setMatricula(Long matricula) {
 		this.matricula = matricula;
-	}
-
-	public List<Turma> getTurmas() {
-		return turmas;
-	}
-
-	public void setTurmas(List<Turma> turmas) {
-		this.turmas = turmas;
 	}
 
 	public List<Aluno> getMentorados() {

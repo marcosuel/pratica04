@@ -17,21 +17,10 @@ public class Aluno {
 	private String sobrenome;
 	private Long matricula;
 	@ManyToOne
-	@JoinColumn(name = "mentor_id")
-	private Mentor mentor;
-	@ManyToOne
 	@JoinColumn(name = "turma_id")
 	private Turma turma;
 	
 	public Aluno() {}
-
-	public Aluno(String nome, String sobrenome, Long matricula, Mentor mentor, Turma turma) {
-		this.nome = nome;
-		this.sobrenome = sobrenome;
-		this.matricula = matricula;
-		this.mentor = mentor;
-		this.turma = turma;
-	}
 
 	public Aluno(String nome, String sobrenome, Long matricula, Turma turma) {
 		this.nome = nome;
@@ -70,14 +59,6 @@ public class Aluno {
 
 	public void setMatricula(Long matricula) {
 		this.matricula = matricula;
-	}
-
-	public Mentor getMentor() {
-		return mentor;
-	}
-
-	public void setMentor(Mentor mentor) {
-		this.mentor = mentor;
 	}
 
 	public Turma getTurma() {

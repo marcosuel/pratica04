@@ -9,8 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 @Entity(name = "turma")
@@ -23,9 +21,6 @@ public class Turma {
 	private int quantidadeAlunos;
 	private Year anoLetivo;
 	
-	@ManyToMany
-	@JoinTable(name = "mentor_turma")
-	private List<Mentor> mentores;
 	@OneToMany
 	@JoinColumn(name = "turma_id")
 	private List<Aluno> alunos;
@@ -36,7 +31,6 @@ public class Turma {
 		this.nome = nome;
 		this.quantidadeAlunos = quantidadeAlunos;
 		this.anoLetivo = anoLetivo;
-		this.mentores = new ArrayList<Mentor>();
 		this.alunos = new ArrayList<Aluno>();
 	}
 
@@ -62,14 +56,6 @@ public class Turma {
 
 	public void setQuantidadeAlunos(int quantidadeAlunos) {
 		this.quantidadeAlunos = quantidadeAlunos;
-	}
-
-	public List<Mentor> getMentores() {
-		return mentores;
-	}
-
-	public void setMentores(List<Mentor> mentores) {
-		this.mentores = mentores;
 	}
 
 	public List<Aluno> getAlunos() {

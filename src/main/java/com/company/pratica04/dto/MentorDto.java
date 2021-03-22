@@ -11,7 +11,6 @@ public class MentorDto {
 	private Long id;
 	private String nomeCompleto;
 	private Long matricula;
-	private List<Turma> turmas;
 	private List<Aluno> mentorados;
 	
 	
@@ -21,7 +20,6 @@ public class MentorDto {
 		this.id = mentor.getId();
 		this.nomeCompleto = mentor.getNome()+" "+mentor.getSobrenome();
 		this.matricula = mentor.getMatricula();
-		this.turmas = mentor.getTurmas();
 		this.mentorados = mentor.getMentorados();
 	}
 
@@ -39,14 +37,6 @@ public class MentorDto {
 
 	public void setMatricula(Long matricula) {
 		this.matricula = matricula;
-	}
-
-	public List<Turma> getTurmas() {
-		return turmas;
-	}
-
-	public void setTurmas(List<Turma> turmas) {
-		this.turmas = turmas;
 	}
 
 	public List<Aluno> getMentorados() {
