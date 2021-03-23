@@ -1,23 +1,23 @@
-package com.company.pratica04.form;
+package com.company.pratica04.dto.aluno;
 
-import com.company.pratica04.model.Mentor;
+import com.company.pratica04.model.Aluno;
 
-public class MentorForm {
+public class AlunoForm {
 
 	private String nome;
 	private String sobrenome;
 	private Long matricula;
 	
-	public MentorForm() {}
-	
-	public MentorForm(String nome, String sobrenome, Long matricula) {
+	public AlunoForm() {}
+
+	public AlunoForm(String nome, String sobrenome, Long matricula) {
 		this.nome = nome;
 		this.sobrenome = sobrenome;
 		this.matricula = matricula;
 	}
 	
-	public Mentor convert() {
-		return new Mentor(nome, sobrenome, matricula);
+	public Aluno convert() {
+		return new Aluno(nome, sobrenome, matricula);
 	}
 
 	public String getNome() {

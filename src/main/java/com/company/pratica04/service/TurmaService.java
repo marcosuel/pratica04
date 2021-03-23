@@ -5,8 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.company.pratica04.dto.TurmaDto;
-import com.company.pratica04.form.TurmaForm;
+import com.company.pratica04.dto.turma.TurmaDto;
+import com.company.pratica04.dto.turma.TurmaForm;
 import com.company.pratica04.model.Turma;
 import com.company.pratica04.repository.TurmaRepository;
 

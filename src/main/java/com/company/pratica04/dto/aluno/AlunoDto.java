@@ -1,5 +1,6 @@
-package com.company.pratica04.dto;
+package com.company.pratica04.dto.aluno;
 
+import com.company.pratica04.dto.turma.TurmaDto;
 import com.company.pratica04.model.Aluno;
 
 public class AlunoDto {

@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.company.pratica04.dto.TurmaDto;
-import com.company.pratica04.form.TurmaForm;
+import com.company.pratica04.dto.turma.TurmaDto;
+import com.company.pratica04.dto.turma.TurmaForm;
 import com.company.pratica04.service.TurmaService;
 
 @RestController

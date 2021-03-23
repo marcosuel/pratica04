@@ -5,8 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.company.pratica04.dto.MentorDto;
-import com.company.pratica04.form.MentorForm;
+import com.company.pratica04.dto.mentor.MentorDto;
+import com.company.pratica04.dto.mentor.MentorForm;
 import com.company.pratica04.model.Mentor;
 import com.company.pratica04.repository.MentorRepository;
 

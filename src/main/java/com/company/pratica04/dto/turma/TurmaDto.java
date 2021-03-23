@@ -1,4 +1,4 @@
-package com.company.pratica04.dto;
+package com.company.pratica04.dto.turma;
 
 import java.time.Year;
 import java.util.List;

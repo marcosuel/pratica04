@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.company.pratica04.dto.MentorDto;
-import com.company.pratica04.form.MentorForm;
+import com.company.pratica04.dto.mentor.MentorDto;
+import com.company.pratica04.dto.mentor.MentorForm;
 import com.company.pratica04.service.MentorService;
 
 @RestController

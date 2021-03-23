@@ -1,4 +1,4 @@
-package com.company.pratica04.form;
+package com.company.pratica04.dto.turma;
 
 import java.time.Year;
 

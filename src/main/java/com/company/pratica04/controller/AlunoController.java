@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.company.pratica04.dto.AlunoDto;
-import com.company.pratica04.form.AlunoForm;
+import com.company.pratica04.dto.aluno.AlunoDto;
+import com.company.pratica04.dto.aluno.AlunoForm;
 import com.company.pratica04.service.AlunoService;
 
 @RestController

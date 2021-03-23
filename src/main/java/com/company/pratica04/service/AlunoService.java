@@ -7,8 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import com.company.pratica04.dto.AlunoDto;
-import com.company.pratica04.form.AlunoForm;
+import com.company.pratica04.dto.aluno.AlunoDto;
+import com.company.pratica04.dto.aluno.AlunoForm;
 import com.company.pratica04.model.Aluno;
 import com.company.pratica04.repository.AlunoRepository;
 
