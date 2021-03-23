@@ -1,6 +1,8 @@
 package com.company.pratica04.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +16,7 @@ import com.company.pratica04.form.MentorForm;
 import com.company.pratica04.service.MentorService;
 
 @RestController
-@RequestMapping("/mentor")
+@RequestMapping("/mentores")
 public class MentorController {
 
 	@Autowired
@@ -27,5 +29,10 @@ public class MentorController {
 		MentorDto dto = service.save(form);
 		
 		return new ResponseEntity<MentorDto>(dto, HttpStatus.CREATED);
+	}
+	
+	@GetMapping
+	public ResponseEntity<?> findAll(Pageable pageable) {
+		return ResponseEntity.ok(service.findAll(pageable));
 	}
 }
