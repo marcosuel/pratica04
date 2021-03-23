@@ -1,8 +1,11 @@
 package com.company.pratica04.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +16,7 @@ import com.company.pratica04.form.TurmaForm;
 import com.company.pratica04.service.TurmaService;
 
 @RestController
-@RequestMapping("/turma")
+@RequestMapping("/turmas")
 public class TurmaController {
 
 	@Autowired
@@ -25,4 +28,8 @@ public class TurmaController {
 		return new ResponseEntity<TurmaDto>(dto, HttpStatus.CREATED);
 	}
 	
+	@GetMapping
+	public ResponseEntity<Page> findAll(Pageable pageable){
+		return ResponseEntity.ok(service.findAll(pageable));
+	}
 }
