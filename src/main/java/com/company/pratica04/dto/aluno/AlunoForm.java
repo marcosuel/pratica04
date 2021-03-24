@@ -1,11 +1,17 @@
 package com.company.pratica04.dto.aluno;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import com.company.pratica04.model.Aluno;
 
 public class AlunoForm {
 
+	@NotBlank
 	private String nome;
+	@NotBlank
 	private String sobrenome;
+	@NotNull
 	private Long matricula;
 	
 	public AlunoForm() {}
