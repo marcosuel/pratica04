@@ -42,13 +42,13 @@ public class ExceptionHandlerController {
 	}
 	
 	@ExceptionHandler(value = DomainException.class)
-	public ResponseEntity<ExceptionResponse> domainExceptionHandler(DomainException de){
+	public ResponseEntity<ExceptionResponse> domainExceptionHandler(DomainException ex){
 		ExceptionResponse response = ExceptionResponseBuilder.create()
-				.withStatus(de.getStatus())
-				.withError(de.getStatus().name())
-				.withMessage(de.getMessage())
+				.withStatus(ex.getStatus())
+				.withError(ex.getStatus().getReasonPhrase())
+				.withMessage(ex.getMessage())
 				.build();
-		return new ResponseEntity<ExceptionResponse>(response, response.getStatus());
+		return new ResponseEntity<ExceptionResponse>(response, ex.getStatus());
 	}
 	
 }

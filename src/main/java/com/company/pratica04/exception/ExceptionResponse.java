@@ -10,7 +10,7 @@ public class ExceptionResponse {
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
 	private LocalDateTime timestamp;
-	private HttpStatus status;
+	private int status;
 	private String error;
 	private String message;
 	
@@ -42,7 +42,7 @@ public class ExceptionResponse {
 		
 		public ExceptionResponse build() {
 			ExceptionResponse exceptionResponse = new ExceptionResponse();
-			exceptionResponse.status = this.status;
+			exceptionResponse.status = this.status.value();
 			exceptionResponse.error = this.error;
 			exceptionResponse.message = this.message;
 			exceptionResponse.timestamp = LocalDateTime.now();
@@ -58,11 +58,11 @@ public class ExceptionResponse {
 		this.timestamp = timestamp;
 	}
 
-	public HttpStatus getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(HttpStatus status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 
