@@ -20,7 +20,7 @@ import com.company.pratica04.repository.TurmaRepository;
 public class AlunoService {
 
 	@Autowired
-	private AlunoRepository repository;
+	private AlunoRepository alunoRep;
 	@Autowired
 	private TurmaRepository turmaRep;
 
@@ -29,7 +29,7 @@ public class AlunoService {
 		if (optTurma.isEmpty())
 			throw new DomainException("Não existe uma turma com o id: " + form.getIdTurma(), HttpStatus.BAD_REQUEST);
 		
-		Optional<Aluno> optAluno = repository.findByMatricula(form.getMatricula());
+		Optional<Aluno> optAluno = alunoRep.findByMatricula(form.getMatricula());
 		if (optAluno.isPresent())
 			throw new DomainException("A matrícula "+form.getMatricula()+" já foi cadastrada.", HttpStatus.BAD_REQUEST);
 		
@@ -37,11 +37,19 @@ public class AlunoService {
 		turma.setQuantidadeAlunos(turma.getQuantidadeAlunos() + 1);
 		form.setTurma(turma);
 		Aluno aluno = form.convert();
-		aluno = repository.save(aluno);
+		aluno = alunoRep.save(aluno);
 		return new AlunoDto(aluno);
 	}
 
 	public Page<AlunoDto> findAll(Pageable pageable) {
-		return repository.findAll(pageable).map(a -> new AlunoDto(a));
+		return alunoRep.findAll(pageable).map(a -> new AlunoDto(a));
+	}
+	
+	public AlunoDto findOne(Long id) {
+		Optional<Aluno> optAluno = alunoRep.findById(id);
+		if(optAluno.isEmpty())
+			throw new DomainException("Não existe um aluno com o id: " + id, HttpStatus.NOT_FOUND);
+		
+		return new AlunoDto(optAluno.get());
 	}
 }
