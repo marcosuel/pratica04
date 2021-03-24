@@ -1,5 +1,7 @@
 package com.company.pratica04.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +26,7 @@ public class MentorController {
 	
 	
 	@PostMapping
-	public ResponseEntity<MentorDto> save(@RequestBody MentorForm form) {
+	public ResponseEntity<MentorDto> save(@Valid @RequestBody MentorForm form) {
 		
 		MentorDto dto = service.save(form);
 		

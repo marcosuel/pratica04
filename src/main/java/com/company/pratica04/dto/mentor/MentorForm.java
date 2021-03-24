@@ -1,11 +1,17 @@
 package com.company.pratica04.dto.mentor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import com.company.pratica04.model.Mentor;
 
 public class MentorForm {
 
+	@NotBlank
 	private String nome;
+	@NotBlank
 	private String sobrenome;
+	@NotNull
 	private Long matricula;
 	
 	public MentorForm() {}
