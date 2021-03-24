@@ -1,6 +1,8 @@
 package com.company.pratica04.repository;
 
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -12,5 +14,7 @@ import com.company.pratica04.model.Aluno;
 public interface AlunoRepository extends PagingAndSortingRepository<Aluno, Long>{
 
 	Page<Aluno> findAll(Pageable pageable);
+
+	Optional<Aluno> findByMatricula(Long matricula);
 	
 }

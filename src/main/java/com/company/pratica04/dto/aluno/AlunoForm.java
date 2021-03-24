@@ -4,6 +4,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.company.pratica04.model.Aluno;
+import com.company.pratica04.model.Turma;
 
 public class AlunoForm {
 
@@ -13,17 +14,22 @@ public class AlunoForm {
 	private String sobrenome;
 	@NotNull
 	private Long matricula;
+	@NotNull
+	private Long idTurma;
+	
+	private Turma turma;
 	
 	public AlunoForm() {}
 
-	public AlunoForm(String nome, String sobrenome, Long matricula) {
+	public AlunoForm(String nome, String sobrenome, Long matricula, Long idTurma) {
 		this.nome = nome;
 		this.sobrenome = sobrenome;
 		this.matricula = matricula;
+		this.idTurma = idTurma;
 	}
 	
 	public Aluno convert() {
-		return new Aluno(nome, sobrenome, matricula);
+		return new Aluno(nome, sobrenome, matricula, turma);
 	}
 
 	public String getNome() {
@@ -48,5 +54,21 @@ public class AlunoForm {
 
 	public void setMatricula(Long matricula) {
 		this.matricula = matricula;
+	}
+
+	public Long getIdTurma() {
+		return idTurma;
+	}
+
+	public void setIdTurma(Long idTurma) {
+		this.idTurma = idTurma;
+	}
+
+	public Turma getTurma() {
+		return turma;
+	}
+
+	public void setTurma(Turma turma) {
+		this.turma = turma;
 	}
 }

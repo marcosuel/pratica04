@@ -1,9 +1,11 @@
+
 package com.company.pratica04.controller;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +27,7 @@ public class AlunoController {
 	@PostMapping
 	public ResponseEntity<AlunoDto> save(@Valid @RequestBody AlunoForm form){
 		AlunoDto dto = service.save(form);
-		return ResponseEntity.ok(dto);
+		return new ResponseEntity<AlunoDto>(dto, HttpStatus.CREATED);
 	}
 	
 	@GetMapping
