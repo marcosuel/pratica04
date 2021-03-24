@@ -1,5 +1,7 @@
 package com.company.pratica04.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +25,7 @@ public class TurmaController {
 	private TurmaService service;
 	
 	@PostMapping
-	public ResponseEntity<TurmaDto> save(@RequestBody TurmaForm form){
+	public ResponseEntity<TurmaDto> save(@Valid @RequestBody TurmaForm form){
 		TurmaDto dto = service.save(form);
 		return new ResponseEntity<TurmaDto>(dto, HttpStatus.CREATED);
 	}
