@@ -24,7 +24,7 @@ public class AlunoService {
 	@Autowired
 	private TurmaRepository turmaRep;
 
-	public AlunoDto save(AlunoForm form) {
+	public AlunoDto cadastra(AlunoForm form) {
 		Optional<Turma> optTurma = turmaRep.findById(form.getIdTurma());		
 		if (optTurma.isEmpty())
 			throw new DomainException("Não existe uma turma com o id: " + form.getIdTurma(), HttpStatus.BAD_REQUEST);
@@ -42,11 +42,11 @@ public class AlunoService {
 		return new AlunoDto(aluno);
 	}
 
-	public Page<AlunoDto> findAll(Pageable pageable) {
+	public Page<AlunoDto> buscaTodos(Pageable pageable) {
 		return alunoRep.findAll(pageable).map(a -> new AlunoDto(a));
 	}
 	
-	public AlunoDto findOne(Long id) {
+	public AlunoDto buscaPorId(Long id) {
 		Optional<Aluno> optAluno = alunoRep.findById(id);
 		if(optAluno.isEmpty())
 			throw new DomainException("Não existe um aluno com o id: " + id, HttpStatus.NOT_FOUND);
@@ -54,7 +54,7 @@ public class AlunoService {
 		return new AlunoDto(optAluno.get());
 	}
 	
-	public void delete(Long id) {
+	public void deleta(Long id) {
 		Optional<Aluno> optAluno = alunoRep.findById(id);
 		if(optAluno.isEmpty())
 			throw new DomainException("Não existe um aluno com o id: " + id, HttpStatus.NOT_FOUND);

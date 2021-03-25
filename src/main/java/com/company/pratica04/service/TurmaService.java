@@ -21,18 +21,18 @@ public class TurmaService {
 	@Autowired
 	private TurmaRepository repository;
 	
-	public TurmaDto save(TurmaForm form) {
+	public TurmaDto cadastra(TurmaForm form) {
 		Turma turma = form.convert();
 		turma = repository.save(turma);
 		
 		return new TurmaDto(turma);
 	}
 	
-	public Page<ListaTurmaDto> findAll(Pageable pageable) {
+	public Page<ListaTurmaDto> buscaTodos(Pageable pageable) {
 		return repository.findAll(pageable).map(t -> new ListaTurmaDto(t));
 	}
 	
-	public TurmaDto findOne(Long id) {
+	public TurmaDto buscaPorId(Long id) {
 		Optional<Turma> optTurma = repository.findById(id);
 		if(optTurma.isEmpty())
 			throw new DomainException("Não foi encontrada uma turma com id: "+id, HttpStatus.NOT_FOUND);
@@ -40,7 +40,7 @@ public class TurmaService {
 		return new TurmaDto(optTurma.get());
 	}
 	
-	public void deletar(Long id) {
+	public void deletaPorId(Long id) {
 		if(!repository.existsById(id))
 			throw new DomainException("Não foi encontrada uma turma com id: "+id, HttpStatus.NOT_FOUND);
 		

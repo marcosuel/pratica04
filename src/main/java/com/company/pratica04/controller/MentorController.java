@@ -30,33 +30,33 @@ public class MentorController {
 	
 	
 	@PostMapping
-	public ResponseEntity<MentorDto> save(@Valid @RequestBody MentorForm form) {
+	public ResponseEntity<MentorDto> cadastra(@Valid @RequestBody MentorForm form) {
 		
-		MentorDto dto = service.save(form);
+		MentorDto dto = service.cadastra(form);
 		
 		return new ResponseEntity<MentorDto>(dto, HttpStatus.CREATED);
 	}
 	
 	@GetMapping
-	public ResponseEntity<?> findAll(Pageable pageable) {
-		return ResponseEntity.ok(service.findAll(pageable));
+	public ResponseEntity<?> buscaTodos(Pageable pageable) {
+		return ResponseEntity.ok(service.buscaTodos(pageable));
 	}
 	
 	@PostMapping("/{id}/mentorados")
-	public ResponseEntity<MentorDto> mentorarAluno(@PathVariable(name = "id") Long idMentor, @Valid @RequestBody AlunoIdForm form) {
-		MentorDto dto = service.mentorarAluno(idMentor, form.getId());
+	public ResponseEntity<MentorDto> mentoraAluno(@PathVariable(name = "id") Long idMentor, @Valid @RequestBody AlunoIdForm form) {
+		MentorDto dto = service.mentoraAluno(idMentor, form.getId());
 		return new ResponseEntity<MentorDto>(dto, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> findOne(@PathVariable Long id){
-		MentorDto dto = service.findOne(id);
+	public ResponseEntity<?> buscaPorId(@PathVariable Long id){
+		MentorDto dto = service.buscaPorId(id);
 		return ResponseEntity.ok(dto);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity delete(@PathVariable Long id) {
-		service.delete(id);
+	public ResponseEntity<?> deletaPorId(@PathVariable Long id) {
+		service.deleta(id);
 		return ResponseEntity.noContent().build();
 	}
 }

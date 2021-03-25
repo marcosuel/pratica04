@@ -27,24 +27,24 @@ public class TurmaController {
 	private TurmaService service;
 	
 	@PostMapping
-	public ResponseEntity<TurmaDto> save(@Valid @RequestBody TurmaForm form){
-		TurmaDto dto = service.save(form);
+	public ResponseEntity<TurmaDto> cadastra(@Valid @RequestBody TurmaForm form){
+		TurmaDto dto = service.cadastra(form);
 		return new ResponseEntity<TurmaDto>(dto, HttpStatus.CREATED);
 	}
 	
 	@GetMapping
-	public ResponseEntity<Page> findAll(Pageable pageable){
-		return ResponseEntity.ok(service.findAll(pageable));
+	public ResponseEntity<Page> buscaTodos(Pageable pageable){
+		return ResponseEntity.ok(service.buscaTodos(pageable));
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<TurmaDto> findOne(@PathVariable Long id){
-		return ResponseEntity.ok(service.findOne(id));
+	public ResponseEntity<TurmaDto> buscaPorId(@PathVariable Long id){
+		return ResponseEntity.ok(service.buscaPorId(id));
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<TurmaDto> deletar(@PathVariable Long id){
-		service.deletar(id);
+	public ResponseEntity<TurmaDto> deleta(@PathVariable Long id){
+		service.deletaPorId(id);
 		return ResponseEntity.noContent().build();
 	}
 }

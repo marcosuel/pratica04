@@ -1,4 +1,3 @@
-
 package com.company.pratica04.controller;
 
 import javax.validation.Valid;
@@ -27,24 +26,24 @@ public class AlunoController {
 	private AlunoService service;
 
 	@PostMapping
-	public ResponseEntity<AlunoDto> save(@Valid @RequestBody AlunoForm form){
-		AlunoDto dto = service.save(form);
+	public ResponseEntity<AlunoDto> cadastra(@Valid @RequestBody AlunoForm form){
+		AlunoDto dto = service.cadastra(form);
 		return new ResponseEntity<AlunoDto>(dto, HttpStatus.CREATED);
 	}
 	
 	@GetMapping
-	public ResponseEntity<?> findAll(Pageable pageable){
-		return ResponseEntity.ok(service.findAll(pageable));
+	public ResponseEntity<?> buscaTodos(Pageable pageable){
+		return ResponseEntity.ok(service.buscaTodos(pageable));
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> findOne(@PathVariable Long id){
-		return ResponseEntity.ok(service.findOne(id));
+	public ResponseEntity<?> buscaPorId(@PathVariable Long id){
+		return ResponseEntity.ok(service.buscaPorId(id));
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> delete(@PathVariable Long id){
-		service.delete(id);
+	public ResponseEntity<?> deleta(@PathVariable Long id){
+		service.deleta(id);
 		return ResponseEntity.noContent().build();
 	}
 }
