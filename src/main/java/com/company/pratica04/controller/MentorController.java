@@ -48,6 +48,12 @@ public class MentorController {
 		return new ResponseEntity<MentorDto>(dto, HttpStatus.CREATED);
 	}
 	
+	@DeleteMapping("/{idMentor}/mentorados/{idAluno}")
+	public ResponseEntity<MentorDto> encerraMentoria(@PathVariable(name = "idMentor") Long idMentor, @PathVariable(name = "idAluno") Long idAluno) {
+		service.encerraMentoria(idMentor, idAluno);
+		return ResponseEntity.noContent().build();
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscaPorId(@PathVariable Long id){
 		MentorDto dto = service.buscaPorId(id);

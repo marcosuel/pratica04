@@ -45,9 +45,7 @@ public class MentorService {
 	}
 	
 	public MentorDto mentoraAluno(Long idMentor, Long idAluno) throws DataIntegrityViolationException {
-		Optional<Mentor> optMentor = mentorRep.findById(idMentor);
-		if(optMentor.isEmpty())	
-			throw new DomainException("Não foi encontrado um mentor com o id: "+idMentor, HttpStatus.NOT_FOUND);
+		Mentor mentor = garanteQueMentorExiste(idMentor);
 		
 		Optional<Aluno> optAluno = alunoRep.findById(idAluno);
 		if(optAluno.isEmpty())	
@@ -58,7 +56,6 @@ public class MentorService {
 		if(!podeMentorar(idMentor, idTurma))
 			throw new DomainException("O mentor não pode mentorar mais que três alunos da turma com id: "+idTurma, HttpStatus.BAD_REQUEST);
 
-		Mentor mentor = optMentor.get();
 		mentor.getMentorados().add(aluno);
 		
 		try {
@@ -76,17 +73,32 @@ public class MentorService {
 	}
 	
 	public MentorDto buscaPorId(Long id) {
+		Mentor mentor = garanteQueMentorExiste(id);
+		
+		return new MentorDto(mentor);
+	}
+	
+	public void deleta(Long id) {
+		Mentor mentor = garanteQueMentorExiste(id);
+		mentorRep.delete(mentor);
+	}
+	
+	public void encerraMentoria(Long idMentor, Long idAluno) {
+		Mentor mentor = garanteQueMentorExiste(idMentor);
+		
+		boolean alunoRemovido = mentor.getMentorados().removeIf(m -> m.getId().equals(idAluno));
+		if(!alunoRemovido)
+			throw new DomainException("O aluno com id "+idAluno+" não possui mentoria com o mentor de id "
+				+idMentor, HttpStatus.BAD_REQUEST);
+		
+		mentorRep.save(mentor);
+	}
+	
+	private Mentor garanteQueMentorExiste(Long id) {
 		Optional<Mentor> optMentor = mentorRep.findById(id);
 		if(optMentor.isEmpty())
 			throw new DomainException("Não foi encontrado um mentor com id: "+id, HttpStatus.NOT_FOUND);
 		
-		return new MentorDto(optMentor.get());
-	}
-	
-	public void deleta(Long id) {
-		if(!mentorRep.existsById(id))
-			throw new DomainException("Não foi encontrado um mentor com id: "+id, HttpStatus.NOT_FOUND);
-		
-		mentorRep.deleteById(id);
+		return optMentor.get();
 	}
 }
