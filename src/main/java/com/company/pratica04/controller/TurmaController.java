@@ -33,7 +33,7 @@ public class TurmaController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<Page> buscaTodos(Pageable pageable){
+	public ResponseEntity<Page<?>> buscaTodos(Pageable pageable){
 		return ResponseEntity.ok(service.buscaTodos(pageable));
 	}
 	

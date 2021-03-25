@@ -2,15 +2,15 @@ package com.company.pratica04.dto.aluno;
 
 import com.company.pratica04.model.Aluno;
 
-public class ListaAlunoTurmaDto {
+public class ItemListaAlunoTurmaDto {
 
 	private Long id;
 	private String nomeCompleto;
 	private Long matricula;
 	
-	public ListaAlunoTurmaDto() {}
+	public ItemListaAlunoTurmaDto() {}
 
-	public ListaAlunoTurmaDto(Aluno aluno) {
+	public ItemListaAlunoTurmaDto(Aluno aluno) {
 		this.id = aluno.getId();
 		this.nomeCompleto = aluno.getNome()+" "+aluno.getSobrenome();
 		this.matricula = aluno.getMatricula();

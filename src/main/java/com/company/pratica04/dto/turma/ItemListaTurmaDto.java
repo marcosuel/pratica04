@@ -4,16 +4,16 @@ import java.time.Year;
 
 import com.company.pratica04.model.Turma;
 
-public class ListaTurmaDto {
+public class ItemListaTurmaDto {
 
 	private Long id;
 	private String nome;
 	private int quantidadeAlunos;
 	private Year anoLetivo;
 	
-	public ListaTurmaDto() {}
+	public ItemListaTurmaDto() {}
 
-	public ListaTurmaDto(Turma turma) {
+	public ItemListaTurmaDto(Turma turma) {
 		this.id = turma.getId();
 		this.nome = turma.getNome();
 		this.quantidadeAlunos = turma.getQuantidadeAlunos();

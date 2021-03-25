@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.company.pratica04.dto.turma.ListaTurmaDto;
+import com.company.pratica04.dto.turma.ItemListaTurmaDto;
 import com.company.pratica04.dto.turma.TurmaDto;
 import com.company.pratica04.dto.turma.TurmaForm;
 import com.company.pratica04.exception.DomainException;
@@ -28,22 +28,28 @@ public class TurmaService {
 		return new TurmaDto(turma);
 	}
 	
-	public Page<ListaTurmaDto> buscaTodos(Pageable pageable) {
-		return repository.findAll(pageable).map(t -> new ListaTurmaDto(t));
+	public Page<ItemListaTurmaDto> buscaTodos(Pageable pageable) {
+		return repository.findAll(pageable).map(t -> new ItemListaTurmaDto(t));
 	}
 	
 	public TurmaDto buscaPorId(Long id) {
-		Optional<Turma> optTurma = repository.findById(id);
-		if(optTurma.isEmpty())
-			throw new DomainException("Não foi encontrada uma turma com id: "+id, HttpStatus.NOT_FOUND);
-		
-		return new TurmaDto(optTurma.get());
+		Turma turma = garanteQueTurmaExiste(id);
+		return new TurmaDto(turma);
 	}
 	
 	public void deletaPorId(Long id) {
-		if(!repository.existsById(id))
-			throw new DomainException("Não foi encontrada uma turma com id: "+id, HttpStatus.NOT_FOUND);
-		
+		if(!repository.existsById(id))	lancaDomainException(id);
 		repository.deleteById(id);
+	}
+	
+	private Turma garanteQueTurmaExiste(Long id) {
+		Optional<Turma> optTurma = repository.findById(id);
+		if(optTurma.isEmpty())
+			lancaDomainException(id);
+		return optTurma.get();
+	}
+	
+	private void lancaDomainException(Long id) {
+		throw new DomainException("Não foi encontrada uma turma com id: "+id, HttpStatus.NOT_FOUND);
 	}
 }

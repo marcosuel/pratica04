@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.company.pratica04.dto.mentor.ListaMentorDto;
+import com.company.pratica04.dto.mentor.ItemListaMentorDto;
 import com.company.pratica04.dto.mentor.MentorDto;
 import com.company.pratica04.dto.mentor.MentorForm;
 import com.company.pratica04.exception.DomainException;
@@ -40,8 +40,8 @@ public class MentorService {
 		return new MentorDto(mentor);
 	}
 	
-	public Page<ListaMentorDto> buscaTodos(Pageable pageable){
-		return mentorRep.findAll(pageable).map(m -> new ListaMentorDto(m));
+	public Page<ItemListaMentorDto> buscaTodos(Pageable pageable){
+		return mentorRep.findAll(pageable).map(m -> new ItemListaMentorDto(m));
 	}
 	
 	public MentorDto mentoraAluno(Long idMentor, Long idAluno) throws DataIntegrityViolationException {
@@ -74,13 +74,13 @@ public class MentorService {
 	
 	public MentorDto buscaPorId(Long id) {
 		Mentor mentor = garanteQueMentorExiste(id);
-		
 		return new MentorDto(mentor);
 	}
 	
 	public void deleta(Long id) {
-		Mentor mentor = garanteQueMentorExiste(id);
-		mentorRep.delete(mentor);
+		if(!mentorRep.existsById(id))
+			lancaDomainException(id);
+		mentorRep.deleteById(id);
 	}
 	
 	public void encerraMentoria(Long idMentor, Long idAluno) {
@@ -97,8 +97,11 @@ public class MentorService {
 	private Mentor garanteQueMentorExiste(Long id) {
 		Optional<Mentor> optMentor = mentorRep.findById(id);
 		if(optMentor.isEmpty())
-			throw new DomainException("Não foi encontrado um mentor com id: "+id, HttpStatus.NOT_FOUND);
-		
+			lancaDomainException(id);
 		return optMentor.get();
+	}
+	
+	private void lancaDomainException(Long id) {
+		throw new DomainException("Não foi encontrado um mentor com id: "+id, HttpStatus.NOT_FOUND);
 	}
 }

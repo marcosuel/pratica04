@@ -2,16 +2,16 @@ package com.company.pratica04.dto.mentor;
 
 import com.company.pratica04.model.Mentor;
 
-public class ListaMentorDto {
+public class ItemListaMentorDto {
 	
 	private Long id;
 	private String nomeCompleto;
 	private Long matricula;
 	
 	
-	public ListaMentorDto() {}
+	public ItemListaMentorDto() {}
 
-	public ListaMentorDto(Mentor mentor) {
+	public ItemListaMentorDto(Mentor mentor) {
 		this.id = mentor.getId();
 		this.nomeCompleto = mentor.getNome()+" "+mentor.getSobrenome();
 		this.matricula = mentor.getMatricula();

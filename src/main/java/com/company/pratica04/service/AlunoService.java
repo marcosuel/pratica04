@@ -47,19 +47,13 @@ public class AlunoService {
 	}
 	
 	public AlunoDto buscaPorId(Long id) {
-		Optional<Aluno> optAluno = alunoRep.findById(id);
-		if(optAluno.isEmpty())
-			throw new DomainException("Não existe um aluno com o id: " + id, HttpStatus.NOT_FOUND);
-		
-		return new AlunoDto(optAluno.get());
+		Aluno aluno = garanteQueAlunoExiste(id);
+		return new AlunoDto(aluno);
 	}
 	
 	public void deleta(Long id) {
-		Optional<Aluno> optAluno = alunoRep.findById(id);
-		if(optAluno.isEmpty())
-			throw new DomainException("Não existe um aluno com o id: " + id, HttpStatus.NOT_FOUND);
 		
-		Aluno aluno = optAluno.get();
+		Aluno aluno = garanteQueAlunoExiste(id);
 		
 		Turma turma = aluno.getTurma();
 		if(turma != null)
@@ -69,4 +63,11 @@ public class AlunoService {
 		alunoRep.delete(aluno);
 	}
 	
+	private Aluno garanteQueAlunoExiste(Long id) {		
+		Optional<Aluno> optAluno = alunoRep.findById(id);
+		if(optAluno.isEmpty())
+			throw new DomainException("Não existe um aluno com o id: " + id, HttpStatus.NOT_FOUND);
+		
+		return optAluno.get();
+	}
 }
