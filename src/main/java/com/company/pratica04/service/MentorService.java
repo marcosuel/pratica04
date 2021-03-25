@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.company.pratica04.dto.mentor.ListaMentorDto;
 import com.company.pratica04.dto.mentor.MentorDto;
 import com.company.pratica04.dto.mentor.MentorForm;
 import com.company.pratica04.exception.DomainException;
@@ -39,8 +40,8 @@ public class MentorService {
 		return new MentorDto(mentor);
 	}
 	
-	public Page<MentorDto> findAll(Pageable pageable){
-		return mentorRep.findAll(pageable).map(m -> new MentorDto(m));
+	public Page<ListaMentorDto> findAll(Pageable pageable){
+		return mentorRep.findAll(pageable).map(m -> new ListaMentorDto(m));
 	}
 	
 	public MentorDto mentorarAluno(Long idMentor, Long idAluno) throws DataIntegrityViolationException {
@@ -71,5 +72,13 @@ public class MentorService {
 	private boolean isMentoradosFull(Long idMentor, Long idTurma) {
 		long qtd = mentorRep.countByIdAndMentoradosTurmaId(idMentor, idTurma);
 		return qtd < 3 ? false : true;
+	}
+	
+	public MentorDto findOne(Long id) {
+		Optional<Mentor> optMentor = mentorRep.findById(id);
+		if(optMentor.isEmpty())
+			throw new DomainException("Não foi encontrado um mentor com id: "+id, HttpStatus.NOT_FOUND);
+		
+		return new MentorDto(optMentor.get());
 	}
 }

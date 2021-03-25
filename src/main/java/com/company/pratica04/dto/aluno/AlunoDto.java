@@ -1,5 +1,6 @@
 package com.company.pratica04.dto.aluno;
 
+import com.company.pratica04.dto.turma.ListaTurmaDto;
 import com.company.pratica04.dto.turma.TurmaDto;
 import com.company.pratica04.model.Aluno;
 
@@ -8,7 +9,7 @@ public class AlunoDto {
 	private Long id;
 	private String nomeCompleto;
 	private Long matricula;
-	private TurmaDto turma;
+	private ListaTurmaDto turma;
 	
 	public AlunoDto() {}
 
@@ -16,11 +17,7 @@ public class AlunoDto {
 		this.id = aluno.getId();
 		this.nomeCompleto = aluno.getNome()+" "+aluno.getSobrenome();
 		this.matricula = aluno.getMatricula();
-		this.turma = isTurmaPresent(aluno) ? new TurmaDto(aluno.getTurma()) : null;
-	}
-	
-	private boolean isTurmaPresent(Aluno aluno) {
-		return aluno.getTurma() == null ? false : true;
+		this.turma = new ListaTurmaDto(aluno.getTurma());
 	}
 
 	public Long getId() {
@@ -47,11 +44,11 @@ public class AlunoDto {
 		this.matricula = matricula;
 	}
 
-	public TurmaDto getTurma() {
+	public ListaTurmaDto getTurma() {
 		return turma;
 	}
 
-	public void setTurma(TurmaDto turma) {
+	public void setTurma(ListaTurmaDto turma) {
 		this.turma = turma;
 	}
 }

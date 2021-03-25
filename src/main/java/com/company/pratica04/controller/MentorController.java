@@ -46,4 +46,10 @@ public class MentorController {
 		MentorDto dto = service.mentorarAluno(idMentor, form.getId());
 		return new ResponseEntity<MentorDto>(dto, HttpStatus.CREATED);
 	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<?> findOne(@PathVariable Long id){
+		MentorDto dto = service.findOne(id);
+		return ResponseEntity.ok(dto);
+	}
 }
