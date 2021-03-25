@@ -62,7 +62,8 @@ public class AlunoService {
 		Aluno aluno = optAluno.get();
 		
 		Turma turma = aluno.getTurma();
-		turma.setQuantidadeAlunos(turma.getQuantidadeAlunos()-1);
+		if(turma != null)
+			turma.setQuantidadeAlunos(turma.getQuantidadeAlunos()-1);
 		
 		alunoRep.encerrarMentoria(id);
 		alunoRep.delete(aluno);

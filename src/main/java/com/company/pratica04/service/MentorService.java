@@ -81,4 +81,11 @@ public class MentorService {
 		
 		return new MentorDto(optMentor.get());
 	}
+	
+	public void delete(Long id) {
+		if(!mentorRep.existsById(id))
+			throw new DomainException("Não foi encontrado um mentor com id: "+id, HttpStatus.NOT_FOUND);
+		
+		mentorRep.deleteById(id);
+	}
 }
