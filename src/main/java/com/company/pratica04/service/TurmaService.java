@@ -39,4 +39,11 @@ public class TurmaService {
 		
 		return new TurmaDto(optTurma.get());
 	}
+	
+	public void deletar(Long id) {
+		if(!repository.existsById(id))
+			throw new DomainException("Não foi encontrada uma turma com id: "+id, HttpStatus.NOT_FOUND);
+		
+		repository.deleteById(id);
+	}
 }
