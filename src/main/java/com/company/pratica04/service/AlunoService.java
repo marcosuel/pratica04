@@ -37,6 +37,7 @@ public class AlunoService {
 		turma.setQuantidadeAlunos(turma.getQuantidadeAlunos() + 1);
 		form.setTurma(turma);
 		Aluno aluno = form.convert();
+		
 		aluno = alunoRep.save(aluno);
 		return new AlunoDto(aluno);
 	}
@@ -51,5 +52,19 @@ public class AlunoService {
 			throw new DomainException("Não existe um aluno com o id: " + id, HttpStatus.NOT_FOUND);
 		
 		return new AlunoDto(optAluno.get());
+	}
+	
+	public void delete(Long id) {
+		Optional<Aluno> optAluno = alunoRep.findById(id);
+		if(optAluno.isEmpty())
+			throw new DomainException("Não existe um aluno com o id: " + id, HttpStatus.NOT_FOUND);
+		
+		Aluno aluno = optAluno.get();
+		
+		Turma turma = aluno.getTurma();
+		turma.setQuantidadeAlunos(turma.getQuantidadeAlunos()-1);
+		
+		alunoRep.encerrarMentoria(id);
+		alunoRep.delete(aluno);
 	}
 }

@@ -3,6 +3,7 @@ package com.company.pratica04.dto.aluno;
 import com.company.pratica04.dto.turma.ListaTurmaDto;
 import com.company.pratica04.dto.turma.TurmaDto;
 import com.company.pratica04.model.Aluno;
+import com.company.pratica04.model.Turma;
 
 public class AlunoDto {
 
@@ -17,7 +18,8 @@ public class AlunoDto {
 		this.id = aluno.getId();
 		this.nomeCompleto = aluno.getNome()+" "+aluno.getSobrenome();
 		this.matricula = aluno.getMatricula();
-		this.turma = new ListaTurmaDto(aluno.getTurma());
+		Turma turma = aluno.getTurma();
+		this.turma = turma != null ? new ListaTurmaDto(turma) : null;
 	}
 
 	public Long getId() {

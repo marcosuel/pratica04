@@ -1,6 +1,5 @@
 package com.company.pratica04.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,7 +16,7 @@ public class Aluno {
 	private String nome;
 	private String sobrenome;
 	private Long matricula;
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "turma_id")
 	private Turma turma;
 	
