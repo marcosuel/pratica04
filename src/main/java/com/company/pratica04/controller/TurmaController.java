@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.company.pratica04.dto.aluno.AlunoIdForm;
+import com.company.pratica04.dto.aluno.AlunoItemListaTurmaDto;
 import com.company.pratica04.dto.turma.TurmaDto;
 import com.company.pratica04.dto.turma.TurmaForm;
 import com.company.pratica04.service.TurmaService;
@@ -52,5 +54,11 @@ public class TurmaController {
 	public ResponseEntity<TurmaDto> removeAluno(@PathVariable Long idTurma, @PathVariable Long idAluno){
 		service.removeAluno(idTurma, idAluno);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@PostMapping("/{idTurma}/alunos")
+	public ResponseEntity<?> adicionaAluno(@PathVariable Long idTurma, @Valid @RequestBody AlunoIdForm form){
+		AlunoItemListaTurmaDto dto = service.adicionaAluno(idTurma, form.getId());
+		return new ResponseEntity<>(dto, HttpStatus.CREATED);
 	}
 }

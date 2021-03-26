@@ -63,7 +63,7 @@ public class AlunoService {
 		alunoRep.delete(aluno);
 	}
 	
-	private Aluno garanteQueAlunoExiste(Long id) {		
+	public Aluno garanteQueAlunoExiste(Long id) {		
 		Optional<Aluno> optAluno = alunoRep.findById(id);
 		if(optAluno.isEmpty())
 			throw new DomainException("Não existe um aluno com o id: " + id, HttpStatus.NOT_FOUND);

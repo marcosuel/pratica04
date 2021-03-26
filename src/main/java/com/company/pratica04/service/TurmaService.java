@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.company.pratica04.dto.turma.TurmaItemListaDto;
+import com.company.pratica04.dto.aluno.AlunoItemListaTurmaDto;
 import com.company.pratica04.dto.turma.TurmaDto;
 import com.company.pratica04.dto.turma.TurmaForm;
 import com.company.pratica04.exception.DomainException;
@@ -25,6 +26,8 @@ public class TurmaService {
 	private TurmaRepository turmaRep;
 	@Autowired
 	private AlunoRepository alunoRep;
+	@Autowired
+	private AlunoService alunoService;
 	
 	public TurmaDto cadastra(TurmaForm form) {
 		Turma turma = form.convert();
@@ -45,6 +48,20 @@ public class TurmaService {
 	public void deletaPorId(Long id) {
 		if(!turmaRep.existsById(id))	lancaDomainException(id);
 		turmaRep.deleteById(id);
+	}
+	
+	public AlunoItemListaTurmaDto adicionaAluno(Long idTurma, Long idAluno) {
+		Turma turma = garanteQueTurmaExiste(idTurma);
+		Aluno aluno = alunoService.garanteQueAlunoExiste(idAluno);
+		
+		if(aluno.getTurma() != null)
+			throw new DomainException("O aluno com id "+idAluno+" já está em uma turma."
+					, HttpStatus.BAD_REQUEST);
+			
+		turma.getAlunos().add(aluno);
+		turmaRep.save(turma);
+		
+		return new AlunoItemListaTurmaDto(aluno);
 	}
 	
 	public void removeAluno(Long idTurma, Long idAluno) {
