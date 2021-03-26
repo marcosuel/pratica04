@@ -36,6 +36,16 @@ public class TurmaService {
 		return new TurmaDto(turma);
 	}
 	
+	public TurmaItemListaDto atualiza(Long id, TurmaForm form) {
+		Turma turma = garanteQueTurmaExiste(id);
+		
+		turma.setNome(form.getNome());
+		turma.setAnoLetivo(form.getAnoLetivo());
+		
+		turma = turmaRep.save(turma);
+		return new TurmaItemListaDto(turma);
+	}
+	
 	public Page<TurmaItemListaDto> buscaTodos(Pageable pageable) {
 		return turmaRep.findAll(pageable).map(t -> new TurmaItemListaDto(t));
 	}

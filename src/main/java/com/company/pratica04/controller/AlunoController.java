@@ -34,7 +34,7 @@ public class AlunoController {
 	}
 	
 	@PatchMapping("/{id}")
-	public ResponseEntity<AlunoDto> cadastra(@PathVariable Long id, @Valid @RequestBody AtualizaAlunoForm form){
+	public ResponseEntity<AlunoDto> atualiza(@PathVariable Long id, @Valid @RequestBody AtualizaAlunoForm form){
 		AlunoDto dto = service.atualiza(id, form);
 		return ResponseEntity.ok(dto);
 	}

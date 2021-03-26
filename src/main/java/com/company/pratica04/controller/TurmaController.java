@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import com.company.pratica04.dto.aluno.AlunoIdForm;
 import com.company.pratica04.dto.aluno.AlunoItemListaTurmaDto;
 import com.company.pratica04.dto.turma.TurmaDto;
 import com.company.pratica04.dto.turma.TurmaForm;
+import com.company.pratica04.dto.turma.TurmaItemListaDto;
 import com.company.pratica04.service.TurmaService;
 
 @RestController
@@ -32,6 +34,12 @@ public class TurmaController {
 	public ResponseEntity<TurmaDto> cadastra(@Valid @RequestBody TurmaForm form){
 		TurmaDto dto = service.cadastra(form);
 		return new ResponseEntity<TurmaDto>(dto, HttpStatus.CREATED);
+	}
+	
+	@PatchMapping("/{id}")
+	public ResponseEntity<?> atualiza(@PathVariable Long id, @Valid @RequestBody TurmaForm form){
+		TurmaItemListaDto dto = service.atualiza(id, form);
+		return ResponseEntity.ok(dto);
 	}
 	
 	@GetMapping
