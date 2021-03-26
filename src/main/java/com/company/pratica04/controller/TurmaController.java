@@ -47,4 +47,10 @@ public class TurmaController {
 		service.deletaPorId(id);
 		return ResponseEntity.noContent().build();
 	}
+	
+	@DeleteMapping("/{idTurma}/alunos/{idAluno}")
+	public ResponseEntity<TurmaDto> removeAluno(@PathVariable Long idTurma, @PathVariable Long idAluno){
+		service.removeAluno(idTurma, idAluno);
+		return ResponseEntity.noContent().build();
+	}
 }

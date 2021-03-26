@@ -1,5 +1,6 @@
 package com.company.pratica04.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,24 +13,28 @@ import com.company.pratica04.dto.turma.TurmaItemListaDto;
 import com.company.pratica04.dto.turma.TurmaDto;
 import com.company.pratica04.dto.turma.TurmaForm;
 import com.company.pratica04.exception.DomainException;
+import com.company.pratica04.model.Aluno;
 import com.company.pratica04.model.Turma;
+import com.company.pratica04.repository.AlunoRepository;
 import com.company.pratica04.repository.TurmaRepository;
 
 @Service
 public class TurmaService {
 
 	@Autowired
-	private TurmaRepository repository;
+	private TurmaRepository turmaRep;
+	@Autowired
+	private AlunoRepository alunoRep;
 	
 	public TurmaDto cadastra(TurmaForm form) {
 		Turma turma = form.convert();
-		turma = repository.save(turma);
+		turma = turmaRep.save(turma);
 		
 		return new TurmaDto(turma);
 	}
 	
 	public Page<TurmaItemListaDto> buscaTodos(Pageable pageable) {
-		return repository.findAll(pageable).map(t -> new TurmaItemListaDto(t));
+		return turmaRep.findAll(pageable).map(t -> new TurmaItemListaDto(t));
 	}
 	
 	public TurmaDto buscaPorId(Long id) {
@@ -38,12 +43,25 @@ public class TurmaService {
 	}
 	
 	public void deletaPorId(Long id) {
-		if(!repository.existsById(id))	lancaDomainException(id);
-		repository.deleteById(id);
+		if(!turmaRep.existsById(id))	lancaDomainException(id);
+		turmaRep.deleteById(id);
+	}
+	
+	public void removeAluno(Long idTurma, Long idAluno) {
+		Turma turma = garanteQueTurmaExiste(idTurma);
+		List<Aluno> alunos = turma.getAlunos();
+		
+		boolean alunoRemovido = alunos.removeIf(a -> a.getId().equals(idAluno));
+		if(!alunoRemovido)
+			throw new DomainException("O aluno com id "+idAluno+" não está na turma de id "
+					+idTurma, HttpStatus.BAD_REQUEST);
+		
+		turmaRep.save(turma);
+		alunoRep.encerrarMentoria(idAluno);
 	}
 	
 	private Turma garanteQueTurmaExiste(Long id) {
-		Optional<Turma> optTurma = repository.findById(id);
+		Optional<Turma> optTurma = turmaRep.findById(id);
 		if(optTurma.isEmpty())
 			lancaDomainException(id);
 		return optTurma.get();
