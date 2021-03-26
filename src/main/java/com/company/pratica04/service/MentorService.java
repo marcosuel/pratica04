@@ -52,10 +52,11 @@ public class MentorService {
 			throw new DomainException("Não foi encontrado um aluno com o id: "+idAluno, HttpStatus.NOT_FOUND);
 		
 		Aluno aluno = optAluno.get();
-		Long idTurma = aluno.getTurma().getId();
-		if(!podeMentorar(idMentor, idTurma))
-			throw new DomainException("O mentor não pode mentorar mais que três alunos da turma com id: "+idTurma, HttpStatus.BAD_REQUEST);
-
+		if(aluno.getTurma() == null)
+				throw new DomainException("O mentor não pode mentorar um aluno sem turma.", HttpStatus.BAD_REQUEST);
+		
+		
+		garanteQuePodeMentorar(idMentor, aluno);
 		mentor.getMentorados().add(aluno);
 		
 		try {
@@ -67,9 +68,14 @@ public class MentorService {
 		return new MentorDto(mentor);
 	}
 	
-	private boolean podeMentorar(Long idMentor, Long idTurma) {
+	private void garanteQuePodeMentorar(Long idMentor, Aluno aluno) {
+		if(aluno.getTurma() == null)
+			throw new DomainException("O mentor não pode mentorar um aluno sem turma.", HttpStatus.BAD_REQUEST);
+		
+		Long idTurma = aluno.getTurma().getId();
 		long qtd = mentorRep.countByIdAndMentoradosTurmaId(idMentor, idTurma);
-		return qtd < 3 ? true : false;
+		if(qtd >= 3)
+			throw new DomainException("O mentor não pode mentorar mais que três alunos da turma com id: "+idTurma, HttpStatus.BAD_REQUEST);
 	}
 	
 	public MentorDto buscaPorId(Long id) {
