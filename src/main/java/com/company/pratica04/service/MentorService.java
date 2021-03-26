@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.company.pratica04.dto.mentor.AtualizaMentorForm;
 import com.company.pratica04.dto.mentor.ItemListaMentorDto;
 import com.company.pratica04.dto.mentor.MentorDto;
 import com.company.pratica04.dto.mentor.MentorForm;
@@ -40,6 +41,17 @@ public class MentorService {
 		return new MentorDto(mentor);
 	}
 	
+	public MentorDto atualiza(Long id, AtualizaMentorForm form) {
+		Mentor mentor = garanteQueMentorExiste(id);
+		
+		mentor.setNome(form.getNome());
+		mentor.setSobrenome(form.getSobrenome());
+		mentor.setMatricula(form.getMatricula());
+		
+		mentor = mentorRep.save(mentor);
+		return new MentorDto(mentor);
+	}
+	
 	public Page<ItemListaMentorDto> buscaTodos(Pageable pageable){
 		return mentorRep.findAll(pageable).map(m -> new ItemListaMentorDto(m));
 	}
@@ -54,7 +66,6 @@ public class MentorService {
 		Aluno aluno = optAluno.get();
 		if(aluno.getTurma() == null)
 				throw new DomainException("O mentor não pode mentorar um aluno sem turma.", HttpStatus.BAD_REQUEST);
-		
 		
 		garanteQuePodeMentorar(idMentor, aluno);
 		mentor.getMentorados().add(aluno);

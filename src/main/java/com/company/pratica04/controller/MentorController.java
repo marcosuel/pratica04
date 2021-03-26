@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.company.pratica04.dto.aluno.AlunoIdForm;
+import com.company.pratica04.dto.mentor.AtualizaMentorForm;
 import com.company.pratica04.dto.mentor.MentorDto;
 import com.company.pratica04.dto.mentor.MentorForm;
 import com.company.pratica04.service.MentorService;
@@ -56,6 +58,12 @@ public class MentorController {
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscaPorId(@PathVariable Long id){
 		MentorDto dto = service.buscaPorId(id);
+		return ResponseEntity.ok(dto);
+	}
+	
+	@PatchMapping("/{id}")
+	public ResponseEntity<?> atualiza(@PathVariable Long id, @Valid @RequestBody AtualizaMentorForm form){
+		MentorDto dto = service.atualiza(id, form);
 		return ResponseEntity.ok(dto);
 	}
 	
