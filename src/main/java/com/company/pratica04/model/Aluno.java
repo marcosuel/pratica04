@@ -20,13 +20,10 @@ public class Aluno {
 	@JoinColumn(name = "turma_id")
 	private Turma turma;
 	
+	@ManyToOne
+	private Mentor mentor;
+	
 	public Aluno() {}
-
-	public Aluno(String nome, String sobrenome, Long matricula) {
-		this.nome = nome;
-		this.sobrenome = sobrenome;
-		this.matricula = matricula;
-	}
 	
 	public Aluno(String nome, String sobrenome, Long matricula, Turma turma) {
 		this.nome = nome;
@@ -73,5 +70,13 @@ public class Aluno {
 
 	public void setTurma(Turma turma) {
 		this.turma = turma;
+	}
+
+	public Mentor getMentor() {
+		return mentor;
+	}
+
+	public void setMentor(Mentor mentor) {
+		this.mentor = mentor;
 	}
 }

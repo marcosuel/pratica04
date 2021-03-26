@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 
 @Entity(name = "mentor")
@@ -21,10 +20,7 @@ public class Mentor {
 	private String sobrenome;
 	private Long matricula;
 	@OneToMany
-	@JoinTable(name = "tb_mentoria",
-    			joinColumns = {@JoinColumn(name = "mentor_id")},
-    			inverseJoinColumns = {@JoinColumn(name = "aluno_id")})
-	
+	@JoinColumn(name = "mentor_id")
 	private List<Aluno> mentorados;
 	
 	public Mentor() {}
