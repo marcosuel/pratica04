@@ -4,19 +4,16 @@ import java.time.Year;
 
 import com.company.pratica04.model.Turma;
 
-public class ItemListaTurmaDto {
-
+public class TurmaItemAlunoDto {
 	private Long id;
 	private String nome;
-	private int quantidadeAlunos;
 	private Year anoLetivo;
 	
-	public ItemListaTurmaDto() {}
+	public TurmaItemAlunoDto() {}
 
-	public ItemListaTurmaDto(Turma turma) {
+	public TurmaItemAlunoDto(Turma turma) {
 		this.id = turma.getId();
 		this.nome = turma.getNome();
-		this.quantidadeAlunos = turma.getQuantidadeAlunos();
 		this.anoLetivo = turma.getAnoLetivo();
 	}
 
@@ -35,15 +32,7 @@ public class ItemListaTurmaDto {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	public int getQuantidadeAlunos() {
-		return quantidadeAlunos;
-	}
-
-	public void setQuantidadeAlunos(int quantidadeAlunos) {
-		this.quantidadeAlunos = quantidadeAlunos;
-	}
-
+	
 	public Year getAnoLetivo() {
 		return anoLetivo;
 	}
@@ -51,6 +40,4 @@ public class ItemListaTurmaDto {
 	public void setAnoLetivo(Year anoLetivo) {
 		this.anoLetivo = anoLetivo;
 	}
-	
-	
 }

@@ -4,6 +4,7 @@ import java.time.Year;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.company.pratica04.model.Turma;
 
@@ -11,7 +12,7 @@ public class TurmaForm {
 
 	@NotBlank
 	private String nome;
-	@NotNull
+	@NotNull @Size(min = 2000, max = 2100)
 	private Year anoLetivo;
 	
 	public TurmaForm() {}

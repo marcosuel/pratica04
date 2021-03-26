@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.company.pratica04.dto.turma.ItemListaTurmaDto;
+import com.company.pratica04.dto.turma.TurmaItemListaDto;
 import com.company.pratica04.dto.turma.TurmaDto;
 import com.company.pratica04.dto.turma.TurmaForm;
 import com.company.pratica04.exception.DomainException;
@@ -28,8 +28,8 @@ public class TurmaService {
 		return new TurmaDto(turma);
 	}
 	
-	public Page<ItemListaTurmaDto> buscaTodos(Pageable pageable) {
-		return repository.findAll(pageable).map(t -> new ItemListaTurmaDto(t));
+	public Page<TurmaItemListaDto> buscaTodos(Pageable pageable) {
+		return repository.findAll(pageable).map(t -> new TurmaItemListaDto(t));
 	}
 	
 	public TurmaDto buscaPorId(Long id) {
