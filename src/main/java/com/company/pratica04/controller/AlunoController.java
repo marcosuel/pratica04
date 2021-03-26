@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.company.pratica04.dto.aluno.AlunoDto;
 import com.company.pratica04.dto.aluno.AlunoForm;
+import com.company.pratica04.dto.aluno.AtualizaAlunoForm;
 import com.company.pratica04.service.AlunoService;
 
 @RestController
@@ -29,6 +31,12 @@ public class AlunoController {
 	public ResponseEntity<AlunoDto> cadastra(@Valid @RequestBody AlunoForm form){
 		AlunoDto dto = service.cadastra(form);
 		return new ResponseEntity<AlunoDto>(dto, HttpStatus.CREATED);
+	}
+	
+	@PatchMapping("/{id}")
+	public ResponseEntity<AlunoDto> cadastra(@PathVariable Long id, @Valid @RequestBody AtualizaAlunoForm form){
+		AlunoDto dto = service.atualiza(id, form);
+		return ResponseEntity.ok(dto);
 	}
 	
 	@GetMapping

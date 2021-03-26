@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.company.pratica04.dto.aluno.AlunoDto;
 import com.company.pratica04.dto.aluno.AlunoForm;
+import com.company.pratica04.dto.aluno.AtualizaAlunoForm;
 import com.company.pratica04.exception.DomainException;
 import com.company.pratica04.model.Aluno;
 import com.company.pratica04.model.Turma;
@@ -61,6 +62,16 @@ public class AlunoService {
 		
 		alunoRep.encerrarMentoria(id);
 		alunoRep.delete(aluno);
+	}
+	
+	public AlunoDto atualiza(Long id, AtualizaAlunoForm form) {
+		Aluno aluno = garanteQueAlunoExiste(id);
+		aluno.setNome(form.getNome());
+		aluno.setSobrenome(form.getSobrenome());
+		aluno.setMatricula(form.getMatricula());
+		aluno = alunoRep.save(aluno);
+		
+		return new AlunoDto(aluno);
 	}
 	
 	public Aluno garanteQueAlunoExiste(Long id) {		
