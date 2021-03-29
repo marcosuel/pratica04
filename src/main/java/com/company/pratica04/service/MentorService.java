@@ -1,6 +1,8 @@
 package com.company.pratica04.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -9,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.company.pratica04.dto.aluno.AlunoDto;
 import com.company.pratica04.dto.mentor.AtualizaMentorForm;
 import com.company.pratica04.dto.mentor.ItemListaMentorDto;
 import com.company.pratica04.dto.mentor.MentorDto;
@@ -54,6 +57,14 @@ public class MentorService {
 	
 	public Page<ItemListaMentorDto> buscaTodos(Pageable pageable){
 		return mentorRep.findAll(pageable).map(m -> new ItemListaMentorDto(m));
+	}
+	
+	public List<AlunoDto> buscaMentorados(Long id){
+		Mentor mentor = garanteQueMentorExiste(id);
+		List<Aluno> mentorados = mentor.getMentorados();
+		return mentorados.stream()
+				.map(aluno -> new AlunoDto(aluno))
+				.collect(Collectors.toList());
 	}
 	
 	public MentorDto mentoraAluno(Long idMentor, Long idAluno) throws DataIntegrityViolationException {

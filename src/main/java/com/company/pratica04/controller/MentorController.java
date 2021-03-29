@@ -1,5 +1,7 @@
 package com.company.pratica04.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.company.pratica04.dto.aluno.AlunoDto;
 import com.company.pratica04.dto.aluno.AlunoIdForm;
+import com.company.pratica04.dto.aluno.AlunoItemListaTurmaDto;
 import com.company.pratica04.dto.mentor.AtualizaMentorForm;
 import com.company.pratica04.dto.mentor.MentorDto;
 import com.company.pratica04.dto.mentor.MentorForm;
@@ -47,6 +51,12 @@ public class MentorController {
 	public ResponseEntity<MentorDto> mentoraAluno(@PathVariable(name = "id") Long idMentor, @Valid @RequestBody AlunoIdForm form) {
 		MentorDto dto = service.mentoraAluno(idMentor, form.getId());
 		return new ResponseEntity<MentorDto>(dto, HttpStatus.CREATED);
+	}
+	
+	@GetMapping("/{id}/mentorados")
+	public ResponseEntity<?> listaMentorados(@PathVariable(name = "id") Long id) {
+		List<AlunoDto> dto = service.buscaMentorados(id);
+		return ResponseEntity.ok(dto);
 	}
 	
 	@DeleteMapping("/{idMentor}/mentorados/{idAluno}")
