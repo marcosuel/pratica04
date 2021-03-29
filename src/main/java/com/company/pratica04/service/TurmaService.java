@@ -2,6 +2,7 @@ package com.company.pratica04.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,6 +46,14 @@ public class TurmaService {
 	
 	public Page<TurmaItemListaDto> buscaTodos(Pageable pageable) {
 		return turmaRep.findAll(pageable).map(t -> new TurmaItemListaDto(t));
+	}
+	
+	public List<AlunoItemListaTurmaDto> listaAlunos(Long id){
+		Turma turma = garanteQueTurmaExiste(id);
+		List<Aluno> alunos = turma.getAlunos();
+		return alunos.stream()
+				.map(aluno -> new AlunoItemListaTurmaDto(aluno))
+				.collect(Collectors.toList());
 	}
 	
 	public TurmaDto buscaPorId(Long id) {

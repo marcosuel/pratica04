@@ -1,5 +1,7 @@
 package com.company.pratica04.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,5 +70,11 @@ public class TurmaController {
 	public ResponseEntity<?> adicionaAluno(@PathVariable Long idTurma, @Valid @RequestBody AlunoIdForm form){
 		AlunoItemListaTurmaDto dto = service.adicionaAluno(idTurma, form.getId());
 		return new ResponseEntity<>(dto, HttpStatus.CREATED);
+	}
+	
+	@GetMapping("/{id}/alunos")
+	public ResponseEntity<?> listaAlunos(@PathVariable Long id){
+		List<AlunoItemListaTurmaDto> dto = service.listaAlunos(id);
+		return ResponseEntity.ok(dto);
 	}
 }

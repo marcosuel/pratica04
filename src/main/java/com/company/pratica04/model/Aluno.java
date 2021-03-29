@@ -25,11 +25,10 @@ public class Aluno {
 	
 	public Aluno() {}
 	
-	public Aluno(String nome, String sobrenome, Long matricula, Turma turma) {
+	public Aluno(String nome, String sobrenome, Long matricula) {
 		this.nome = nome;
 		this.sobrenome = sobrenome;
 		this.matricula = matricula;
-		this.turma = turma;
 	}
 
 	public Long getId() {

@@ -6,6 +6,8 @@ import javax.validation.constraints.NotNull;
 import com.company.pratica04.model.Aluno;
 import com.company.pratica04.model.Turma;
 
+import springfox.documentation.annotations.ApiIgnore;
+
 public class AlunoForm {
 
 	@NotBlank
@@ -17,8 +19,6 @@ public class AlunoForm {
 	@NotNull
 	private Long idTurma;
 	
-	private Turma turma;
-	
 	public AlunoForm() {}
 
 	public AlunoForm(String nome, String sobrenome, Long matricula, Long idTurma) {
@@ -29,7 +29,7 @@ public class AlunoForm {
 	}
 	
 	public Aluno convert() {
-		return new Aluno(nome, sobrenome, matricula, turma);
+		return new Aluno(nome, sobrenome, matricula);
 	}
 
 	public String getNome() {
@@ -62,13 +62,5 @@ public class AlunoForm {
 
 	public void setIdTurma(Long idTurma) {
 		this.idTurma = idTurma;
-	}
-
-	public Turma getTurma() {
-		return turma;
-	}
-
-	public void setTurma(Turma turma) {
-		this.turma = turma;
 	}
 }

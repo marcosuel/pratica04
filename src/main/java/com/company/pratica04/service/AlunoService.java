@@ -36,8 +36,9 @@ public class AlunoService {
 		
 		Turma turma = optTurma.get();
 		turma.setQuantidadeAlunos(turma.getQuantidadeAlunos() + 1);
-		form.setTurma(turma);
+		
 		Aluno aluno = form.convert();
+		aluno.setTurma(turma);
 		
 		aluno = alunoRep.save(aluno);
 		return new AlunoDto(aluno);
