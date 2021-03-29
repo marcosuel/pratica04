@@ -59,8 +59,8 @@ public class MentorController {
 		return ResponseEntity.ok(dto);
 	}
 	
-	@DeleteMapping("/{idMentor}/mentorados/{idAluno}")
-	public ResponseEntity<MentorDto> encerraMentoria(@PathVariable(name = "idMentor") Long idMentor, @PathVariable(name = "idAluno") Long idAluno) {
+	@DeleteMapping("/{id}/mentorados/{idAluno}")
+	public ResponseEntity<MentorDto> encerraMentoria(@PathVariable(name = "id") Long idMentor, @PathVariable Long idAluno) {
 		service.encerraMentoria(idMentor, idAluno);
 		return ResponseEntity.noContent().build();
 	}

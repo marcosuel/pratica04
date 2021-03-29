@@ -60,14 +60,14 @@ public class TurmaController {
 		return ResponseEntity.noContent().build();
 	}
 	
-	@DeleteMapping("/{idTurma}/alunos/{idAluno}")
-	public ResponseEntity<TurmaDto> removeAluno(@PathVariable Long idTurma, @PathVariable Long idAluno){
+	@DeleteMapping("/{id}/alunos/{idAluno}")
+	public ResponseEntity<TurmaDto> removeAluno(@PathVariable(name = "id") Long idTurma, @PathVariable Long idAluno){
 		service.removeAluno(idTurma, idAluno);
 		return ResponseEntity.noContent().build();
 	}
 	
-	@PostMapping("/{idTurma}/alunos")
-	public ResponseEntity<?> adicionaAluno(@PathVariable Long idTurma, @Valid @RequestBody AlunoIdForm form){
+	@PostMapping("/{id}/alunos")
+	public ResponseEntity<?> adicionaAluno(@PathVariable(name = "id") Long idTurma, @Valid @RequestBody AlunoIdForm form){
 		AlunoItemListaTurmaDto dto = service.adicionaAluno(idTurma, form.getId());
 		return new ResponseEntity<>(dto, HttpStatus.CREATED);
 	}
