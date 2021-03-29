@@ -49,19 +49,15 @@ public class AlunoService {
 	
 	public AlunoDto buscaPorId(Long id) {
 		Aluno aluno = garanteQueAlunoExiste(id);
-		System.err.println(aluno.getMentor().getNome());
 		return new AlunoDto(aluno);
 	}
 	
 	public void deleta(Long id) {
-		
 		Aluno aluno = garanteQueAlunoExiste(id);
-		
 		Turma turma = aluno.getTurma();
 		if(turma != null)
 			turma.setQuantidadeAlunos(turma.getQuantidadeAlunos()-1);
 		
-		//alunoRep.encerrarMentoria(id);
 		alunoRep.delete(aluno);
 	}
 	

@@ -16,7 +16,6 @@ import com.company.pratica04.dto.turma.TurmaForm;
 import com.company.pratica04.exception.DomainException;
 import com.company.pratica04.model.Aluno;
 import com.company.pratica04.model.Turma;
-import com.company.pratica04.repository.AlunoRepository;
 import com.company.pratica04.repository.TurmaRepository;
 
 @Service
@@ -24,8 +23,6 @@ public class TurmaService {
 
 	@Autowired
 	private TurmaRepository turmaRep;
-	@Autowired
-	private AlunoRepository alunoRep;
 	@Autowired
 	private AlunoService alunoService;
 	
@@ -56,8 +53,10 @@ public class TurmaService {
 	}
 	
 	public void deletaPorId(Long id) {
-		if(!turmaRep.existsById(id))	lancaDomainException(id);
-		turmaRep.deleteById(id);
+		Turma turma = garanteQueTurmaExiste(id);
+		turma.getAlunos().forEach(aluno -> aluno.setMentor(null));
+		
+		turmaRep.delete(turma);
 	}
 	
 	public AlunoItemListaTurmaDto adicionaAluno(Long idTurma, Long idAluno) {
@@ -69,22 +68,20 @@ public class TurmaService {
 					, HttpStatus.BAD_REQUEST);
 			
 		turma.getAlunos().add(aluno);
+		turma.setQuantidadeAlunos(turma.getQuantidadeAlunos()+1);
 		turmaRep.save(turma);
-		
 		return new AlunoItemListaTurmaDto(aluno);
 	}
 	
 	public void removeAluno(Long idTurma, Long idAluno) {
 		Turma turma = garanteQueTurmaExiste(idTurma);
+		Aluno aluno = alunoService.garanteQueAlunoExiste(idAluno);
+	
 		List<Aluno> alunos = turma.getAlunos();
-		
-		boolean alunoRemovido = alunos.removeIf(a -> a.getId().equals(idAluno));
-		if(!alunoRemovido)
-			throw new DomainException("O aluno com id "+idAluno+" não está na turma de id "
-					+idTurma, HttpStatus.BAD_REQUEST);
-		
+		aluno.setMentor(null);
+		alunos.remove(aluno);
+		turma.setQuantidadeAlunos(turma.getQuantidadeAlunos()-1);
 		turmaRep.save(turma);
-		alunoRep.encerrarMentoria(idAluno);
 	}
 	
 	private Turma garanteQueTurmaExiste(Long id) {

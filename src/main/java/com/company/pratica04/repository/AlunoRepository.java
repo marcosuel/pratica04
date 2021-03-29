@@ -21,9 +21,4 @@ public interface AlunoRepository extends PagingAndSortingRepository<Aluno, Long>
 	Page<Aluno> findAll(Pageable pageable);
 
 	Optional<Aluno> findByMatricula(Long matricula);
-	
-	@Modifying
-    @Transactional
-    @Query(value = "delete from tb_mentoria where aluno_id = :id", nativeQuery = true)
-	void encerrarMentoria(@Param("id") Long id);
 }
