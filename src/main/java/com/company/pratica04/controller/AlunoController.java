@@ -3,6 +3,7 @@ package com.company.pratica04.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,10 @@ import com.company.pratica04.dto.aluno.AlunoForm;
 import com.company.pratica04.dto.aluno.AtualizaAlunoForm;
 import com.company.pratica04.service.AlunoService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Parameter;
+
 @RestController
 @RequestMapping("/alunos")
 public class AlunoController {
@@ -27,30 +32,35 @@ public class AlunoController {
 	@Autowired
 	private AlunoService service;
 
+	@ApiOperation(value = "Cadastra um novo aluno.")
 	@PostMapping
 	public ResponseEntity<AlunoDto> cadastra(@Valid @RequestBody AlunoForm form){
 		AlunoDto dto = service.cadastra(form);
 		return new ResponseEntity<AlunoDto>(dto, HttpStatus.CREATED);
 	}
 	
+	@ApiOperation(value = "Atualiza um aluno.")
 	@PatchMapping("/{id}")
-	public ResponseEntity<AlunoDto> atualiza(@PathVariable Long id, @Valid @RequestBody AtualizaAlunoForm form){
+	public ResponseEntity<AlunoDto> atualiza(@Parameter(description = "Id do aluno") @PathVariable Long id, @Valid @RequestBody AtualizaAlunoForm form){
 		AlunoDto dto = service.atualiza(id, form);
 		return ResponseEntity.ok(dto);
 	}
 	
+	@ApiOperation(value = "Lista alunos cadastrados.")
 	@GetMapping
-	public ResponseEntity<?> buscaTodos(Pageable pageable){
+	public ResponseEntity<Page<AlunoDto>> buscaTodos(Pageable pageable){
 		return ResponseEntity.ok(service.buscaTodos(pageable));
 	}
 	
+	@ApiOperation(value = "Busca um aluno pelo Id.")
 	@GetMapping("/{id}")
-	public ResponseEntity<?> buscaPorId(@PathVariable Long id){
+	public ResponseEntity<AlunoDto> buscaPorId(@Parameter(description = "Id do aluno") @PathVariable Long id){
 		return ResponseEntity.ok(service.buscaPorId(id));
 	}
 	
+	@ApiOperation(value = "Deleta um aluno pelo Id.")
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleta(@PathVariable Long id){
+	public ResponseEntity<?> deleta(@Parameter(description = "Id do aluno") @PathVariable Long id){
 		service.deleta(id);
 		return ResponseEntity.noContent().build();
 	}
