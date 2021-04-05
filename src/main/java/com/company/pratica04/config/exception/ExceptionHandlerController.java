@@ -6,49 +6,67 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.company.pratica04.exception.DomainException;
 import com.company.pratica04.exception.ExceptionResponse;
+import com.company.pratica04.exception.FormFieldError;
 import com.company.pratica04.exception.ExceptionResponse.ExceptionResponseBuilder;
 
-
 @RestControllerAdvice
-public class ExceptionHandlerController {
+public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
 	@Autowired
 	private MessageSource messageSource;
-	
-	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public List<FormFieldErrorDto> validationHandler(MethodArgumentNotValidException exception) {
+
+	@ExceptionHandler(value = Exception.class)
+	public ResponseEntity<Object> handleAnyException(Exception e, WebRequest request) {
+		ExceptionResponse response = ExceptionResponseBuilder.create()
+			.withError(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
+			.withMessage(e.getLocalizedMessage() != null ? e.getLocalizedMessage() : "Ocorreu um erro inesperado.")
+			.withStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+			.withPath(this.extractPath(request))
+			.build();
+		return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		List<FormFieldError> dto = new ArrayList<>();
 		
-		List<FormFieldErrorDto> dto = new ArrayList<>();
-		
-		List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
-		
+		List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
+
 		fieldErrors.forEach(e -> {
 			String message = messageSource.getMessage(e, LocaleContextHolder.getLocale());
-			dto.add(new FormFieldErrorDto(e.getField(), message));
+			String campo = e.getField();
+			dto.add(new FormFieldError(campo, message));
 		});
-		
-		return dto;
+
+		return new ResponseEntity<>(dto, headers, status);
 	}
-	
+
 	@ExceptionHandler(value = DomainException.class)
-	public ResponseEntity<ExceptionResponse> domainExceptionHandler(DomainException ex){
+	public ResponseEntity<Object> handleDomainException(DomainException ex, WebRequest request) {
 		ExceptionResponse response = ExceptionResponseBuilder.create()
 				.withStatus(ex.getStatus())
 				.withError(ex.getStatus().getReasonPhrase())
 				.withMessage(ex.getMessage())
+				.withPath(this.extractPath(request))
 				.build();
-		return new ResponseEntity<ExceptionResponse>(response, ex.getStatus());
+		return new ResponseEntity<>(response, ex.getStatus());
 	}
 	
+	private String extractPath(WebRequest request) {
+		return request.getDescription(false).split("=")[1];
+	}
+
 }

@@ -13,11 +13,13 @@ public class ExceptionResponse {
 	private int status;
 	private String error;
 	private String message;
+	private String path;
 	
 	public static final class ExceptionResponseBuilder {
 		private HttpStatus status;
 		private String error;
 		private String message;
+		private String path;
 		
 		private ExceptionResponseBuilder() {}
 		
@@ -40,12 +42,18 @@ public class ExceptionResponse {
 			return this;
 		}
 		
+		public ExceptionResponseBuilder withPath(String path) {
+			this.path = path;
+			return this;
+		}
+		
 		public ExceptionResponse build() {
 			ExceptionResponse exceptionResponse = new ExceptionResponse();
 			exceptionResponse.status = this.status.value();
 			exceptionResponse.error = this.error;
 			exceptionResponse.message = this.message;
 			exceptionResponse.timestamp = LocalDateTime.now();
+			exceptionResponse.path = this.path;
 			return exceptionResponse;
 		}
 	}
@@ -81,5 +89,12 @@ public class ExceptionResponse {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
 }
