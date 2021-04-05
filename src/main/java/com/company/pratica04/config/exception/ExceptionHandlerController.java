@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.company.pratica04.exception.DomainException;
 import com.company.pratica04.exception.ExceptionResponse;
 import com.company.pratica04.exception.FormFieldError;
+import com.company.pratica04.exception.FormFieldResponse;
 import com.company.pratica04.exception.ExceptionResponse.ExceptionResponseBuilder;
 
 @RestControllerAdvice
@@ -41,17 +42,18 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		List<FormFieldError> dto = new ArrayList<>();
+		List<FormFieldError> erros = new ArrayList<>();
 		
 		List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
 
 		fieldErrors.forEach(e -> {
 			String message = messageSource.getMessage(e, LocaleContextHolder.getLocale());
 			String campo = e.getField();
-			dto.add(new FormFieldError(campo, message));
+			erros.add(new FormFieldError(campo, message));
 		});
 
-		return new ResponseEntity<>(dto, headers, status);
+		FormFieldResponse response = new FormFieldResponse(status.getReasonPhrase(), erros, this.extractPath(request));
+		return new ResponseEntity<>(response, headers, status);
 	}
 
 	@ExceptionHandler(value = DomainException.class)
