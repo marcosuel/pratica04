@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.company.pratica04.dto.aluno.AlunoDto;
-import com.company.pratica04.dto.aluno.AlunoForm;
-import com.company.pratica04.dto.aluno.AtualizaAlunoForm;
+import com.company.pratica04.dto.aluno.AlunoPostForm;
+import com.company.pratica04.dto.aluno.AlunoPutForm;
 import com.company.pratica04.service.AlunoService;
 
 import io.swagger.annotations.ApiOperation;
@@ -34,14 +34,15 @@ public class AlunoController {
 
 	@ApiOperation(value = "Cadastra um novo aluno.")
 	@PostMapping
-	public ResponseEntity<AlunoDto> cadastra(@Valid @RequestBody AlunoForm form){
+	public ResponseEntity<AlunoDto> cadastra(@Valid @RequestBody AlunoPostForm form){
 		AlunoDto dto = service.cadastra(form);
+		System.err.println("dd");
 		return new ResponseEntity<AlunoDto>(dto, HttpStatus.CREATED);
 	}
 	
 	@ApiOperation(value = "Atualiza um aluno.")
 	@PatchMapping("/{id}")
-	public ResponseEntity<AlunoDto> atualiza(@Parameter(description = "Id do aluno") @PathVariable Long id, @Valid @RequestBody AtualizaAlunoForm form){
+	public ResponseEntity<AlunoDto> atualiza(@Parameter(description = "Id do aluno") @PathVariable Long id, @Valid @RequestBody AlunoPutForm form){
 		AlunoDto dto = service.atualiza(id, form);
 		return ResponseEntity.ok(dto);
 	}

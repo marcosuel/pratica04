@@ -9,9 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import com.company.pratica04.dto.aluno.AlunoDto;
-import com.company.pratica04.dto.aluno.AlunoForm;
-import com.company.pratica04.dto.aluno.AtualizaAlunoForm;
+import com.company.pratica04.dto.aluno.AlunoPostForm;
+import com.company.pratica04.dto.aluno.AlunoPutForm;
 import com.company.pratica04.exception.DomainException;
+import com.company.pratica04.mapper.AlunoMapper;
 import com.company.pratica04.model.Aluno;
 import com.company.pratica04.model.Turma;
 import com.company.pratica04.repository.AlunoRepository;
@@ -25,7 +26,7 @@ public class AlunoService {
 	@Autowired
 	private TurmaRepository turmaRep;
 
-	public AlunoDto cadastra(AlunoForm form) {
+	public AlunoDto cadastra(AlunoPostForm form) {
 		Optional<Turma> optTurma = turmaRep.findById(form.getIdTurma());		
 		if (optTurma.isEmpty())
 			throw new DomainException("Não existe uma turma com o id: " + form.getIdTurma(), HttpStatus.BAD_REQUEST);
@@ -37,7 +38,7 @@ public class AlunoService {
 		Turma turma = optTurma.get();
 		turma.setQuantidadeAlunos(turma.getQuantidadeAlunos() + 1);
 		
-		Aluno aluno = form.convert();
+		Aluno aluno = AlunoMapper.INSTANCE.toAluno(form);
 		aluno.setTurma(turma);
 		
 		aluno = alunoRep.save(aluno);
@@ -62,7 +63,7 @@ public class AlunoService {
 		alunoRep.delete(aluno);
 	}
 	
-	public AlunoDto atualiza(Long id, AtualizaAlunoForm form) {
+	public AlunoDto atualiza(Long id, AlunoPutForm form) {
 		Aluno aluno = garanteQueAlunoExiste(id);
 		aluno.setNome(form.getNome());
 		aluno.setSobrenome(form.getSobrenome());

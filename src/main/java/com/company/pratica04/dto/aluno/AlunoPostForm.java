@@ -8,7 +8,7 @@ import com.company.pratica04.model.Turma;
 
 import springfox.documentation.annotations.ApiIgnore;
 
-public class AlunoForm {
+public class AlunoPostForm {
 
 	@NotBlank
 	private String nome;
@@ -19,9 +19,9 @@ public class AlunoForm {
 	@NotNull
 	private Long idTurma;
 	
-	public AlunoForm() {}
+	public AlunoPostForm() {}
 
-	public AlunoForm(String nome, String sobrenome, Long matricula, Long idTurma) {
+	public AlunoPostForm(String nome, String sobrenome, Long matricula, Long idTurma) {
 		this.nome = nome;
 		this.sobrenome = sobrenome;
 		this.matricula = matricula;

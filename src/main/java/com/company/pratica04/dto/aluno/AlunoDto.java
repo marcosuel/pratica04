@@ -7,7 +7,8 @@ import com.company.pratica04.model.Turma;
 public class AlunoDto {
 
 	private Long id;
-	private String nomeCompleto;
+	private String nome;
+	private String sobrenome;
 	private Long matricula;
 	private TurmaItemAlunoDto turma;
 	
@@ -15,7 +16,8 @@ public class AlunoDto {
 
 	public AlunoDto(Aluno aluno) {
 		this.id = aluno.getId();
-		this.nomeCompleto = aluno.getNome()+" "+aluno.getSobrenome();
+		this.nome = aluno.getNome();
+		this.sobrenome = aluno.getSobrenome();
 		this.matricula = aluno.getMatricula();
 		Turma turma = aluno.getTurma();
 		this.turma = turma != null ? new TurmaItemAlunoDto(turma) : null;
@@ -27,14 +29,6 @@ public class AlunoDto {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getNomeCompleto() {
-		return nomeCompleto;
-	}
-
-	public void setNomeCompleto(String nomeCompleto) {
-		this.nomeCompleto = nomeCompleto;
 	}
 
 	public Long getMatricula() {
@@ -51,5 +45,21 @@ public class AlunoDto {
 
 	public void setTurma(TurmaItemAlunoDto turma) {
 		this.turma = turma;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getSobrenome() {
+		return sobrenome;
+	}
+
+	public void setSobrenome(String sobrenome) {
+		this.sobrenome = sobrenome;
 	}
 }

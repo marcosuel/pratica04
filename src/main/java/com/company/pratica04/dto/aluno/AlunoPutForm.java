@@ -3,7 +3,7 @@ package com.company.pratica04.dto.aluno;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class AtualizaAlunoForm {
+public class AlunoPutForm {
 
 	@NotBlank
 	private String nome;
@@ -13,9 +13,9 @@ public class AtualizaAlunoForm {
 	private Long matricula;
 	
 	
-	public AtualizaAlunoForm() {}
+	public AlunoPutForm() {}
 
-	public AtualizaAlunoForm(String nome, String sobrenome, Long matricula) {
+	public AlunoPutForm(String nome, String sobrenome, Long matricula) {
 		this.nome = nome;
 		this.sobrenome = sobrenome;
 		this.matricula = matricula;
