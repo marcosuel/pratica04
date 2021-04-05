@@ -2,20 +2,12 @@ package com.company.pratica04.dto.turma;
 
 import java.time.Year;
 
-import com.company.pratica04.model.Turma;
-
 public class TurmaItemAlunoDto {
 	private Long id;
 	private String nome;
 	private Year anoLetivo;
 	
 	public TurmaItemAlunoDto() {}
-
-	public TurmaItemAlunoDto(Turma turma) {
-		this.id = turma.getId();
-		this.nome = turma.getNome();
-		this.anoLetivo = turma.getAnoLetivo();
-	}
 
 	public Long getId() {
 		return id;

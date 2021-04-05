@@ -11,10 +11,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.company.pratica04.dto.turma.TurmaItemListaDto;
+import com.company.pratica04.dto.turma.TurmaPatchForm;
 import com.company.pratica04.dto.aluno.AlunoItemListaTurmaDto;
 import com.company.pratica04.dto.turma.TurmaDto;
-import com.company.pratica04.dto.turma.TurmaForm;
+import com.company.pratica04.dto.turma.TurmaPostForm;
 import com.company.pratica04.exception.DomainException;
+import com.company.pratica04.mapper.AlunoMapper;
+import com.company.pratica04.mapper.TurmaMapper;
 import com.company.pratica04.model.Aluno;
 import com.company.pratica04.model.Turma;
 import com.company.pratica04.repository.TurmaRepository;
@@ -26,39 +29,41 @@ public class TurmaService {
 	private TurmaRepository turmaRep;
 	@Autowired
 	private AlunoService alunoService;
+	@Autowired
+	private TurmaMapper mapper;
 	
-	public TurmaDto cadastra(TurmaForm form) {
+	public TurmaDto cadastra(TurmaPostForm form) {
 		Turma turma = form.convert();
 		turma = turmaRep.save(turma);
 		
-		return new TurmaDto(turma);
+		return mapper.toDto(turma);
 	}
 	
-	public TurmaItemListaDto atualiza(Long id, TurmaForm form) {
+	public TurmaItemListaDto atualiza(Long id, TurmaPatchForm form) {
 		Turma turma = garanteQueTurmaExiste(id);
 		
 		turma.setNome(form.getNome());
 		turma.setAnoLetivo(form.getAnoLetivo());
 		
 		turma = turmaRep.save(turma);
-		return new TurmaItemListaDto(turma);
+		return mapper.toItemListaDto(turma);
 	}
 	
 	public Page<TurmaItemListaDto> buscaTodos(Pageable pageable) {
-		return turmaRep.findAll(pageable).map(t -> new TurmaItemListaDto(t));
+		return turmaRep.findAll(pageable).map(turma -> mapper.toItemListaDto(turma));
 	}
 	
 	public List<AlunoItemListaTurmaDto> listaAlunos(Long id){
 		Turma turma = garanteQueTurmaExiste(id);
 		List<Aluno> alunos = turma.getAlunos();
 		return alunos.stream()
-				.map(aluno -> new AlunoItemListaTurmaDto(aluno))
+				.map(aluno -> AlunoMapper.INSTANCE.toItemTurmaDto(aluno))
 				.collect(Collectors.toList());
 	}
 	
 	public TurmaDto buscaPorId(Long id) {
 		Turma turma = garanteQueTurmaExiste(id);
-		return new TurmaDto(turma);
+		return mapper.toDto(turma);
 	}
 	
 	public void deletaPorId(Long id) {
@@ -79,7 +84,7 @@ public class TurmaService {
 		turma.getAlunos().add(aluno);
 		turma.setQuantidadeAlunos(turma.getQuantidadeAlunos()+1);
 		turmaRep.save(turma);
-		return new AlunoItemListaTurmaDto(aluno);
+		return AlunoMapper.INSTANCE.toItemTurmaDto(aluno);
 	}
 	
 	public void removeAluno(Long idTurma, Long idAluno) {

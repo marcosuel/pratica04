@@ -2,10 +2,8 @@ package com.company.pratica04.dto.turma;
 
 import java.time.Year;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.company.pratica04.dto.aluno.AlunoItemListaTurmaDto;
-import com.company.pratica04.model.Turma;
 
 public class TurmaDto {
 	private Long id;
@@ -15,14 +13,6 @@ public class TurmaDto {
 	private List<AlunoItemListaTurmaDto> alunos;
 	
 	public TurmaDto() {}
-
-	public TurmaDto(Turma turma) {
-		this.id = turma.getId();
-		this.nome = turma.getNome();
-		this.quantidadeAlunos = turma.getQuantidadeAlunos();
-		this.anoLetivo = turma.getAnoLetivo();
-		this.alunos = turma.getAlunos().stream().map(a -> new AlunoItemListaTurmaDto(a)).collect(Collectors.toList());
-	}
 
 	public Long getId() {
 		return id;

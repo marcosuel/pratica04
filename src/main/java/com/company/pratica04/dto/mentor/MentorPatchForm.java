@@ -1,9 +1,9 @@
-package com.company.pratica04.dto.aluno;
+package com.company.pratica04.dto.mentor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class AlunoPutForm {
+public class MentorPatchForm {
 
 	@NotBlank
 	private String nome;
@@ -12,14 +12,7 @@ public class AlunoPutForm {
 	@NotNull
 	private Long matricula;
 	
-	
-	public AlunoPutForm() {}
-
-	public AlunoPutForm(String nome, String sobrenome, Long matricula) {
-		this.nome = nome;
-		this.sobrenome = sobrenome;
-		this.matricula = matricula;
-	}
+	public MentorPatchForm() {}
 
 	public String getNome() {
 		return nome;

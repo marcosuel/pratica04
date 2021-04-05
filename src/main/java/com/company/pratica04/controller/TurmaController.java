@@ -21,8 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.company.pratica04.dto.aluno.AlunoIdForm;
 import com.company.pratica04.dto.aluno.AlunoItemListaTurmaDto;
 import com.company.pratica04.dto.turma.TurmaDto;
-import com.company.pratica04.dto.turma.TurmaForm;
+import com.company.pratica04.dto.turma.TurmaPostForm;
 import com.company.pratica04.dto.turma.TurmaItemListaDto;
+import com.company.pratica04.dto.turma.TurmaPatchForm;
 import com.company.pratica04.service.TurmaService;
 
 import io.swagger.annotations.ApiOperation;
@@ -37,7 +38,7 @@ public class TurmaController {
 	
 	@ApiOperation(value = "Cadastra uma turma.")
 	@PostMapping
-	public ResponseEntity<TurmaDto> cadastra(@Valid @RequestBody TurmaForm form){
+	public ResponseEntity<TurmaDto> cadastra(@Valid @RequestBody TurmaPostForm form){
 		TurmaDto dto = service.cadastra(form);
 		return new ResponseEntity<TurmaDto>(dto, HttpStatus.CREATED);
 	}
@@ -45,7 +46,7 @@ public class TurmaController {
 	@ApiOperation(value = "Atualiza uma turma.")
 	@PatchMapping("/{id}")
 	public ResponseEntity<TurmaItemListaDto> atualiza(@Parameter(description = "Id da turma") @PathVariable Long id, 
-										@Valid @RequestBody TurmaForm form){
+										@Valid @RequestBody TurmaPatchForm form){
 		TurmaItemListaDto dto = service.atualiza(id, form);
 		return ResponseEntity.ok(dto);
 	}

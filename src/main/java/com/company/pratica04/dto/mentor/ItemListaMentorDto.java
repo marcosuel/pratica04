@@ -1,21 +1,14 @@
 package com.company.pratica04.dto.mentor;
 
-import com.company.pratica04.model.Mentor;
-
 public class ItemListaMentorDto {
 	
 	private Long id;
-	private String nomeCompleto;
+	private String nome;
+	private String sobrenome;
 	private Long matricula;
 	
 	
 	public ItemListaMentorDto() {}
-
-	public ItemListaMentorDto(Mentor mentor) {
-		this.id = mentor.getId();
-		this.nomeCompleto = mentor.getNome()+" "+mentor.getSobrenome();
-		this.matricula = mentor.getMatricula();
-	}
 
 	public Long getId() {
 		return id;
@@ -33,11 +26,19 @@ public class ItemListaMentorDto {
 		this.matricula = matricula;
 	}
 
-	public String getNomeCompleto() {
-		return nomeCompleto;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setNomeCompleto(String nomeCompleto) {
-		this.nomeCompleto = nomeCompleto;
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getSobrenome() {
+		return sobrenome;
+	}
+
+	public void setSobrenome(String sobrenome) {
+		this.sobrenome = sobrenome;
 	}
 }

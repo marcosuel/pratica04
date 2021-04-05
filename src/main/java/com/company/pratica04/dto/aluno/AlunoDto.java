@@ -1,8 +1,6 @@
 package com.company.pratica04.dto.aluno;
 
 import com.company.pratica04.dto.turma.TurmaItemAlunoDto;
-import com.company.pratica04.model.Aluno;
-import com.company.pratica04.model.Turma;
 
 public class AlunoDto {
 
@@ -13,15 +11,6 @@ public class AlunoDto {
 	private TurmaItemAlunoDto turma;
 	
 	public AlunoDto() {}
-
-	public AlunoDto(Aluno aluno) {
-		this.id = aluno.getId();
-		this.nome = aluno.getNome();
-		this.sobrenome = aluno.getSobrenome();
-		this.matricula = aluno.getMatricula();
-		Turma turma = aluno.getTurma();
-		this.turma = turma != null ? new TurmaItemAlunoDto(turma) : null;
-	}
 
 	public Long getId() {
 		return id;

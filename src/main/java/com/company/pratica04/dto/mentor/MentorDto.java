@@ -1,29 +1,19 @@
 package com.company.pratica04.dto.mentor;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.company.pratica04.dto.aluno.AlunoDto;
-import com.company.pratica04.model.Mentor;
 
 public class MentorDto {
 	
 	private Long id;
-	private String nomeCompleto;
+	private String nome;
+	private String sobrenome;
 	private Long matricula;
 	private List<AlunoDto> mentorados;
 	
 	
 	public MentorDto() {}
-
-	public MentorDto(Mentor mentor) {
-		this.id = mentor.getId();
-		this.nomeCompleto = mentor.getNome()+" "+mentor.getSobrenome();
-		this.matricula = mentor.getMatricula();
-		this.mentorados = mentor.getMentorados()
-							.stream().map(a -> new AlunoDto(a))
-							.collect(Collectors.toList());
-	}
 
 	public Long getId() {
 		return id;
@@ -49,11 +39,19 @@ public class MentorDto {
 		this.mentorados = mentorados;
 	}
 
-	public String getNomeCompleto() {
-		return nomeCompleto;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setNomeCompleto(String nomeCompleto) {
-		this.nomeCompleto = nomeCompleto;
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getSobrenome() {
+		return sobrenome;
+	}
+
+	public void setSobrenome(String sobrenome) {
+		this.sobrenome = sobrenome;
 	}
 }

@@ -3,7 +3,9 @@ package com.company.pratica04.dto.mentor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class AtualizaMentorForm {
+import com.company.pratica04.model.Mentor;
+
+public class MentorPostForm {
 
 	@NotBlank
 	private String nome;
@@ -12,13 +14,10 @@ public class AtualizaMentorForm {
 	@NotNull
 	private Long matricula;
 	
+	public MentorPostForm() {}
 	
-	public AtualizaMentorForm() {}
-
-	public AtualizaMentorForm(String nome, String sobrenome, Long matricula) {
-		this.nome = nome;
-		this.sobrenome = sobrenome;
-		this.matricula = matricula;
+	public Mentor convert() {
+		return new Mentor(nome, sobrenome, matricula);
 	}
 
 	public String getNome() {
@@ -44,5 +43,4 @@ public class AtualizaMentorForm {
 	public void setMatricula(Long matricula) {
 		this.matricula = matricula;
 	}
-
 }

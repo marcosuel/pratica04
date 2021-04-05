@@ -3,11 +3,6 @@ package com.company.pratica04.dto.aluno;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.company.pratica04.model.Aluno;
-import com.company.pratica04.model.Turma;
-
-import springfox.documentation.annotations.ApiIgnore;
-
 public class AlunoPostForm {
 
 	@NotBlank
@@ -20,17 +15,6 @@ public class AlunoPostForm {
 	private Long idTurma;
 	
 	public AlunoPostForm() {}
-
-	public AlunoPostForm(String nome, String sobrenome, Long matricula, Long idTurma) {
-		this.nome = nome;
-		this.sobrenome = sobrenome;
-		this.matricula = matricula;
-		this.idTurma = idTurma;
-	}
-	
-	public Aluno convert() {
-		return new Aluno(nome, sobrenome, matricula);
-	}
 
 	public String getNome() {
 		return nome;

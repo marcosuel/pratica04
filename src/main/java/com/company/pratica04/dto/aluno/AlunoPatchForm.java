@@ -1,11 +1,9 @@
-package com.company.pratica04.dto.mentor;
+package com.company.pratica04.dto.aluno;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.company.pratica04.model.Mentor;
-
-public class MentorForm {
+public class AlunoPatchForm {
 
 	@NotBlank
 	private String nome;
@@ -14,17 +12,8 @@ public class MentorForm {
 	@NotNull
 	private Long matricula;
 	
-	public MentorForm() {}
 	
-	public MentorForm(String nome, String sobrenome, Long matricula) {
-		this.nome = nome;
-		this.sobrenome = sobrenome;
-		this.matricula = matricula;
-	}
-	
-	public Mentor convert() {
-		return new Mentor(nome, sobrenome, matricula);
-	}
+	public AlunoPatchForm() {}
 
 	public String getNome() {
 		return nome;
@@ -49,4 +38,5 @@ public class MentorForm {
 	public void setMatricula(Long matricula) {
 		this.matricula = matricula;
 	}
+
 }

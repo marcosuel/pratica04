@@ -12,11 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.company.pratica04.dto.aluno.AlunoDto;
-import com.company.pratica04.dto.mentor.AtualizaMentorForm;
+import com.company.pratica04.dto.mentor.MentorPatchForm;
 import com.company.pratica04.dto.mentor.ItemListaMentorDto;
 import com.company.pratica04.dto.mentor.MentorDto;
-import com.company.pratica04.dto.mentor.MentorForm;
+import com.company.pratica04.dto.mentor.MentorPostForm;
 import com.company.pratica04.exception.DomainException;
+import com.company.pratica04.mapper.AlunoMapper;
+import com.company.pratica04.mapper.MentorMapper;
 import com.company.pratica04.model.Aluno;
 import com.company.pratica04.model.Mentor;
 import com.company.pratica04.repository.AlunoRepository;
@@ -25,15 +27,15 @@ import com.company.pratica04.repository.MentorRepository;
 
 @Service
 public class MentorService {
-
+	
 	@Autowired
 	private MentorRepository mentorRep;
-	
 	@Autowired
 	private AlunoRepository alunoRep;
+	@Autowired
+	private MentorMapper mapper;
 	
-	
-	public MentorDto cadastra(MentorForm form) {
+	public MentorDto cadastra(MentorPostForm form) {
 		Optional<Mentor> optMentor = mentorRep.findByMatricula(form.getMatricula());
 		if(optMentor.isPresent())
 			throw new DomainException("A matrícula "+form.getMatricula()+" já foi cadastrada.", HttpStatus.BAD_REQUEST);
@@ -41,10 +43,10 @@ public class MentorService {
 		Mentor mentor = form.convert();
 		mentor = mentorRep.save(mentor);
 		
-		return new MentorDto(mentor);
+		return mapper.toDto(mentor);
 	}
 	
-	public MentorDto atualiza(Long id, AtualizaMentorForm form) {
+	public MentorDto atualiza(Long id, MentorPatchForm form) {
 		Mentor mentor = garanteQueMentorExiste(id);
 		
 		mentor.setNome(form.getNome());
@@ -52,18 +54,18 @@ public class MentorService {
 		mentor.setMatricula(form.getMatricula());
 		
 		mentor = mentorRep.save(mentor);
-		return new MentorDto(mentor);
+		return mapper.toDto(mentor);
 	}
 	
 	public Page<ItemListaMentorDto> buscaTodos(Pageable pageable){
-		return mentorRep.findAll(pageable).map(m -> new ItemListaMentorDto(m));
+		return mentorRep.findAll(pageable).map(mentor -> mapper.toItemListaDto(mentor));
 	}
 	
 	public List<AlunoDto> buscaMentorados(Long id){
 		Mentor mentor = garanteQueMentorExiste(id);
 		List<Aluno> mentorados = mentor.getMentorados();
 		return mentorados.stream()
-				.map(aluno -> new AlunoDto(aluno))
+				.map(aluno -> AlunoMapper.INSTANCE.toDto(aluno))
 				.collect(Collectors.toList());
 	}
 	
@@ -87,7 +89,7 @@ public class MentorService {
 			throw new DomainException("O aluno com o id "+idAluno+" já possui um mentor", HttpStatus.BAD_REQUEST);
 		}
 			
-		return new MentorDto(mentor);
+		return mapper.toDto(mentor);
 	}
 	
 	private void garanteQuePodeMentorar(Long idMentor, Aluno aluno) {
@@ -102,7 +104,7 @@ public class MentorService {
 	
 	public MentorDto buscaPorId(Long id) {
 		Mentor mentor = garanteQueMentorExiste(id);
-		return new MentorDto(mentor);
+		return mapper.toDto(mentor);
 	}
 	
 	public void deleta(Long id) {

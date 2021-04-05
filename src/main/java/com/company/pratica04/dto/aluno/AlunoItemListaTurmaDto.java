@@ -1,20 +1,13 @@
 package com.company.pratica04.dto.aluno;
 
-import com.company.pratica04.model.Aluno;
-
 public class AlunoItemListaTurmaDto {
 
 	private Long id;
-	private String nomeCompleto;
+	private String nome;
+	private String sobrenome;
 	private Long matricula;
 	
 	public AlunoItemListaTurmaDto() {}
-
-	public AlunoItemListaTurmaDto(Aluno aluno) {
-		this.id = aluno.getId();
-		this.nomeCompleto = aluno.getNome()+" "+aluno.getSobrenome();
-		this.matricula = aluno.getMatricula();
-	}
 
 	public Long getId() {
 		return id;
@@ -24,12 +17,20 @@ public class AlunoItemListaTurmaDto {
 		this.id = id;
 	}
 
-	public String getNomeCompleto() {
-		return nomeCompleto;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setNomeCompleto(String nomeCompleto) {
-		this.nomeCompleto = nomeCompleto;
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getSobrenome() {
+		return sobrenome;
+	}
+
+	public void setSobrenome(String sobrenome) {
+		this.sobrenome = sobrenome;
 	}
 
 	public Long getMatricula() {

@@ -20,11 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.company.pratica04.dto.aluno.AlunoDto;
 import com.company.pratica04.dto.aluno.AlunoIdForm;
-import com.company.pratica04.dto.aluno.AlunoItemListaTurmaDto;
-import com.company.pratica04.dto.mentor.AtualizaMentorForm;
+import com.company.pratica04.dto.mentor.MentorPatchForm;
 import com.company.pratica04.dto.mentor.ItemListaMentorDto;
 import com.company.pratica04.dto.mentor.MentorDto;
-import com.company.pratica04.dto.mentor.MentorForm;
+import com.company.pratica04.dto.mentor.MentorPostForm;
 import com.company.pratica04.service.MentorService;
 
 import io.swagger.annotations.ApiOperation;
@@ -39,7 +38,7 @@ public class MentorController {
 	
 	@ApiOperation(value = "Cadastra um novo mentor.")
 	@PostMapping
-	public ResponseEntity<MentorDto> cadastra(@Valid @RequestBody MentorForm form) {
+	public ResponseEntity<MentorDto> cadastra(@Valid @RequestBody MentorPostForm form) {
 		
 		MentorDto dto = service.cadastra(form);
 		
@@ -86,7 +85,7 @@ public class MentorController {
 	@ApiOperation(value = "Atualiza um mentor.")
 	@PatchMapping("/{id}")
 	public ResponseEntity<MentorDto> atualiza(@Parameter(description = "Id do mentor") @PathVariable Long id, 
-										@Valid @RequestBody AtualizaMentorForm form){
+										@Valid @RequestBody MentorPatchForm form){
 		MentorDto dto = service.atualiza(id, form);
 		return ResponseEntity.ok(dto);
 	}

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.company.pratica04.dto.aluno.AlunoDto;
 import com.company.pratica04.dto.aluno.AlunoPostForm;
-import com.company.pratica04.dto.aluno.AlunoPutForm;
+import com.company.pratica04.dto.aluno.AlunoPatchForm;
 import com.company.pratica04.exception.DomainException;
 import com.company.pratica04.mapper.AlunoMapper;
 import com.company.pratica04.model.Aluno;
@@ -25,6 +25,8 @@ public class AlunoService {
 	private AlunoRepository alunoRep;
 	@Autowired
 	private TurmaRepository turmaRep;
+	@Autowired
+	private AlunoMapper mapper;
 
 	public AlunoDto cadastra(AlunoPostForm form) {
 		Optional<Turma> optTurma = turmaRep.findById(form.getIdTurma());		
@@ -38,20 +40,20 @@ public class AlunoService {
 		Turma turma = optTurma.get();
 		turma.setQuantidadeAlunos(turma.getQuantidadeAlunos() + 1);
 		
-		Aluno aluno = AlunoMapper.INSTANCE.toAluno(form);
+		Aluno aluno = mapper.toAluno(form);
 		aluno.setTurma(turma);
 		
 		aluno = alunoRep.save(aluno);
-		return new AlunoDto(aluno);
+		return mapper.toDto(aluno);
 	}
 
 	public Page<AlunoDto> buscaTodos(Pageable pageable) {
-		return alunoRep.findAll(pageable).map(a -> new AlunoDto(a));
+		return alunoRep.findAll(pageable).map(a -> mapper.toDto(a));
 	}
 	
 	public AlunoDto buscaPorId(Long id) {
 		Aluno aluno = garanteQueAlunoExiste(id);
-		return new AlunoDto(aluno);
+		return mapper.toDto(aluno);
 	}
 	
 	public void deleta(Long id) {
@@ -63,14 +65,14 @@ public class AlunoService {
 		alunoRep.delete(aluno);
 	}
 	
-	public AlunoDto atualiza(Long id, AlunoPutForm form) {
+	public AlunoDto atualiza(Long id, AlunoPatchForm form) {
 		Aluno aluno = garanteQueAlunoExiste(id);
 		aluno.setNome(form.getNome());
 		aluno.setSobrenome(form.getSobrenome());
 		aluno.setMatricula(form.getMatricula());
 		aluno = alunoRep.save(aluno);
 		
-		return new AlunoDto(aluno);
+		return mapper.toDto(aluno);
 	}
 	
 	public Aluno garanteQueAlunoExiste(Long id) {		

@@ -7,16 +7,16 @@ import javax.validation.constraints.NotNull;
 
 import com.company.pratica04.model.Turma;
 
-public class TurmaForm {
+public class TurmaPostForm {
 
 	@NotBlank
 	private String nome;
 	@NotNull
 	private Year anoLetivo;
 	
-	public TurmaForm() {}
+	public TurmaPostForm() {}
 
-	public TurmaForm(String nome, Year anoLetivo) {
+	public TurmaPostForm(String nome, Year anoLetivo) {
 		this.nome = nome;
 		this.anoLetivo = anoLetivo;
 	}
