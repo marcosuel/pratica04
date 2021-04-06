@@ -40,7 +40,7 @@ public class MentorService {
 		if(optMentor.isPresent())
 			throw new DomainException("A matrícula "+form.getMatricula()+" já foi cadastrada.", HttpStatus.BAD_REQUEST);
 		
-		Mentor mentor = form.convert();
+		Mentor mentor = mapper.toMentor(form);
 		mentor = mentorRep.save(mentor);
 		
 		return mapper.toDto(mentor);

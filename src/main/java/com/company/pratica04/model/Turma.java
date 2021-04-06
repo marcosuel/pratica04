@@ -11,66 +11,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
-@Entity(name = "turma")
-public class Turma {
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Entity(name = "turma")
+@Data @NoArgsConstructor
+public class Turma {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
 	private int quantidadeAlunos;
 	private Year anoLetivo;
-	
 	@OneToMany
 	@JoinColumn(name = "turma_id")
-	private List<Aluno> alunos;
-	
-	public Turma() {}
-
-	public Turma(String nome, Integer quantidadeAlunos, Year anoLetivo) {
-		this.nome = nome;
-		this.quantidadeAlunos = quantidadeAlunos;
-		this.anoLetivo = anoLetivo;
-		this.alunos = new ArrayList<Aluno>();
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public int getQuantidadeAlunos() {
-		return quantidadeAlunos;
-	}
-
-	public void setQuantidadeAlunos(int quantidadeAlunos) {
-		this.quantidadeAlunos = quantidadeAlunos;
-	}
-
-	public List<Aluno> getAlunos() {
-		return alunos;
-	}
-
-	public void setAlunos(List<Aluno> alunos) {
-		this.alunos = alunos;
-	}
-
-	public Year getAnoLetivo() {
-		return anoLetivo;
-	}
-
-	public void setAnoLetivo(Year anoLetivo) {
-		this.anoLetivo = anoLetivo;
-	}
+	private List<Aluno> alunos = new ArrayList<Aluno>();
 }

@@ -10,9 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
-@Entity(name = "mentor")
-public class Mentor {
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Entity(name = "mentor")
+@Data @NoArgsConstructor
+public class Mentor {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -21,62 +24,5 @@ public class Mentor {
 	private Long matricula;
 	@OneToMany
 	@JoinColumn(name = "mentor_id")
-	private List<Aluno> mentorados;
-	
-	public Mentor() {}
-
-	public Mentor(String nome, String sobrenome, Long matricula) {
-		this.nome = nome;
-		this.sobrenome = sobrenome;
-		this.matricula = matricula;
-		this.mentorados = new ArrayList<Aluno>();
-	}
-
-	public Mentor(Long id, String nome, String sobrenome, Long matricula, List<Aluno> mentorados) {
-		this.id = id;
-		this.nome = nome;
-		this.sobrenome = sobrenome;
-		this.matricula = matricula;
-		this.mentorados = mentorados;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getSobrenome() {
-		return sobrenome;
-	}
-
-	public void setSobrenome(String sobrenome) {
-		this.sobrenome = sobrenome;
-	}
-
-	public Long getMatricula() {
-		return matricula;
-	}
-
-	public void setMatricula(Long matricula) {
-		this.matricula = matricula;
-	}
-
-	public List<Aluno> getMentorados() {
-		return mentorados;
-	}
-
-	public void setMentorados(List<Aluno> mentorados) {
-		this.mentorados = mentorados;
-	}
+	private List<Aluno> mentorados = new ArrayList<Aluno>();
 }

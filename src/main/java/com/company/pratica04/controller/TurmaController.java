@@ -39,9 +39,6 @@ public class TurmaController {
 	@ApiOperation(value = "Cadastra uma turma.")
 	@PostMapping
 	public ResponseEntity<TurmaDto> cadastra(@Valid @RequestBody TurmaPostForm form){
-		TurmaDto aa = null;
-		int length = aa.getAlunos().size();
-		
 		TurmaDto dto = service.cadastra(form);
 		return new ResponseEntity<TurmaDto>(dto, HttpStatus.CREATED);
 	}
@@ -85,7 +82,7 @@ public class TurmaController {
 	@PostMapping("/{id}/alunos")
 	public ResponseEntity<AlunoItemListaTurmaDto> adicionaAluno(@Parameter(description = "Id da turma") @PathVariable(name = "id") Long idTurma, 
 											@Valid @RequestBody AlunoIdForm form){
-		AlunoItemListaTurmaDto dto = service.adicionaAluno(idTurma, form.getId());
+		AlunoItemListaTurmaDto dto = service.adicionaAluno(idTurma, form.getIdAluno());
 		return new ResponseEntity<>(dto, HttpStatus.CREATED);
 	}
 	

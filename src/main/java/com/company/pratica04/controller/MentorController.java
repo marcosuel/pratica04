@@ -55,7 +55,8 @@ public class MentorController {
 	@PostMapping("/{id}/mentorados")
 	public ResponseEntity<MentorDto> mentoraAluno(@Parameter(description = "Id do mentor") @PathVariable(name = "id") Long idMentor, 
 													@Valid @RequestBody AlunoIdForm form) {
-		MentorDto dto = service.mentoraAluno(idMentor, form.getId());
+
+		MentorDto dto = service.mentoraAluno(idMentor, form.getIdAluno());
 		return new ResponseEntity<MentorDto>(dto, HttpStatus.CREATED);
 	}
 	

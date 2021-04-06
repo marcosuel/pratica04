@@ -5,6 +5,11 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter @Setter @NoArgsConstructor
 public class FormFieldResponse {
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
@@ -17,38 +22,6 @@ public class FormFieldResponse {
 		this.timestamp = LocalDateTime.now();
 		this.status = status;
 		this.erros = erros;
-		this.path = path;
-	}
-
-	public LocalDateTime getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(LocalDateTime timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public List<FormFieldError> getErros() {
-		return erros;
-	}
-
-	public void setErros(List<FormFieldError> erros) {
-		this.erros = erros;
-	}
-
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
 		this.path = path;
 	}
 }

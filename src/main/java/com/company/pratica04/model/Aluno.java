@@ -7,7 +7,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity(name = "aluno")
+@Data  @NoArgsConstructor
 public class Aluno {
 
 	@Id
@@ -19,63 +23,6 @@ public class Aluno {
 	@ManyToOne
 	@JoinColumn(name = "turma_id")
 	private Turma turma;
-	
 	@ManyToOne
 	private Mentor mentor;
-	
-	public Aluno() {}
-	
-	public Aluno(String nome, String sobrenome, Long matricula) {
-		this.nome = nome;
-		this.sobrenome = sobrenome;
-		this.matricula = matricula;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getSobrenome() {
-		return sobrenome;
-	}
-
-	public void setSobrenome(String sobrenome) {
-		this.sobrenome = sobrenome;
-	}
-
-	public Long getMatricula() {
-		return matricula;
-	}
-
-	public void setMatricula(Long matricula) {
-		this.matricula = matricula;
-	}
-
-	public Turma getTurma() {
-		return turma;
-	}
-
-	public void setTurma(Turma turma) {
-		this.turma = turma;
-	}
-
-	public Mentor getMentor() {
-		return mentor;
-	}
-
-	public void setMentor(Mentor mentor) {
-		this.mentor = mentor;
-	}
 }

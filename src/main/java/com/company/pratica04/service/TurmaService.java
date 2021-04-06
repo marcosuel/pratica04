@@ -33,7 +33,7 @@ public class TurmaService {
 	private TurmaMapper mapper;
 	
 	public TurmaDto cadastra(TurmaPostForm form) {
-		Turma turma = form.convert();
+		Turma turma = mapper.toTurma(form);
 		turma = turmaRep.save(turma);
 		
 		return mapper.toDto(turma);
