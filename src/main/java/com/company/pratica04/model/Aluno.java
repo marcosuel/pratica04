@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @Entity(name = "aluno")
 @Data  @NoArgsConstructor @AllArgsConstructor
 public class Aluno {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -26,4 +25,11 @@ public class Aluno {
 	private Turma turma;
 	@ManyToOne
 	private Mentor mentor;
+	
+	public Aluno(String nome, String sobrenome, Long matricula, Turma turma) {
+		this.nome = nome;
+		this.sobrenome = sobrenome;
+		this.matricula = matricula;
+		this.turma = turma;
+	}
 }
