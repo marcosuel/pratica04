@@ -25,8 +25,8 @@ public class AlunoService {
 	private AlunoRepository alunoRep;
 	@Autowired
 	private TurmaRepository turmaRep;
-	@Autowired
-	private AlunoMapper mapper;
+
+	private AlunoMapper mapper = AlunoMapper.INSTANCE;
 
 	public AlunoDto cadastra(AlunoPostForm form) {
 		Optional<Turma> optTurma = turmaRep.findById(form.getIdTurma());		
@@ -42,7 +42,6 @@ public class AlunoService {
 		
 		Aluno aluno = mapper.toAluno(form);
 		aluno.setTurma(turma);
-		
 		aluno = alunoRep.save(aluno);
 		return mapper.toDto(aluno);
 	}
@@ -53,7 +52,7 @@ public class AlunoService {
 	
 	public AlunoDto buscaPorId(Long id) {
 		Aluno aluno = garanteQueAlunoExiste(id);
-		return mapper.toDto(aluno);
+		return AlunoMapper.INSTANCE.toDto(aluno);
 	}
 	
 	public void deleta(Long id) {
