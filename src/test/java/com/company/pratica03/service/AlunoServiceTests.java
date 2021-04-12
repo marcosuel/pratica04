@@ -98,4 +98,15 @@ class AlunoServiceTests {
 			service.cadastra(alunoPostForm);
 		});
 	}
+	
+	@Test
+	void testaCadastroMatriculaRepetida() {
+		when(alunoRep.findByMatricula(alunoPostForm.getMatricula())).thenReturn(Optional.of(aluno));
+		when(turmaRep.findById(alunoPostForm.getIdTurma())).thenReturn(Optional.of(turma));
+		
+		assertThrows(DomainException.class, () -> {
+			service.cadastra(alunoPostForm);
+		});
+	}
+	
 }
