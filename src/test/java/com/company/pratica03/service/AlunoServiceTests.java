@@ -1,6 +1,8 @@
 package com.company.pratica03.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.Year;
@@ -38,6 +40,8 @@ class AlunoServiceTests {
 	@InjectMocks
 	private AlunoService service;
 
+	
+	//objects
 	AlunoPostForm alunoPostForm;
 	Aluno alunoNaoSalvo;
 	Aluno alunoSalvo;
@@ -68,7 +72,7 @@ class AlunoServiceTests {
 	
 	@Test
 	void testaCadastroAlunoComSucesso() {
-		var qtdAlunosInicial = turma.getQuantidadeAlunos();
+		var qtdExcepted = turma.getQuantidadeAlunos();
 		
 		//setting up mocks
 		when(alunoRep.findByMatricula(alunoPostForm.getMatricula())).thenReturn(Optional.empty());
@@ -85,7 +89,7 @@ class AlunoServiceTests {
 		var turmaExpected = new TurmaItemAlunoDto(turmaItem.getId(), turmaItem.getNome(), turmaItem.getAnoLetivo());
 		
 		//running asserts
-		assertEquals(qtdAlunosInicial+1, turma.getQuantidadeAlunos());
+		assertEquals(qtdExcepted+1, turma.getQuantidadeAlunos());
 		comparaItemTurmaEsperadoComResultado(turmaExpected, turmaResult);
 		comparaAlunoDtoEsperadoComResultado(expected, result);
 	}
@@ -122,7 +126,26 @@ class AlunoServiceTests {
 		comparaAlunoDtoEsperadoComResultado(expected, result);
 	}
 	
+	@Test
+	void testaBuscaAlunoPorIdComIdInexistente() {
+		var id = 999L;
+		when(alunoRep.findById(id)).thenReturn(Optional.empty());
+		
+		assertThrows(DomainException.class, () -> {
+			service.buscaPorId(id);
+		});
+	}
 	
+	@Test
+	void deletaAlunoComSucesso() {
+		var qtdExcepted = turma.getQuantidadeAlunos()-1;
+		var id = alunoSalvo.getId();
+		when(alunoRep.findById(id)).thenReturn(Optional.of(alunoSalvo));
+		service.deleta(id);
+		
+		verify(alunoRep, times(1)).delete(alunoSalvo);
+		assertEquals(qtdExcepted, turma.getQuantidadeAlunos());
+	}
 	
 	private void comparaAlunoDtoEsperadoComResultado(AlunoDto expected, AlunoDto result) {
 		assertEquals(expected.getId(), result.getId());
