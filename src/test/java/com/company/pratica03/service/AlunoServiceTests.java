@@ -44,7 +44,6 @@ class AlunoServiceTests {
 	Turma turma;
 	TurmaItemAlunoDto turmaItem;
 	AlunoDto alunoDto;
-	int qtdAlunos;
 	
 	@BeforeEach
 	public void init() {
@@ -56,7 +55,7 @@ class AlunoServiceTests {
 		var nomeTurma = "Turma de POO";
 		var matricula = 542184L;
 		var ano = Year.of(2017);
-		qtdAlunos = 1;
+		var qtdAlunos = 1;
 
 		//setting up objects
 		alunoPostForm = new AlunoPostForm(nomeAluno, sobrenome, matricula, idTurma);
@@ -69,6 +68,8 @@ class AlunoServiceTests {
 	
 	@Test
 	void testaCadastroAlunoComSucesso() {
+		var qtdAlunosInicial = turma.getQuantidadeAlunos();
+		
 		//setting up mocks
 		when(alunoRep.findByMatricula(alunoPostForm.getMatricula())).thenReturn(Optional.empty());
 		when(turmaRep.findById(turma.getId())).thenReturn(Optional.of(turma));
@@ -76,20 +77,17 @@ class AlunoServiceTests {
 		when(alunoMapper.toAluno(alunoPostForm)).thenReturn(alunoNaoSalvo);
 		when(alunoMapper.toDto(alunoSalvo)).thenReturn(alunoDto);
 		
-		AlunoDto expected = new AlunoDto(alunoSalvo.getId(), alunoSalvo.getNome(), alunoSalvo.getSobrenome(), alunoSalvo.getMatricula(), turmaItem);
 		//running code
-		AlunoDto result = service.cadastra(alunoPostForm);
+		var result = service.cadastra(alunoPostForm);
+		var turmaResult = result.getTurma();
+		
+		var expected = new AlunoDto(alunoSalvo.getId(), alunoSalvo.getNome(), alunoSalvo.getSobrenome(), alunoSalvo.getMatricula(), turmaItem);
+		var turmaExpected = new TurmaItemAlunoDto(turmaItem.getId(), turmaItem.getNome(), turmaItem.getAnoLetivo());
+		
 		//running asserts
-		TurmaItemAlunoDto turmaResult = result.getTurma();
-		assertEquals(turmaItem.getId(), turmaResult.getId());
-		assertEquals(turmaItem.getNome(), turmaResult.getNome());
-		assertEquals(turmaItem.getAnoLetivo(), turmaResult.getAnoLetivo());
-		assertEquals(qtdAlunos+1, turma.getQuantidadeAlunos());
-
-		assertEquals(expected.getId(), result.getId());
-		assertEquals(expected.getNome(), result.getNome());
-		assertEquals(expected.getSobrenome(), result.getSobrenome());
-		assertEquals(expected.getMatricula(), result.getMatricula());
+		assertEquals(qtdAlunosInicial+1, turma.getQuantidadeAlunos());
+		comparaItemTurmaEsperadoComResultado(turmaExpected, turmaResult);
+		comparaAlunoDtoEsperadoComResultado(expected, result);
 	}
 	
 	@Test
@@ -113,6 +111,29 @@ class AlunoServiceTests {
 		});
 	}
 	
+	@Test
+	void testaBuscaAlunoPorIdComSucesso() {
+		var id = alunoSalvo.getId();
+		when(alunoRep.findById(id)).thenReturn(Optional.of(alunoSalvo));
+		
+		var result = service.buscaPorId(id);
+		var expected = new AlunoDto(alunoSalvo.getId(), alunoSalvo.getNome(), alunoSalvo.getSobrenome(), alunoSalvo.getMatricula(), turmaItem);
+		
+		comparaAlunoDtoEsperadoComResultado(expected, result);
+	}
 	
 	
+	
+	private void comparaAlunoDtoEsperadoComResultado(AlunoDto expected, AlunoDto result) {
+		assertEquals(expected.getId(), result.getId());
+		assertEquals(expected.getNome(), result.getNome());
+		assertEquals(expected.getSobrenome(), result.getSobrenome());
+		assertEquals(expected.getMatricula(), result.getMatricula());		
+	}
+	
+	private void comparaItemTurmaEsperadoComResultado(TurmaItemAlunoDto expected, TurmaItemAlunoDto result) {
+		assertEquals(expected.getId(), result.getId());
+		assertEquals(expected.getNome(), result.getNome());
+		assertEquals(expected.getAnoLetivo(), result.getAnoLetivo());		
+	}
 }
