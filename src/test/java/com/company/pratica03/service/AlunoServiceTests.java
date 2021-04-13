@@ -18,6 +18,7 @@ import com.company.pratica04.dto.aluno.AlunoDto;
 import com.company.pratica04.dto.aluno.AlunoPostForm;
 import com.company.pratica04.dto.turma.TurmaItemAlunoDto;
 import com.company.pratica04.exception.DomainException;
+import com.company.pratica04.mapper.AlunoMapper;
 import com.company.pratica04.model.Aluno;
 import com.company.pratica04.model.Turma;
 import com.company.pratica04.repository.AlunoRepository;
@@ -31,18 +32,19 @@ class AlunoServiceTests {
 	private AlunoRepository alunoRep;
 	@Mock
 	private TurmaRepository turmaRep;
+	@Mock
+	private AlunoMapper alunoMapper;
 	
 	@InjectMocks
 	private AlunoService service;
 
-	
-	
 	AlunoPostForm alunoPostForm;
 	Aluno alunoNaoSalvo;
-	Aluno aluno;
+	Aluno alunoSalvo;
 	Turma turma;
 	TurmaItemAlunoDto turmaItem;
-	int qtdAluno;
+	AlunoDto alunoDto;
+	int qtdAlunos;
 	
 	@BeforeEach
 	public void init() {
@@ -54,15 +56,15 @@ class AlunoServiceTests {
 		var nomeTurma = "Turma de POO";
 		var matricula = 542184L;
 		var ano = Year.of(2017);
-		qtdAluno = 1;
+		qtdAlunos = 1;
 
 		//setting up objects
 		alunoPostForm = new AlunoPostForm(nomeAluno, sobrenome, matricula, idTurma);
-		turma = new Turma(idTurma, nomeTurma, qtdAluno, ano, new ArrayList<Aluno>());
-		aluno = new Aluno(idAluno, nomeAluno, sobrenome, matricula, turma, null);
+		turma = new Turma(idTurma, nomeTurma, qtdAlunos, ano, new ArrayList<Aluno>());
+		alunoSalvo = new Aluno(idAluno, nomeAluno, sobrenome, matricula, turma, null);
 		alunoNaoSalvo = new Aluno(nomeAluno, sobrenome, matricula, turma);
 		turmaItem = new TurmaItemAlunoDto(idTurma, nomeTurma, ano);
-		
+		alunoDto = new AlunoDto(alunoSalvo.getId(), alunoSalvo.getNome(), alunoSalvo.getSobrenome(), alunoSalvo.getMatricula(), turmaItem);
 	}
 	
 	@Test
@@ -70,9 +72,11 @@ class AlunoServiceTests {
 		//setting up mocks
 		when(alunoRep.findByMatricula(alunoPostForm.getMatricula())).thenReturn(Optional.empty());
 		when(turmaRep.findById(turma.getId())).thenReturn(Optional.of(turma));
-		when(alunoRep.save(alunoNaoSalvo)).thenReturn(aluno);
+		when(alunoRep.save(alunoNaoSalvo)).thenReturn(alunoSalvo);
+		when(alunoMapper.toAluno(alunoPostForm)).thenReturn(alunoNaoSalvo);
+		when(alunoMapper.toDto(alunoSalvo)).thenReturn(alunoDto);
 		
-		AlunoDto expected = new AlunoDto(aluno.getId(), aluno.getNome(), aluno.getSobrenome(), aluno.getMatricula(), turmaItem);
+		AlunoDto expected = new AlunoDto(alunoSalvo.getId(), alunoSalvo.getNome(), alunoSalvo.getSobrenome(), alunoSalvo.getMatricula(), turmaItem);
 		//running code
 		AlunoDto result = service.cadastra(alunoPostForm);
 		//running asserts
@@ -80,7 +84,7 @@ class AlunoServiceTests {
 		assertEquals(turmaItem.getId(), turmaResult.getId());
 		assertEquals(turmaItem.getNome(), turmaResult.getNome());
 		assertEquals(turmaItem.getAnoLetivo(), turmaResult.getAnoLetivo());
-		assertEquals(qtdAluno+1, turma.getQuantidadeAlunos());
+		assertEquals(qtdAlunos+1, turma.getQuantidadeAlunos());
 
 		assertEquals(expected.getId(), result.getId());
 		assertEquals(expected.getNome(), result.getNome());
@@ -89,7 +93,7 @@ class AlunoServiceTests {
 	}
 	
 	@Test
-	void testaCadastroAlunoTurmaNaoExistente() {
+	void testaCadastroAlunoComTurmaNaoExistenteFalha() {
 		var id = 999L;
 		alunoPostForm.setIdTurma(id);
 		when(turmaRep.findById(id)).thenReturn(Optional.empty());
@@ -100,13 +104,15 @@ class AlunoServiceTests {
 	}
 	
 	@Test
-	void testaCadastroMatriculaRepetida() {
-		when(alunoRep.findByMatricula(alunoPostForm.getMatricula())).thenReturn(Optional.of(aluno));
+	void testaCadastroAlunoComMatriculaRepetidaFalha() {
+		when(alunoRep.findByMatricula(alunoPostForm.getMatricula())).thenReturn(Optional.of(alunoSalvo));
 		when(turmaRep.findById(alunoPostForm.getIdTurma())).thenReturn(Optional.of(turma));
 		
 		assertThrows(DomainException.class, () -> {
 			service.cadastra(alunoPostForm);
 		});
 	}
+	
+	
 	
 }
