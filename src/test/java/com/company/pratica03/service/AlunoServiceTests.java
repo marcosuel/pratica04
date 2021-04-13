@@ -48,31 +48,40 @@ class AlunoServiceTests {
 	Turma turma;
 	TurmaItemAlunoDto turmaItem;
 	AlunoDto alunoDto;
+	//variables
+	Long idAluno;
+	Long idTurma;
+	String nomeAluno;
+	String sobrenome;
+	String nomeTurma;
+	Long matricula;
+	Year ano;
+	int qtdAlunos;
 	
 	@BeforeEach
 	public void init() {
 		//setting up attributes
-		var idAluno = 1L;
-		var idTurma = 2L;
-		var nomeAluno = "José";
-		var sobrenome = "Alberto";
-		var nomeTurma = "Turma de POO";
-		var matricula = 542184L;
-		var ano = Year.of(2017);
-		var qtdAlunos = 1;
+		idAluno = 1L;
+		idTurma = 2L;
+		nomeAluno = "José";
+		sobrenome = "Alberto";
+		nomeTurma = "Turma de POO";
+		matricula = 542184L;
+		ano = Year.of(2017);
+		qtdAlunos = 1;
 
 		//setting up objects
 		alunoPostForm = new AlunoPostForm(nomeAluno, sobrenome, matricula, idTurma);
 		turma = new Turma(idTurma, nomeTurma, qtdAlunos, ano, new ArrayList<Aluno>());
-		alunoSalvo = new Aluno(idAluno, nomeAluno, sobrenome, matricula, turma, null);
-		alunoNaoSalvo = new Aluno(nomeAluno, sobrenome, matricula, turma);
-		turmaItem = new TurmaItemAlunoDto(idTurma, nomeTurma, ano);
+		alunoNaoSalvo = new Aluno(alunoPostForm.getNome(), alunoPostForm.getSobrenome(), alunoPostForm.getMatricula(), turma);
+		alunoSalvo = new Aluno(idAluno, alunoNaoSalvo.getNome(), alunoNaoSalvo.getSobrenome(), alunoNaoSalvo.getMatricula(), alunoNaoSalvo.getTurma(), null);
+		turmaItem = new TurmaItemAlunoDto(turma.getId(), turma.getNome(), turma.getAnoLetivo());
 		alunoDto = new AlunoDto(alunoSalvo.getId(), alunoSalvo.getNome(), alunoSalvo.getSobrenome(), alunoSalvo.getMatricula(), turmaItem);
 	}
 	
 	@Test
 	void testaCadastroAlunoComSucesso() {
-		var qtdExcepted = turma.getQuantidadeAlunos();
+		var qtdExcepted = turma.getQuantidadeAlunos()+1;
 		
 		//setting up mocks
 		when(alunoRep.findByMatricula(alunoPostForm.getMatricula())).thenReturn(Optional.empty());
@@ -85,11 +94,11 @@ class AlunoServiceTests {
 		var result = service.cadastra(alunoPostForm);
 		var turmaResult = result.getTurma();
 		
-		var expected = new AlunoDto(alunoSalvo.getId(), alunoSalvo.getNome(), alunoSalvo.getSobrenome(), alunoSalvo.getMatricula(), turmaItem);
-		var turmaExpected = new TurmaItemAlunoDto(turmaItem.getId(), turmaItem.getNome(), turmaItem.getAnoLetivo());
+		var expected = new AlunoDto(idAluno, nomeAluno, sobrenome, matricula, turmaItem);
+		var turmaExpected = new TurmaItemAlunoDto(idTurma, nomeTurma, ano);
 		
 		//running asserts
-		assertEquals(qtdExcepted+1, turma.getQuantidadeAlunos());
+		assertEquals(qtdExcepted, turma.getQuantidadeAlunos());
 		comparaItemTurmaEsperadoComResultado(turmaExpected, turmaResult);
 		comparaAlunoDtoEsperadoComResultado(expected, result);
 	}
