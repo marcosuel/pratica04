@@ -67,7 +67,7 @@ class AlunoServiceTests {
 
 	
 	@BeforeEach
-	public void init() {
+	public void setup() {
 		//setting up attributes
 		idAluno = 1L;
 		idTurma = 2L;
@@ -93,7 +93,7 @@ class AlunoServiceTests {
 	}
 	
 	@Test
-	void testCadastroAlunoComSucesso() {
+	void givenPostFormWhenSaveThenSuccess() {
 		var qtdExcepted = turma.getQuantidadeAlunos()+1;
 		
 		//setting up mocks
@@ -112,12 +112,12 @@ class AlunoServiceTests {
 		
 		//running asserts
 		assertEquals(qtdExcepted, turma.getQuantidadeAlunos());
-		comparaItemTurmaEsperadoComResultado(turmaExpected, turmaResult);
-		comparaAlunoDtoEsperadoComResultado(expected, result);
+		compareItemTurmaDtoExpectedWithActual(turmaExpected, turmaResult);
+		compareAlunoDtoExceptedWithActual(expected, result);
 	}
 	
 	@Test
-	void testErroCadastroAlunoComTurmaNaoExistente() {
+	void givenPostFormWhenSaveWithNonexistentTurmaIdThenFail() {
 		var id = 999L;
 		alunoPostForm.setIdTurma(id);
 		when(turmaRep.findById(id)).thenReturn(Optional.empty());
@@ -129,7 +129,7 @@ class AlunoServiceTests {
 	}
 	
 	@Test
-	void testErroCadastroAlunoComMatriculaRepetida() {
+	void givenPostFormWhenSaveWithDuplicatedMatriculaThenFail() {
 		when(alunoRep.findByMatricula(alunoPostForm.getMatricula())).thenReturn(Optional.of(alunoSalvo));
 		when(turmaRep.findById(alunoPostForm.getIdTurma())).thenReturn(Optional.of(turma));
 		
@@ -140,18 +140,18 @@ class AlunoServiceTests {
 	}
 	
 	@Test
-	void testBuscaAlunoPorIdComSucesso() {
+	void givenIdWhenFindByIdThenSuccess() {
 		var id = alunoSalvo.getId();
 		when(alunoRep.findById(id)).thenReturn(Optional.of(alunoSalvo));
 		
 		var result = service.buscaPorId(id);
 		var expected = new AlunoDto(alunoSalvo.getId(), alunoSalvo.getNome(), alunoSalvo.getSobrenome(), alunoSalvo.getMatricula(), turmaItem);
 		
-		comparaAlunoDtoEsperadoComResultado(expected, result);
+		compareAlunoDtoExceptedWithActual(expected, result);
 	}
 	
 	@Test
-	void testErroBuscaAlunoPorIdComIdInexistente() {
+	void givenIdWhenFindByIdWithNonexistentIdThenFail() {
 		var id = 999L;
 		when(alunoRep.findById(id)).thenReturn(Optional.empty());
 		
@@ -161,7 +161,7 @@ class AlunoServiceTests {
 	}
 	
 	@Test
-	void testDeletaAlunoComSucesso() {
+	void givenIdWhenDeleteThenSuccess() {
 		var qtdExcepted = turma.getQuantidadeAlunos()-1;
 		var id = alunoSalvo.getId();
 		when(alunoRep.findById(id)).thenReturn(Optional.of(alunoSalvo));
@@ -172,7 +172,7 @@ class AlunoServiceTests {
 	}
 	
 	@Test
-	void testErroDeletaAlunoComIdInexistente() {
+	void givenIdWhenDeleteWithNonexistentIdThenFail() {
 		var id = 999L;
 		when(alunoRep.findById(id)).thenReturn(Optional.empty());
 		
@@ -183,7 +183,7 @@ class AlunoServiceTests {
 	}
 	
 	@Test
-	void testAtualizaAlunocomSucesso() {
+	void givenPatchFormWhenUpdateThenSuccess() {
 		var alunoDtoAtualizado = new AlunoDto(alunoAtualizado.getId(), alunoAtualizado.getNome(), 
 				alunoAtualizado.getSobrenome(), alunoAtualizado.getMatricula(), turmaItem);
 		
@@ -194,11 +194,11 @@ class AlunoServiceTests {
 		var expected = new AlunoDto(idAluno, nomeAtualizado, sobrenomeAtualizado, matriculaAtualizada, turmaItem);
 		var result = service.atualiza(alunoSalvo.getId(), alunoPatchForm);
 		
-		comparaAlunoDtoEsperadoComResultado(expected, result);
+		compareAlunoDtoExceptedWithActual(expected, result);
 	}
 	
 	@Test
-	void testErroAtualizaAlunoComIdInexistente() {
+	void givenIdAndPatchFormWhenUpdateAlunoWithNonexistentIdThenFail() {
 		var id = 999L;
 		when(alunoRep.findById(id)).thenReturn(Optional.empty());
 		
@@ -209,7 +209,7 @@ class AlunoServiceTests {
 	}
 
 	@Test
-	void testErroAtualizaAlunoComMatriculaDuplicada() {
+	void givenPatchFormWhenUpdateAlunoWithDuplicatedMatriculaThenFail() {
 		var outroAluno = new Aluno(22L, "Pedro", "Barbosa", matriculaAtualizada, turma, null);
 		
 		when(alunoRep.findById(alunoSalvo.getId())).thenReturn(Optional.of(alunoSalvo));
@@ -221,14 +221,14 @@ class AlunoServiceTests {
 		verify(alunoRep, never()).save(alunoSalvo);
 	}
 	
-	private void comparaAlunoDtoEsperadoComResultado(AlunoDto expected, AlunoDto result) {
+	private void compareAlunoDtoExceptedWithActual(AlunoDto expected, AlunoDto result) {
 		assertEquals(expected.getId(), result.getId());
 		assertEquals(expected.getNome(), result.getNome());
 		assertEquals(expected.getSobrenome(), result.getSobrenome());
 		assertEquals(expected.getMatricula(), result.getMatricula());		
 	}
 	
-	private void comparaItemTurmaEsperadoComResultado(TurmaItemAlunoDto expected, TurmaItemAlunoDto result) {
+	private void compareItemTurmaDtoExpectedWithActual(TurmaItemAlunoDto expected, TurmaItemAlunoDto result) {
 		assertEquals(expected.getId(), result.getId());
 		assertEquals(expected.getNome(), result.getNome());
 		assertEquals(expected.getAnoLetivo(), result.getAnoLetivo());		
