@@ -2,7 +2,6 @@ package com.company.pratica03.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -19,6 +18,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.company.pratica04.dto.aluno.AlunoDto;
+import com.company.pratica04.dto.aluno.AlunoPatchForm;
 import com.company.pratica04.dto.aluno.AlunoPostForm;
 import com.company.pratica04.dto.turma.TurmaItemAlunoDto;
 import com.company.pratica04.exception.DomainException;
@@ -45,6 +45,7 @@ class AlunoServiceTests {
 	
 	//objects
 	AlunoPostForm alunoPostForm;
+	AlunoPatchForm alunoPatchForm;
 	Aluno alunoNaoSalvo;
 	Aluno alunoSalvo;
 	Turma turma;
@@ -59,6 +60,10 @@ class AlunoServiceTests {
 	Long matricula;
 	Year ano;
 	int qtdAlunos;
+	String nomeAtualizado;
+	String sobrenomeAtualizado;
+	Long matriculaAtualizada;
+
 	
 	@BeforeEach
 	public void init() {
@@ -71,8 +76,12 @@ class AlunoServiceTests {
 		matricula = 542184L;
 		ano = Year.of(2017);
 		qtdAlunos = 1;
+		nomeAtualizado = "Carlos";
+		sobrenomeAtualizado = "Silva";
+		matriculaAtualizada = 542842L;
 
 		//setting up objects
+		alunoPatchForm = new AlunoPatchForm(nomeAtualizado, sobrenomeAtualizado, matriculaAtualizada);
 		alunoPostForm = new AlunoPostForm(nomeAluno, sobrenome, matricula, idTurma);
 		turma = new Turma(idTurma, nomeTurma, qtdAlunos, ano, new ArrayList<Aluno>());
 		alunoNaoSalvo = new Aluno(alunoPostForm.getNome(), alunoPostForm.getSobrenome(), alunoPostForm.getMatricula(), turma);
@@ -82,7 +91,7 @@ class AlunoServiceTests {
 	}
 	
 	@Test
-	void testaCadastroAlunoComSucesso() {
+	void testCadastroAlunoComSucesso() {
 		var qtdExcepted = turma.getQuantidadeAlunos()+1;
 		
 		//setting up mocks
@@ -106,7 +115,7 @@ class AlunoServiceTests {
 	}
 	
 	@Test
-	void testaCadastroAlunoComTurmaNaoExistenteFalha() {
+	void testErroCadastroAlunoComTurmaNaoExistente() {
 		var id = 999L;
 		alunoPostForm.setIdTurma(id);
 		when(turmaRep.findById(id)).thenReturn(Optional.empty());
@@ -118,7 +127,7 @@ class AlunoServiceTests {
 	}
 	
 	@Test
-	void testaCadastroAlunoComMatriculaRepetidaFalha() {
+	void testErroCadastroAlunoComMatriculaRepetida() {
 		when(alunoRep.findByMatricula(alunoPostForm.getMatricula())).thenReturn(Optional.of(alunoSalvo));
 		when(turmaRep.findById(alunoPostForm.getIdTurma())).thenReturn(Optional.of(turma));
 		
@@ -129,7 +138,7 @@ class AlunoServiceTests {
 	}
 	
 	@Test
-	void testaBuscaAlunoPorIdComSucesso() {
+	void testBuscaAlunoPorIdComSucesso() {
 		var id = alunoSalvo.getId();
 		when(alunoRep.findById(id)).thenReturn(Optional.of(alunoSalvo));
 		
@@ -140,7 +149,7 @@ class AlunoServiceTests {
 	}
 	
 	@Test
-	void testaBuscaAlunoPorIdComIdInexistente() {
+	void testErroBuscaAlunoPorIdComIdInexistente() {
 		var id = 999L;
 		when(alunoRep.findById(id)).thenReturn(Optional.empty());
 		
@@ -150,7 +159,7 @@ class AlunoServiceTests {
 	}
 	
 	@Test
-	void testaDeletaAlunoComSucesso() {
+	void testDeletaAlunoComSucesso() {
 		var qtdExcepted = turma.getQuantidadeAlunos()-1;
 		var id = alunoSalvo.getId();
 		when(alunoRep.findById(id)).thenReturn(Optional.of(alunoSalvo));
@@ -161,7 +170,7 @@ class AlunoServiceTests {
 	}
 	
 	@Test
-	void testaDeletaAlunoComIdInexistente() {
+	void testErroDeletaAlunoComIdInexistente() {
 		var id = 999L;
 		when(alunoRep.findById(id)).thenReturn(Optional.empty());
 		
@@ -170,6 +179,34 @@ class AlunoServiceTests {
 		});
 		verify(alunoRep, never()).delete(alunoSalvo);
 	}
+	
+	@Test
+	void testAtualizaAlunocomSucesso() {
+		var alunoDtoAtualizado = new AlunoDto(alunoSalvo.getId(), nomeAtualizado, sobrenomeAtualizado, matriculaAtualizada, turmaItem);
+		
+		when(alunoRep.findById(alunoSalvo.getId())).thenReturn(Optional.of(alunoSalvo));
+		when(alunoRep.save(alunoSalvo)).thenReturn(alunoSalvo);
+		when(alunoMapper.toDto(alunoSalvo)).thenReturn(alunoDtoAtualizado);
+		
+		var expected = new AlunoDto(idAluno, nomeAtualizado, sobrenomeAtualizado, matriculaAtualizada, turmaItem);
+		var result = alunoDtoAtualizado;
+		
+		service.atualiza(alunoSalvo.getId(), alunoPatchForm);
+		
+		comparaAlunoDtoEsperadoComResultado(expected, result);
+	}
+	
+	void testErroAtualizaAlunoComIdInexistente() {
+		var id = 999L;
+		when(alunoRep.findById(id)).thenReturn(Optional.empty());
+		
+		assertThrows(DomainException.class, () -> {
+			service.atualiza(id, alunoPatchForm);
+		});
+		verify(alunoRep, never()).save(alunoSalvo);
+	}
+
+	
 	
 	private void comparaAlunoDtoEsperadoComResultado(AlunoDto expected, AlunoDto result) {
 		assertEquals(expected.getId(), result.getId());
