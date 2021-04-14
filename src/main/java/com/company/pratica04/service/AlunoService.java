@@ -66,6 +66,11 @@ public class AlunoService {
 	
 	public AlunoDto atualiza(Long id, AlunoPatchForm form) {
 		Aluno aluno = garanteQueAlunoExiste(id);
+		
+		Optional<Aluno> optAluno = alunoRep.findByMatricula(form.getMatricula());
+		if(optAluno.isPresent() && !optAluno.get().getId().equals(id))
+			throw new DomainException("A matrícula "+form.getMatricula()+" já foi cadastrada.", HttpStatus.BAD_REQUEST);
+		
 		aluno.setNome(form.getNome());
 		aluno.setSobrenome(form.getSobrenome());
 		aluno.setMatricula(form.getMatricula());
