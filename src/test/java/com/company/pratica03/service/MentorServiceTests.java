@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.company.pratica04.dto.aluno.AlunoDto;
 import com.company.pratica04.dto.mentor.MentorDto;
+import com.company.pratica04.dto.mentor.MentorPatchForm;
 import com.company.pratica04.dto.mentor.MentorPostForm;
 import com.company.pratica04.exception.DomainException;
 import com.company.pratica04.mapper.MentorMapper;
@@ -134,6 +135,27 @@ public class MentorServiceTests {
 		assertThrows(DomainException.class, () -> {
 			service.deleta(id);
 		});
+	}
+	
+	@Test
+	void givenIdAndPatchFormWhenUpdateThenSuccess() {
+		initMentor();
+		var nomeAtualizado = "Pedro";
+		var sobrenomeAtualizado = "Vieira";
+		var matriculaAtualizada = 542879L;
+		
+		var patchForm = new MentorPatchForm(nomeAtualizado, sobrenomeAtualizado, matriculaAtualizada);
+		var mentorDtoAtualizado = new MentorDto(idMentor, patchForm.getNome(), patchForm.getSobrenome(), 
+				patchForm.getMatricula(), mentoradosDto);
+		
+		when(mentorRep.findById(idMentor)).thenReturn(Optional.of(mentorSalvo));
+		when(mentorRep.save(mentorSalvo)).thenReturn(mentorSalvo);
+		when(mapper.toDto(mentorSalvo)).thenReturn(mentorDtoAtualizado);
+		
+		var expected = new MentorDto(idMentor, nomeAtualizado, sobrenomeAtualizado, matriculaAtualizada, mentoradosDto);
+		var result = service.atualiza(idMentor, patchForm);
+		
+		compareExpectedMentorDtoWithActual(expected, result);
 	}
 	
 	
