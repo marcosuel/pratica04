@@ -50,7 +50,7 @@ public class MentorServiceTests {
 	
 	String nomeAtualizado;
 	String sobrenomeAtualizado;
-	String matriculaAtualizada;
+	Long matriculaAtualizada;
 	
 	MentorPatchForm patchForm;
 	MentorPostForm postForm;
@@ -145,15 +145,16 @@ public class MentorServiceTests {
 	@Test
 	void givenIdAndPatchFormWhenUpdateThenSuccess() {
 		initMentor();
-		var nomeAtualizado = "Pedro";
-		var sobrenomeAtualizado = "Vieira";
-		var matriculaAtualizada = 542879L;
+		nomeAtualizado = "Pedro";
+		sobrenomeAtualizado = "Vieira";
+		matriculaAtualizada = 542879L;
 		
 		patchForm = new MentorPatchForm(nomeAtualizado, sobrenomeAtualizado, matriculaAtualizada);
 		var mentorDtoAtualizado = new MentorDto(idMentor, patchForm.getNome(), patchForm.getSobrenome(), 
 				patchForm.getMatricula(), mentoradosDto);
 		
 		when(mentorRep.findById(idMentor)).thenReturn(Optional.of(mentorSalvo));
+		when(mentorRep.findByMatricula(matriculaAtualizada)).thenReturn(Optional.of(mentorSalvo));
 		when(mentorRep.save(mentorSalvo)).thenReturn(mentorSalvo);
 		when(mapper.toDto(mentorSalvo)).thenReturn(mentorDtoAtualizado);
 		
@@ -176,7 +177,19 @@ public class MentorServiceTests {
 		verify(mentorRep, never()).save(mentorSalvo);
 	}
 	
-	
+	@Test
+	void givenIdAndPatchWhenUpdateWithDuplicatedMatriculaThenFail() {
+		initMentor();
+		patchForm = new MentorPatchForm(nomeAtualizado, sobrenomeAtualizado, matriculaAtualizada);
+		var outroMentor = new Mentor(2L, patchForm.getNome(), patchForm.getSobrenome(), patchForm.getMatricula(), mentorados);
+		
+		when(mentorRep.findById(idMentor)).thenReturn(Optional.of(mentorSalvo));
+		when(mentorRep.findByMatricula(patchForm.getMatricula())).thenReturn(Optional.of(outroMentor));
+		
+		assertThrows(DomainException.class, () -> {
+			service.atualiza(idMentor, patchForm);
+		});
+	}
 	
 	void compareExpectedMentorDtoWithActual(MentorDto expected, MentorDto result) {
 		assertEquals(expected.getId(), result.getId());

@@ -49,6 +49,10 @@ public class MentorService {
 	public MentorDto atualiza(Long id, MentorPatchForm form) {
 		Mentor mentor = garanteQueMentorExiste(id);
 		
+		Optional<Mentor> optMentor = mentorRep.findByMatricula(form.getMatricula());
+		if(optMentor.isPresent() && !optMentor.get().getId().equals(id))
+			throw new DomainException("A matrícula "+form.getMatricula()+" já foi cadastrada.", HttpStatus.BAD_REQUEST);
+		
 		mentor.setNome(form.getNome());
 		mentor.setSobrenome(form.getSobrenome());
 		mentor.setMatricula(form.getMatricula());

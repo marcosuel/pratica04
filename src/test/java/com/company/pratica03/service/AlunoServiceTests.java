@@ -216,7 +216,7 @@ class AlunoServiceTests {
 		when(alunoRep.findByMatricula(matriculaAtualizada)).thenReturn(Optional.of(outroAluno));
 		
 		assertThrows(DomainException.class, () -> {
-			service.atualiza(idAluno, alunoPatchForm);
+			service.atualiza(idTurma, alunoPatchForm);
 		});
 		verify(alunoRep, never()).save(alunoSalvo);
 	}
