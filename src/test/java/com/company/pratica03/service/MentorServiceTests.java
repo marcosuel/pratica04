@@ -242,7 +242,19 @@ public class MentorServiceTests {
 		verify(mentorRep, never()).save(mentorSalvo);
 	}
 	
-	
+	@Test
+	void givenIdMentorAndIdAlunoWhenMentoraAlunoWithAlunoWithoutTurmaThenFail() {
+		initMentor();
+		var idAluno = 2L;
+		var aluno = new Aluno(idAluno, "Julio", "Cardoso", 98491L, null, null);
+		
+		when(mentorRep.findById(idMentor)).thenReturn(Optional.of(mentorSalvo));
+		when(alunoRep.findById(idAluno)).thenReturn(Optional.of(aluno));
+		
+		assertThrows(DomainException.class, () -> {
+			service.mentoraAluno(idMentor, idAluno);			
+		});
+	}
 	
 	void compareExpectedMentorDtoWithActual(MentorDto expected, MentorDto result) {
 		assertEquals(expected.getId(), result.getId());
