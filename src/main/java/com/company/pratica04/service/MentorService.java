@@ -83,16 +83,13 @@ public class MentorService {
 		Aluno aluno = optAluno.get();
 		if(aluno.getTurma() == null)
 			throw new DomainException("O mentor não pode mentorar um aluno sem turma.", HttpStatus.BAD_REQUEST);
+		if(aluno.getMentor() != null)
+			throw new DomainException("O aluno com o id "+idAluno+" já possui um mentor", HttpStatus.BAD_REQUEST);
 		
 		garanteQuePodeMentorar(idMentor, aluno);
 		mentor.getMentorados().add(aluno);
 		
-		try {
-			mentor = mentorRep.save(mentor);
-		} catch(DataIntegrityViolationException ex) {
-			throw new DomainException("O aluno com o id "+idAluno+" já possui um mentor", HttpStatus.BAD_REQUEST);
-		}
-			
+		mentor = mentorRep.save(mentor);
 		return mapper.toDto(mentor);
 	}
 	
