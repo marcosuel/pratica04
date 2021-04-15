@@ -218,13 +218,28 @@ public class MentorServiceTests {
 	
 	@Test
 	void givenIdMentorAndIdAlunoWhenMentoraAlunoWithNonexistentIdMentorThenFail() {
-		Long idAluno = 2L;
+		var idAluno = 2L;
 		idMentor = 1L;
+		
 		when(mentorRep.findById(idMentor)).thenReturn(Optional.empty());
 		
 		assertThrows(DomainException.class, () -> {
 			service.mentoraAluno(idMentor, idAluno);
 		});
+		verify(mentorRep, never()).save(mentorSalvo);
+	}
+	
+	@Test
+	void givenIdMentorAndIdAlunoWhenMentoraAlunoWithNonexistentIdAlunoThenFail() {
+		initMentor();
+		var idAluno = 2L;
+		
+		when(mentorRep.findById(idMentor)).thenReturn(Optional.of(mentorSalvo));
+		
+		assertThrows(DomainException.class, () -> {
+			service.mentoraAluno(idMentor, idAluno);
+		});
+		verify(mentorRep, never()).save(mentorSalvo);
 	}
 	
 	
