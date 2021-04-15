@@ -112,8 +112,8 @@ class AlunoServiceTests {
 		
 		//running asserts
 		assertEquals(qtdExcepted, turma.getQuantidadeAlunos());
-		compareItemTurmaDtoExpectedWithActual(turmaExpected, turmaResult);
-		compareAlunoDtoExceptedWithActual(expected, result);
+		compareExpectedItemTurmaDtoWithActual(turmaExpected, turmaResult);
+		compareExceptedAlunoDtoWithActual(expected, result);
 	}
 	
 	@Test
@@ -147,7 +147,7 @@ class AlunoServiceTests {
 		var result = service.buscaPorId(id);
 		var expected = new AlunoDto(alunoSalvo.getId(), alunoSalvo.getNome(), alunoSalvo.getSobrenome(), alunoSalvo.getMatricula(), turmaItem);
 		
-		compareAlunoDtoExceptedWithActual(expected, result);
+		compareExceptedAlunoDtoWithActual(expected, result);
 	}
 	
 	@Test
@@ -194,7 +194,7 @@ class AlunoServiceTests {
 		var expected = new AlunoDto(idAluno, nomeAtualizado, sobrenomeAtualizado, matriculaAtualizada, turmaItem);
 		var result = service.atualiza(alunoSalvo.getId(), alunoPatchForm);
 		
-		compareAlunoDtoExceptedWithActual(expected, result);
+		compareExceptedAlunoDtoWithActual(expected, result);
 	}
 	
 	@Test
@@ -221,14 +221,14 @@ class AlunoServiceTests {
 		verify(alunoRep, never()).save(alunoSalvo);
 	}
 	
-	private void compareAlunoDtoExceptedWithActual(AlunoDto expected, AlunoDto result) {
+	private void compareExceptedAlunoDtoWithActual(AlunoDto expected, AlunoDto result) {
 		assertEquals(expected.getId(), result.getId());
 		assertEquals(expected.getNome(), result.getNome());
 		assertEquals(expected.getSobrenome(), result.getSobrenome());
 		assertEquals(expected.getMatricula(), result.getMatricula());		
 	}
 	
-	private void compareItemTurmaDtoExpectedWithActual(TurmaItemAlunoDto expected, TurmaItemAlunoDto result) {
+	private void compareExpectedItemTurmaDtoWithActual(TurmaItemAlunoDto expected, TurmaItemAlunoDto result) {
 		assertEquals(expected.getId(), result.getId());
 		assertEquals(expected.getNome(), result.getNome());
 		assertEquals(expected.getAnoLetivo(), result.getAnoLetivo());		

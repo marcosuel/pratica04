@@ -80,10 +80,7 @@ public class MentorServiceTests {
 		var expected = new MentorDto(idMentor, nomeMentor, sobrenomeMentor, matriculaMentor, mentoradosDto);
 		var result = service.cadastra(postForm);
 		
-		assertEquals(expected.getId(), result.getId());
-		assertEquals(expected.getNome(), result.getNome());
-		assertEquals(expected.getSobrenome(), result.getSobrenome());
-		assertEquals(expected.getMatricula(), result.getMatricula());
+		compareExpectedMentorDtoWithActual(expected, result);
 	}
 	
 	@Test
@@ -98,6 +95,25 @@ public class MentorServiceTests {
 		verify(mentorRep, never()).save(mentorNaoSalvo);
 	}
 	
+	@Test
+	void givenIdWhenFindByIdThenSuccess() {
+		initMentor();
+		
+		when(mentorRep.findById(idMentor)).thenReturn(Optional.of(mentorSalvo));
+		when(mapper.toDto(mentorSalvo)).thenReturn(mentorDto);
+		
+		var expected = new MentorDto(idMentor, nomeMentor, sobrenomeMentor, matriculaMentor, mentoradosDto);
+		var result = service.buscaPorId(idMentor);
+		
+		compareExpectedMentorDtoWithActual(expected, result);
+	}
 	
+	void compareExpectedMentorDtoWithActual(MentorDto expected, MentorDto result) {
+		assertEquals(expected.getId(), result.getId());
+		assertEquals(expected.getNome(), result.getNome());
+		assertEquals(expected.getSobrenome(), result.getSobrenome());
+		assertEquals(expected.getMatricula(), result.getMatricula());
+		assertEquals(expected.getMentorados().size(), result.getMentorados().size());		
+	}
 	
 }
