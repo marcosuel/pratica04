@@ -32,8 +32,8 @@ public class MentorService {
 	private MentorRepository mentorRep;
 	@Autowired
 	private AlunoRepository alunoRep;
-	@Autowired
-	private MentorMapper mapper;
+
+	private MentorMapper mapper = MentorMapper.INSTANCE;
 	
 	public MentorDto cadastra(MentorPostForm form) {
 		Optional<Mentor> optMentor = mentorRep.findByMatricula(form.getMatricula());
@@ -69,7 +69,7 @@ public class MentorService {
 				.collect(Collectors.toList());
 	}
 	
-	public MentorDto mentoraAluno(Long idMentor, Long idAluno) throws DataIntegrityViolationException {
+	public MentorDto mentoraAluno(Long idMentor, Long idAluno) {
 		Mentor mentor = garanteQueMentorExiste(idMentor);
 		
 		Optional<Aluno> optAluno = alunoRep.findById(idAluno);
@@ -78,7 +78,7 @@ public class MentorService {
 		
 		Aluno aluno = optAluno.get();
 		if(aluno.getTurma() == null)
-				throw new DomainException("O mentor não pode mentorar um aluno sem turma.", HttpStatus.BAD_REQUEST);
+			throw new DomainException("O mentor não pode mentorar um aluno sem turma.", HttpStatus.BAD_REQUEST);
 		
 		garanteQuePodeMentorar(idMentor, aluno);
 		mentor.getMentorados().add(aluno);
@@ -92,15 +92,6 @@ public class MentorService {
 		return mapper.toDto(mentor);
 	}
 	
-	private void garanteQuePodeMentorar(Long idMentor, Aluno aluno) {
-		if(aluno.getTurma() == null)
-			throw new DomainException("O mentor não pode mentorar um aluno sem turma.", HttpStatus.BAD_REQUEST);
-		
-		Long idTurma = aluno.getTurma().getId();
-		long qtd = mentorRep.countByIdAndMentoradosTurmaId(idMentor, idTurma);
-		if(qtd >= 3)
-			throw new DomainException("O mentor não pode mentorar mais que três alunos da turma com id: "+idTurma, HttpStatus.BAD_REQUEST);
-	}
 	
 	public MentorDto buscaPorId(Long id) {
 		Mentor mentor = garanteQueMentorExiste(id);
@@ -119,7 +110,7 @@ public class MentorService {
 		boolean alunoRemovido = mentor.getMentorados().removeIf(m -> m.getId().equals(idAluno));
 		if(!alunoRemovido)
 			throw new DomainException("O aluno com id "+idAluno+" não possui mentoria com o mentor de id "
-				+idMentor, HttpStatus.BAD_REQUEST);
+					+idMentor, HttpStatus.BAD_REQUEST);
 		
 		mentorRep.save(mentor);
 	}
@@ -133,5 +124,16 @@ public class MentorService {
 	
 	private void lancaDomainException(Long id) {
 		throw new DomainException("Não foi encontrado um mentor com id: "+id, HttpStatus.NOT_FOUND);
+	}
+
+	private void garanteQuePodeMentorar(Long idMentor, Aluno aluno) {
+		if(aluno.getTurma() == null)
+			throw new DomainException("O mentor não pode iniciar uma mentoria com um aluno sem turma.", HttpStatus.BAD_REQUEST);
+		
+		Long idTurma = aluno.getTurma().getId();
+		long qtd = mentorRep.countByIdAndMentoradosTurmaId(idMentor, idTurma);
+		if(qtd >= 3)
+			throw new DomainException("O mentor não pode mentorar mais que três alunos da turma com id: "
+					+idTurma, HttpStatus.BAD_REQUEST);
 	}
 }
