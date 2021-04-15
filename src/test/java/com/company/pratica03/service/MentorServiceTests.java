@@ -216,6 +216,17 @@ public class MentorServiceTests {
 		compareExpectedMentorDtoWithActual(expected, result);
 	}
 	
+	@Test
+	void givenIdMentorAndIdAlunoWhenMentoraAlunoWithNonexistentIdMentorThenFail() {
+		Long idAluno = 2L;
+		idMentor = 1L;
+		when(mentorRep.findById(idMentor)).thenReturn(Optional.empty());
+		
+		assertThrows(DomainException.class, () -> {
+			service.mentoraAluno(idMentor, idAluno);
+		});
+	}
+	
 	
 	
 	void compareExpectedMentorDtoWithActual(MentorDto expected, MentorDto result) {
