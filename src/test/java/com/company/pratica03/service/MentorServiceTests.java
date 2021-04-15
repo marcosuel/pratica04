@@ -48,6 +48,11 @@ public class MentorServiceTests {
 	List<Aluno> mentorados;
 	List<AlunoDto> mentoradosDto;
 	
+	String nomeAtualizado;
+	String sobrenomeAtualizado;
+	String matriculaAtualizada;
+	
+	MentorPatchForm patchForm;
 	MentorPostForm postForm;
 	Mentor mentorNaoSalvo;
 	Mentor mentorSalvo;
@@ -144,7 +149,7 @@ public class MentorServiceTests {
 		var sobrenomeAtualizado = "Vieira";
 		var matriculaAtualizada = 542879L;
 		
-		var patchForm = new MentorPatchForm(nomeAtualizado, sobrenomeAtualizado, matriculaAtualizada);
+		patchForm = new MentorPatchForm(nomeAtualizado, sobrenomeAtualizado, matriculaAtualizada);
 		var mentorDtoAtualizado = new MentorDto(idMentor, patchForm.getNome(), patchForm.getSobrenome(), 
 				patchForm.getMatricula(), mentoradosDto);
 		
@@ -156,6 +161,19 @@ public class MentorServiceTests {
 		var result = service.atualiza(idMentor, patchForm);
 		
 		compareExpectedMentorDtoWithActual(expected, result);
+	}
+	
+	@Test
+	void givenIdAndPatchFormWhenUpdateWithNonexistentIdThenFail() {
+		var id = 999L;
+		patchForm = new MentorPatchForm();
+		
+		when(mentorRep.findById(id)).thenReturn(Optional.empty());
+		
+		assertThrows(DomainException.class, () -> {
+			service.atualiza(id, patchForm);
+		});
+		verify(mentorRep, never()).save(mentorSalvo);
 	}
 	
 	
