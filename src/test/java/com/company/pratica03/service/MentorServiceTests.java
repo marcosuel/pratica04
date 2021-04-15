@@ -120,11 +120,20 @@ public class MentorServiceTests {
 	
 	@Test
 	void givenIdWhenDeleteThenSuccess() {
-		var id = 999L;
-		when(mentorRep.existsById(id)).thenReturn(true);
+		when(mentorRep.existsById(idMentor)).thenReturn(true);
 		
-		service.deleta(id);
-		verify(mentorRep).deleteById(id);
+		service.deleta(idMentor);
+		verify(mentorRep).deleteById(idMentor);
+	}
+	
+	@Test
+	void givenIdWhenDeleteWithNonexistentIdThenFail() {
+		var id = 999L;
+		when(mentorRep.existsById(id)).thenReturn(false);
+		
+		assertThrows(DomainException.class, () -> {
+			service.deleta(id);
+		});
 	}
 	
 	
