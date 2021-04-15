@@ -108,6 +108,27 @@ public class MentorServiceTests {
 		compareExpectedMentorDtoWithActual(expected, result);
 	}
 	
+	@Test
+	void givenIdWhenFindByIdWithNonexistentIdThenFail() {
+		var id = 999L;
+		when(mentorRep.findById(id)).thenReturn(Optional.empty());
+		
+		assertThrows(DomainException.class, ()->{
+			service.buscaPorId(id);
+		});
+	}
+	
+	@Test
+	void givenIdWhenDeleteThenSuccess() {
+		var id = 999L;
+		when(mentorRep.existsById(id)).thenReturn(true);
+		
+		service.deleta(id);
+		verify(mentorRep).deleteById(id);
+	}
+	
+	
+	
 	void compareExpectedMentorDtoWithActual(MentorDto expected, MentorDto result) {
 		assertEquals(expected.getId(), result.getId());
 		assertEquals(expected.getNome(), result.getNome());
