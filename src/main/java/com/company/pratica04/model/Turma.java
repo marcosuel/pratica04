@@ -28,4 +28,11 @@ public class Turma {
 	@OneToMany
 	@JoinColumn(name = "turma_id")
 	private List<Aluno> alunos = new ArrayList<Aluno>();
+	
+	public Turma(Long id, String nome, int quantidadeAlunos, Year anoLetivo) {
+		this.id = id;
+		this.nome = nome;
+		this.quantidadeAlunos = quantidadeAlunos;
+		this.anoLetivo = anoLetivo;
+	}
 }

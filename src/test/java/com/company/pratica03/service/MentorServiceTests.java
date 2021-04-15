@@ -5,6 +5,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,10 +20,12 @@ import com.company.pratica04.dto.aluno.AlunoDto;
 import com.company.pratica04.dto.mentor.MentorDto;
 import com.company.pratica04.dto.mentor.MentorPatchForm;
 import com.company.pratica04.dto.mentor.MentorPostForm;
+import com.company.pratica04.dto.turma.TurmaItemAlunoDto;
 import com.company.pratica04.exception.DomainException;
 import com.company.pratica04.mapper.MentorMapper;
 import com.company.pratica04.model.Aluno;
 import com.company.pratica04.model.Mentor;
+import com.company.pratica04.model.Turma;
 import com.company.pratica04.repository.AlunoRepository;
 import com.company.pratica04.repository.MentorRepository;
 import com.company.pratica04.service.MentorService;
@@ -190,6 +193,30 @@ public class MentorServiceTests {
 			service.atualiza(idMentor, patchForm);
 		});
 	}
+	
+	@Test
+	void givenIdMentorAndIdAlunoWhenMentoraAlunoThenSuccess() {
+		initMentor();
+		var idAluno = 3L;
+		var turma = new Turma(1L, "Turma de FBD", 0, Year.of(2015));
+		var turmaDto = new TurmaItemAlunoDto(turma.getId(), turma.getNome(), turma.getAnoLetivo());
+		var aluno = new Aluno(idAluno, "Joana", "Pinheiro", 98732L, turma, null);
+		var alunoDto = new AlunoDto(aluno.getId(), aluno.getNome(), aluno.getSobrenome(), aluno.getMatricula(), turmaDto);
+		turma.getAlunos().add(aluno);
+		mentorDto.getMentorados().add(alunoDto);
+		
+		when(mentorRep.findById(idMentor)).thenReturn(Optional.of(mentorSalvo));
+		when(alunoRep.findById(idAluno)).thenReturn(Optional.of(aluno));
+		when(mentorRep.save(mentorSalvo)).thenReturn(mentorSalvo);
+		when(mapper.toDto(mentorSalvo)).thenReturn(mentorDto);
+		
+		var expected = new MentorDto(idMentor, nomeMentor, sobrenomeMentor, matriculaMentor, mentoradosDto);
+		var result = service.mentoraAluno(idMentor, idAluno);
+		
+		compareExpectedMentorDtoWithActual(expected, result);
+	}
+	
+	
 	
 	void compareExpectedMentorDtoWithActual(MentorDto expected, MentorDto result) {
 		assertEquals(expected.getId(), result.getId());
