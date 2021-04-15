@@ -1,6 +1,8 @@
 package com.company.pratica03.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.company.pratica04.dto.aluno.AlunoDto;
 import com.company.pratica04.dto.mentor.MentorDto;
 import com.company.pratica04.dto.mentor.MentorPostForm;
+import com.company.pratica04.exception.DomainException;
 import com.company.pratica04.mapper.MentorMapper;
 import com.company.pratica04.model.Aluno;
 import com.company.pratica04.model.Mentor;
@@ -81,6 +84,18 @@ public class MentorServiceTests {
 		assertEquals(expected.getNome(), result.getNome());
 		assertEquals(expected.getSobrenome(), result.getSobrenome());
 		assertEquals(expected.getMatricula(), result.getMatricula());
+	}
+	
+	@Test
+	void givenPostFormWhenSaveWithDuplicatedMatriculaThenFail() {
+		initMentor();
+
+		when(mentorRep.findByMatricula(matriculaMentor)).thenReturn(Optional.of(mentorSalvo));
+		
+		assertThrows(DomainException.class, ()->{
+			service.cadastra(postForm);
+		});
+		verify(mentorRep, never()).save(mentorNaoSalvo);
 	}
 	
 	
