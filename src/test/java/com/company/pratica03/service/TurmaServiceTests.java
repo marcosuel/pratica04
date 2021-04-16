@@ -19,6 +19,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.company.pratica04.dto.aluno.AlunoItemListaTurmaDto;
 import com.company.pratica04.dto.turma.TurmaDto;
+import com.company.pratica04.dto.turma.TurmaItemListaDto;
+import com.company.pratica04.dto.turma.TurmaPatchForm;
 import com.company.pratica04.dto.turma.TurmaPostForm;
 import com.company.pratica04.exception.DomainException;
 import com.company.pratica04.mapper.TurmaMapper;
@@ -128,6 +130,40 @@ public class TurmaServiceTests {
 		assertEquals(null, aluno.getMentor());
 		verify(turmaRep).delete(Mockito.any(Turma.class));
 	}
+	
+	@Test
+	void givenIdWhenDeleteWithNonexistentIdThenFail() {
+		var id = 999L;
+		when(turmaRep.findById(id)).thenReturn(Optional.empty());
+		
+		assertThrows(DomainException.class, () -> {
+			turmaService.deletaPorId(id);
+		});
+		verify(turmaRep, never()).delete(Mockito.any(Turma.class));
+	}
+	
+	@Test
+	void givenIdAndPatchFormThenSuccess() {
+		initTurma();
+		var nomeAtualizado = "PAA";
+		var anoAtualizado = Year.of(2016);
+		var patchForm = new TurmaPatchForm(nomeAtualizado, anoAtualizado);
+		var turmaAtualizadaDto = new TurmaItemListaDto(idTurma, patchForm.getNome(), qtdAlunos, patchForm.getAnoLetivo());
+		
+		when(turmaRep.findById(idTurma)).thenReturn(Optional.of(turmaSalva));
+		when(turmaRep.save(Mockito.any(Turma.class))).thenReturn(turmaSalva);
+		when(mapper.toItemListaDto(Mockito.any(Turma.class))).thenReturn(turmaAtualizadaDto);
+		
+		var expected = new TurmaItemListaDto(idTurma, nomeAtualizado, qtdAlunos, anoAtualizado);
+		var result = turmaService.atualiza(idTurma, patchForm);
+		
+		assertEquals(expected.getId(), result.getId());
+		assertEquals(expected.getNome(), result.getNome());
+		assertEquals(expected.getQuantidadeAlunos(), result.getQuantidadeAlunos());
+		assertEquals(expected.getAnoLetivo(), result.getAnoLetivo());
+	}
+	
+	
 	
 	private void compareExpectedTurmaDtoWithActual(TurmaDto expected, TurmaDto result) {
 		assertEquals(expected.getId(), result.getId());
