@@ -317,6 +317,20 @@ public class MentorServiceTests {
 		verify(mentorRep, never()).save(mentorSalvo);
 	}
 	
+	@Test
+	void givenIdMentorAndIdAlunoWhenEncerraMentoriaWithAlunoMentorDifferentFromIdMentorThenFail() {
+		initMentor();
+		initAlunoAndTurma();
+		var outroMentor = new Mentor(2L, "Francisco", "Cunha", 87165L, new ArrayList<Aluno>());
+		outroMentor.getMentorados().add(aluno);
+		aluno.setMentor(outroMentor);
+		
+		when(mentorRep.findById(idMentor)).thenReturn(Optional.of(mentorSalvo));
+		assertThrows(DomainException.class, () -> {
+			service.encerraMentoria(idMentor, idAluno);
+		});
+		verify(mentorRep, never()).save(mentorSalvo);
+	}
 	
 	
 	
