@@ -23,6 +23,7 @@ import com.company.pratica04.dto.turma.TurmaPostForm;
 import com.company.pratica04.exception.DomainException;
 import com.company.pratica04.mapper.TurmaMapper;
 import com.company.pratica04.model.Aluno;
+import com.company.pratica04.model.Mentor;
 import com.company.pratica04.model.Turma;
 import com.company.pratica04.repository.TurmaRepository;
 import com.company.pratica04.service.AlunoService;
@@ -115,7 +116,18 @@ public class TurmaServiceTests {
 		verify(turmaRep, never()).save(Mockito.any(Turma.class));
 	}
 	
-	
+	@Test
+	void givenIdWhenDeleteThenSuccess() {
+		initTurma();
+		var aluno = new Aluno(1L, "Zé", "Carneiro", 549L, null, new Mentor());
+		turmaSalva.getAlunos().add(aluno);
+		when(turmaRep.findById(idTurma)).thenReturn(Optional.of(turmaSalva));
+		
+		turmaService.deletaPorId(idTurma);
+		
+		assertEquals(null, aluno.getMentor());
+		verify(turmaRep).delete(Mockito.any(Turma.class));
+	}
 	
 	private void compareExpectedTurmaDtoWithActual(TurmaDto expected, TurmaDto result) {
 		assertEquals(expected.getId(), result.getId());
