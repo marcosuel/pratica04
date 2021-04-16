@@ -92,6 +92,18 @@ public class TurmaServiceTests {
 		verify(turmaRep, never()).save(Mockito.any(Turma.class));
 	}
 	
+	@Test
+	void givenIdWhenFindByIdThenSuccess() {
+		initTurma();
+		when(turmaRep.findById(idTurma)).thenReturn(Optional.of(turmaSalva));
+		when(mapper.toDto(turmaSalva)).thenReturn(turmaDto);
+		
+		var expected = new TurmaDto(idTurma, nomeTurma, qtdAlunos, anoLetivo, alunosDto);
+		var result = turmaService.buscaPorId(idTurma);
+		
+		compareExpectedTurmaDtoWithActual(expected, result);
+	}
+	
 	private void compareExpectedTurmaDtoWithActual(TurmaDto expected, TurmaDto result) {
 		assertEquals(expected.getId(), result.getId());
 		assertEquals(expected.getNome(), result.getNome());
