@@ -143,7 +143,7 @@ public class TurmaServiceTests {
 	}
 	
 	@Test
-	void givenIdAndPatchFormThenSuccess() {
+	void givenIdAndPatchFormWhenUpdateThenSuccess() {
 		initTurma();
 		var nomeAtualizado = "PAA";
 		var anoAtualizado = Year.of(2016);
@@ -161,6 +161,17 @@ public class TurmaServiceTests {
 		assertEquals(expected.getNome(), result.getNome());
 		assertEquals(expected.getQuantidadeAlunos(), result.getQuantidadeAlunos());
 		assertEquals(expected.getAnoLetivo(), result.getAnoLetivo());
+	}
+	
+	@Test
+	void givenIdAndPatchFormWhenUpdateWithNonexistentIdThenFail() {
+		var id = 999L;
+		when(turmaRep.findById(id)).thenReturn(Optional.empty());
+		
+		assertThrows(DomainException.class, () -> {
+			turmaService.atualiza(id, new TurmaPatchForm());
+		});
+		verify(turmaRep, never()).save(Mockito.any(Turma.class));
 	}
 	
 	
