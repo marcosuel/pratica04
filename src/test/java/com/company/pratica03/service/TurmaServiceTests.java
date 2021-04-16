@@ -1,11 +1,14 @@
 package com.company.pratica03.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.company.pratica04.dto.aluno.AlunoItemListaTurmaDto;
 import com.company.pratica04.dto.turma.TurmaDto;
 import com.company.pratica04.dto.turma.TurmaPostForm;
+import com.company.pratica04.exception.DomainException;
 import com.company.pratica04.mapper.TurmaMapper;
 import com.company.pratica04.model.Aluno;
 import com.company.pratica04.model.Turma;
@@ -77,7 +81,16 @@ public class TurmaServiceTests {
 		compareExpectedTurmaDtoWithActual(expected, result);
 	}
 	
-	
+	@Test
+	void givenPostFormWhenSaveWithDuplicatedAnoLetivoThenFail() {
+		initTurma();
+		when(turmaRep.findByAnoLetivo(anoLetivo)).thenReturn(Optional.of(turmaSalva));
+		
+		assertThrows(DomainException.class, () -> {
+			turmaService.cadastra(postForm);
+		});
+		verify(turmaRep, never()).save(Mockito.any(Turma.class));
+	}
 	
 	private void compareExpectedTurmaDtoWithActual(TurmaDto expected, TurmaDto result) {
 		assertEquals(expected.getId(), result.getId());

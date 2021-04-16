@@ -33,6 +33,9 @@ public class TurmaService {
 	private TurmaMapper mapper = TurmaMapper.INSTANCE;
 	
 	public TurmaDto cadastra(TurmaPostForm form) {
+		Optional<Turma> optTurma = turmaRep.findByAnoLetivo(form.getAnoLetivo());
+		if(optTurma.isPresent())
+			throw new DomainException("A turma do ano de "+form.getAnoLetivo()+" já foi cadastrada.", HttpStatus.BAD_REQUEST);
 		Turma turma = mapper.toTurma(form);
 		turma = turmaRep.save(turma);
 		
