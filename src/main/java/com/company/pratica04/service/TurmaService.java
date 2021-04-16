@@ -29,8 +29,8 @@ public class TurmaService {
 	private TurmaRepository turmaRep;
 	@Autowired
 	private AlunoService alunoService;
-	@Autowired
-	private TurmaMapper mapper;
+
+	private TurmaMapper mapper = TurmaMapper.INSTANCE;
 	
 	public TurmaDto cadastra(TurmaPostForm form) {
 		Turma turma = mapper.toTurma(form);
