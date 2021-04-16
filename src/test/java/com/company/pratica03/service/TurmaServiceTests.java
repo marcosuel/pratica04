@@ -174,7 +174,22 @@ public class TurmaServiceTests {
 		verify(turmaRep, never()).save(Mockito.any(Turma.class));
 	}
 	
-	
+	@Test
+	void givenIdAnPatchFormWhenUpdateWithDuplicatedAnoLetivoThenFail() {
+		initTurma();
+		var nomeAtualizado = "PAA";
+		var anoAtualizado = Year.of(2016);
+		var patchForm = new TurmaPatchForm(nomeAtualizado, anoAtualizado);
+		
+		var outraTurma = new Turma(2L, "FBD", 0, anoAtualizado);
+		when(turmaRep.findById(idTurma)).thenReturn(Optional.of(turmaSalva));
+		when(turmaRep.findByAnoLetivo(patchForm.getAnoLetivo())).thenReturn(Optional.of(outraTurma));
+		
+		assertThrows(DomainException.class, () -> {
+			turmaService.atualiza(idTurma, patchForm);
+		});
+		verify(turmaRep, never()).save(Mockito.any(Turma.class));
+	}
 	
 	private void compareExpectedTurmaDtoWithActual(TurmaDto expected, TurmaDto result) {
 		assertEquals(expected.getId(), result.getId());

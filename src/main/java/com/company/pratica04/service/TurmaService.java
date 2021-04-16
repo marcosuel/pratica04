@@ -44,6 +44,9 @@ public class TurmaService {
 	
 	public TurmaItemListaDto atualiza(Long id, TurmaPatchForm form) {
 		Turma turma = garanteQueTurmaExiste(id);
+		Optional<Turma> optTurma = turmaRep.findByAnoLetivo(form.getAnoLetivo());
+		if(optTurma.isPresent())
+			throw new DomainException("Não podem existir duas turmas com o mesmo ano: "+form.getAnoLetivo()+".", HttpStatus.BAD_REQUEST);
 		
 		turma.setNome(form.getNome());
 		turma.setAnoLetivo(form.getAnoLetivo());
