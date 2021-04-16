@@ -104,6 +104,19 @@ public class TurmaServiceTests {
 		compareExpectedTurmaDtoWithActual(expected, result);
 	}
 	
+	@Test
+	void givenIdWhenFindByIdWithNonexistentIdThenFail() {
+		var id = 999L;
+		when(turmaRep.findById(id)).thenReturn(Optional.empty());
+		
+		assertThrows(DomainException.class, ()->{
+			turmaService.buscaPorId(id);
+		});
+		verify(turmaRep, never()).save(Mockito.any(Turma.class));
+	}
+	
+	
+	
 	private void compareExpectedTurmaDtoWithActual(TurmaDto expected, TurmaDto result) {
 		assertEquals(expected.getId(), result.getId());
 		assertEquals(expected.getNome(), result.getNome());
