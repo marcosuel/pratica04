@@ -305,6 +305,19 @@ public class MentorServiceTests {
 		verify(mentorRep).save(mentorSalvo);
 	}
 	
+	@Test
+	void givenIdMentorAndIdAlunoWhenEncerraMentoriaWithNonexistentIdMentorThenFail() {
+		idMentor = 999L;
+		idAluno = 2L;
+		when(mentorRep.findById(idMentor)).thenReturn(Optional.empty());
+		
+		assertThrows(DomainException.class, () -> {
+			service.encerraMentoria(idMentor, idAluno);
+		});
+		verify(mentorRep, never()).save(mentorSalvo);
+	}
+	
+	
 	
 	
 	void compareExpectedMentorDtoWithActual(MentorDto expected, MentorDto result) {
