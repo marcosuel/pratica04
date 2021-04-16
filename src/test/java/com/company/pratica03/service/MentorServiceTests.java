@@ -273,6 +273,25 @@ public class MentorServiceTests {
 		verify(mentorRep, never()).save(mentorSalvo);
 	}
 	
+	@Test
+	void givenIdMentorAndIdAlunoWhenMentoraAlunoWithMentorHaving3StudentsInSameClassThenFail() {
+		initMentor();
+		var idAluno = 2L;
+		var turma = new Turma(1L, "Turma de FBD", 0, Year.of(2015));
+		var aluno = new Aluno(idAluno, "Julio", "Cardoso", 98491L, turma, null);
+		
+		when(mentorRep.findById(idMentor)).thenReturn(Optional.of(mentorSalvo));
+		when(alunoRep.findById(idAluno)).thenReturn(Optional.of(aluno));
+		when(mentorRep.countByIdAndMentoradosTurmaId(idMentor, turma.getId())).thenReturn(3L);
+		
+		assertThrows(DomainException.class, () -> {
+			service.mentoraAluno(idMentor, idAluno);
+		});
+		verify(mentorRep, never()).save(mentorSalvo);
+	}
+	
+	
+	
 	void compareExpectedMentorDtoWithActual(MentorDto expected, MentorDto result) {
 		assertEquals(expected.getId(), result.getId());
 		assertEquals(expected.getNome(), result.getNome());
