@@ -44,7 +44,7 @@ public class MentorServiceTests {
 	private MentorService service;
 	
 	//---------------------
-	Long idMentor;
+	Long idMentor, idAluno;
 	String nomeMentor;
 	String sobrenomeMentor;
 	Long matriculaMentor;
@@ -60,6 +60,8 @@ public class MentorServiceTests {
 	Mentor mentorNaoSalvo;
 	Mentor mentorSalvo;
 	MentorDto mentorDto;
+	Aluno aluno;
+	Turma turma;
 	//---------------------
 	
 	private void initMentor() {
@@ -76,6 +78,11 @@ public class MentorServiceTests {
 		mentorDto = new MentorDto(mentorSalvo.getId(), mentorSalvo.getNome(), mentorSalvo.getSobrenome(), mentorSalvo.getMatricula(), mentoradosDto);
 	}
 	
+	private void initAlunoAndTurma() {
+		idAluno = 2L;
+		turma = new Turma(1L, "Turma de FBD", 0, Year.of(2015));
+		aluno = new Aluno(idAluno, "Joana", "Pinheiro", 98732L, turma, null);
+	}
 	
 	@Test
 	void givenPostFormWhenSaveThenSuccess() {
@@ -197,10 +204,8 @@ public class MentorServiceTests {
 	@Test
 	void givenIdMentorAndIdAlunoWhenMentoraAlunoThenSuccess() {
 		initMentor();
-		var idAluno = 3L;
-		var turma = new Turma(1L, "Turma de FBD", 0, Year.of(2015));
+		initAlunoAndTurma();
 		var turmaDto = new TurmaItemAlunoDto(turma.getId(), turma.getNome(), turma.getAnoLetivo());
-		var aluno = new Aluno(idAluno, "Joana", "Pinheiro", 98732L, turma, null);
 		var alunoDto = new AlunoDto(aluno.getId(), aluno.getNome(), aluno.getSobrenome(), aluno.getMatricula(), turmaDto);
 		turma.getAlunos().add(aluno);
 		mentorDto.getMentorados().add(alunoDto);
@@ -218,7 +223,7 @@ public class MentorServiceTests {
 	
 	@Test
 	void givenIdMentorAndIdAlunoWhenMentoraAlunoWithNonexistentIdMentorThenFail() {
-		var idAluno = 2L;
+		idAluno = 2L;
 		idMentor = 1L;
 		
 		when(mentorRep.findById(idMentor)).thenReturn(Optional.empty());
@@ -232,7 +237,7 @@ public class MentorServiceTests {
 	@Test
 	void givenIdMentorAndIdAlunoWhenMentoraAlunoWithNonexistentIdAlunoThenFail() {
 		initMentor();
-		var idAluno = 2L;
+		idAluno = 2L;
 		
 		when(mentorRep.findById(idMentor)).thenReturn(Optional.of(mentorSalvo));
 		
@@ -245,8 +250,8 @@ public class MentorServiceTests {
 	@Test
 	void givenIdMentorAndIdAlunoWhenMentoraAlunoWithAlunoWithoutTurmaThenFail() {
 		initMentor();
-		var idAluno = 2L;
-		var aluno = new Aluno(idAluno, "Julio", "Cardoso", 98491L, null, null);
+		initAlunoAndTurma();
+		aluno.setTurma(null);
 		
 		when(mentorRep.findById(idMentor)).thenReturn(Optional.of(mentorSalvo));
 		when(alunoRep.findById(idAluno)).thenReturn(Optional.of(aluno));
@@ -260,9 +265,8 @@ public class MentorServiceTests {
 	@Test
 	void givenIdMentorAndIdAlunoWhenMentoraAlunoWithAlunoHavingAMentorThenFail() {
 		initMentor();
-		var idAluno = 2L;
-		var turma = new Turma(1L, "Turma de FBD", 0, Year.of(2015));
-		var aluno = new Aluno(idAluno, "Julio", "Cardoso", 98491L, turma, mentorSalvo);
+		initAlunoAndTurma();
+		aluno.setMentor(mentorSalvo);
 		
 		when(mentorRep.findById(idMentor)).thenReturn(Optional.of(mentorSalvo));
 		when(alunoRep.findById(idAluno)).thenReturn(Optional.of(aluno));
@@ -276,9 +280,7 @@ public class MentorServiceTests {
 	@Test
 	void givenIdMentorAndIdAlunoWhenMentoraAlunoWithMentorHaving3StudentsInSameClassThenFail() {
 		initMentor();
-		var idAluno = 2L;
-		var turma = new Turma(1L, "Turma de FBD", 0, Year.of(2015));
-		var aluno = new Aluno(idAluno, "Julio", "Cardoso", 98491L, turma, null);
+		initAlunoAndTurma();
 		
 		when(mentorRep.findById(idMentor)).thenReturn(Optional.of(mentorSalvo));
 		when(alunoRep.findById(idAluno)).thenReturn(Optional.of(aluno));
@@ -288,6 +290,19 @@ public class MentorServiceTests {
 			service.mentoraAluno(idMentor, idAluno);
 		});
 		verify(mentorRep, never()).save(mentorSalvo);
+	}
+	
+	@Test
+	void givenIdMentorAndIdAlunoWhenEncerraMentoriaThenSuccess() {
+		initMentor();
+		initAlunoAndTurma();
+		aluno.setMentor(mentorSalvo);
+		mentorSalvo.getMentorados().add(aluno);
+		
+		when(mentorRep.findById(idMentor)).thenReturn(Optional.of(mentorSalvo));
+		
+		service.encerraMentoria(idMentor, idAluno);
+		verify(mentorRep).save(mentorSalvo);
 	}
 	
 	
