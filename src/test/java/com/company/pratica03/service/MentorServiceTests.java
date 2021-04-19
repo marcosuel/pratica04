@@ -28,7 +28,7 @@ import com.company.pratica04.model.Mentor;
 import com.company.pratica04.model.Turma;
 import com.company.pratica04.repository.AlunoRepository;
 import com.company.pratica04.repository.MentorRepository;
-import com.company.pratica04.service.MentorService;
+import com.company.pratica04.service.impl.MentorServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class MentorServiceTests {
@@ -41,7 +41,7 @@ public class MentorServiceTests {
 	private MentorMapper mapper;
 	
 	@InjectMocks
-	private MentorService service;
+	private MentorServiceImpl service;
 	
 	//---------------------
 	Long idMentor, idAluno;

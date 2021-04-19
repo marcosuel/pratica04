@@ -28,8 +28,8 @@ import com.company.pratica04.model.Aluno;
 import com.company.pratica04.model.Mentor;
 import com.company.pratica04.model.Turma;
 import com.company.pratica04.repository.TurmaRepository;
-import com.company.pratica04.service.AlunoService;
-import com.company.pratica04.service.TurmaService;
+import com.company.pratica04.service.impl.AlunoServiceImpl;
+import com.company.pratica04.service.impl.TurmaServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class TurmaServiceTests {
@@ -37,11 +37,11 @@ public class TurmaServiceTests {
 	@Mock
 	private TurmaRepository turmaRep;
 	@Mock
-	private AlunoService alunoService;
+	private AlunoServiceImpl alunoService;
 	@Mock
 	private TurmaMapper mapper;
 	@InjectMocks
-	private TurmaService turmaService;
+	private TurmaServiceImpl turmaService;
 	
 	Long idTurma;
 	String nomeTurma;

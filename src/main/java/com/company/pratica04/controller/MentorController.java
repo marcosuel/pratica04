@@ -24,7 +24,7 @@ import com.company.pratica04.dto.mentor.MentorPatchForm;
 import com.company.pratica04.dto.mentor.ItemListaMentorDto;
 import com.company.pratica04.dto.mentor.MentorDto;
 import com.company.pratica04.dto.mentor.MentorPostForm;
-import com.company.pratica04.service.MentorService;
+import com.company.pratica04.service.impl.MentorServiceImpl;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,7 +34,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 public class MentorController {
 
 	@Autowired
-	private MentorService service;
+	private MentorServiceImpl service;
 	
 	@ApiOperation(value = "Cadastra um novo mentor.")
 	@PostMapping

@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.company.pratica04.dto.aluno.AlunoDto;
 import com.company.pratica04.dto.aluno.AlunoPostForm;
+import com.company.pratica04.service.impl.AlunoServiceImpl;
 import com.company.pratica04.dto.aluno.AlunoPatchForm;
-import com.company.pratica04.service.AlunoService;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -29,7 +29,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 public class AlunoController {
 	
 	@Autowired
-	private AlunoService service;
+	private AlunoServiceImpl service;
 
 	@ApiOperation(value = "Cadastra um novo aluno.")
 	@PostMapping

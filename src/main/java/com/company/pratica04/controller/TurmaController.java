@@ -22,9 +22,9 @@ import com.company.pratica04.dto.aluno.AlunoIdForm;
 import com.company.pratica04.dto.aluno.AlunoItemListaTurmaDto;
 import com.company.pratica04.dto.turma.TurmaDto;
 import com.company.pratica04.dto.turma.TurmaPostForm;
+import com.company.pratica04.service.impl.TurmaServiceImpl;
 import com.company.pratica04.dto.turma.TurmaItemListaDto;
 import com.company.pratica04.dto.turma.TurmaPatchForm;
-import com.company.pratica04.service.TurmaService;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,7 +34,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 public class TurmaController {
 
 	@Autowired
-	private TurmaService service;
+	private TurmaServiceImpl service;
 	
 	@ApiOperation(value = "Cadastra uma turma.")
 	@PostMapping

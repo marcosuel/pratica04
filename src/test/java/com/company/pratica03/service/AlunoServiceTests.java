@@ -27,7 +27,7 @@ import com.company.pratica04.model.Aluno;
 import com.company.pratica04.model.Turma;
 import com.company.pratica04.repository.AlunoRepository;
 import com.company.pratica04.repository.TurmaRepository;
-import com.company.pratica04.service.AlunoService;
+import com.company.pratica04.service.impl.AlunoServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class AlunoServiceTests {
@@ -40,7 +40,7 @@ class AlunoServiceTests {
 	private AlunoMapper alunoMapper;
 	
 	@InjectMocks
-	private AlunoService service;
+	private AlunoServiceImpl service;
 
 	
 	//objects
@@ -216,7 +216,7 @@ class AlunoServiceTests {
 		when(alunoRep.findByMatricula(matriculaAtualizada)).thenReturn(Optional.of(outroAluno));
 		
 		assertThrows(DomainException.class, () -> {
-			service.atualiza(idTurma, alunoPatchForm);
+			service.atualiza(idAluno, alunoPatchForm);
 		});
 		verify(alunoRep, never()).save(alunoSalvo);
 	}
