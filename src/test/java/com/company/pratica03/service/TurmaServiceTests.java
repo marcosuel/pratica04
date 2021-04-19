@@ -23,7 +23,6 @@ import com.company.pratica04.dto.turma.TurmaItemListaDto;
 import com.company.pratica04.dto.turma.TurmaPatchForm;
 import com.company.pratica04.dto.turma.TurmaPostForm;
 import com.company.pratica04.exception.DomainException;
-import com.company.pratica04.mapper.AlunoMapper;
 import com.company.pratica04.mapper.TurmaMapper;
 import com.company.pratica04.model.Aluno;
 import com.company.pratica04.model.Mentor;
@@ -41,8 +40,6 @@ public class TurmaServiceTests {
 	private AlunoService alunoService;
 	@Mock
 	private TurmaMapper mapper;
-	@Mock
-	private AlunoMapper alunoMapper;
 	@InjectMocks
 	private TurmaService turmaService;
 	
@@ -216,6 +213,19 @@ public class TurmaServiceTests {
 		when(turmaRep.findById(idTurma)).thenReturn(Optional.empty());
 		
 		assertThrows(DomainException.class, () ->{
+			turmaService.adicionaAluno(idTurma, idAluno);
+		});
+		verify(turmaRep, never()).save(Mockito.any(Turma.class));
+	}
+	
+	@Test
+	void givenIdTurmaAndIdAlunoWhenAddAlunoWithNonexistentIdAlunoThenFail() {
+		initTurma();
+		var idAluno = 2L;
+		when(turmaRep.findById(idTurma)).thenReturn(Optional.of(turmaSalva));
+		when(alunoService.garanteQueAlunoExiste(idAluno)).thenThrow(DomainException.class);
+		
+		assertThrows(DomainException.class, () -> {
 			turmaService.adicionaAluno(idTurma, idAluno);
 		});
 		verify(turmaRep, never()).save(Mockito.any(Turma.class));
