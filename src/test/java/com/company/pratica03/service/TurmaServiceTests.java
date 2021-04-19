@@ -275,6 +275,19 @@ public class TurmaServiceTests {
 		verify(turmaRep, never()).save(Mockito.any(Turma.class));
 	}
 	
+	@Test
+	void givenIdTurmaAndIdAlunoWhenRmAlunoWithNonexistentIdAlunoThenFail() {
+		initTurma();
+		var idAluno = 999L;
+		when(turmaRep.findById(idTurma)).thenReturn(Optional.of(turmaSalva));
+		when(alunoService.garanteQueAlunoExiste(idAluno)).thenThrow(DomainException.class);
+		
+		assertThrows(DomainException.class, () -> {
+			turmaService.removeAluno(idTurma, idAluno);
+		});
+		verify(turmaRep, never()).save(Mockito.any(Turma.class));
+	}
+	
 	private void compareExpectedTurmaDtoWithActual(TurmaDto expected, TurmaDto result) {
 		assertEquals(expected.getId(), result.getId());
 		assertEquals(expected.getNome(), result.getNome());
