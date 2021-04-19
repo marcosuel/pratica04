@@ -245,7 +245,24 @@ public class TurmaServiceTests {
 		verify(turmaRep, never()).save(Mockito.any(Turma.class));
 	}
 	
-	
+	@Test
+	void givenIdTurmaAndIdAlunoWhenRmAlunoThenSuccess() {
+		initTurma();
+		var idAluno = 2L;
+		var aluno = new Aluno(idAluno, "Pedro", "Pedroso", 9846L, turmaSalva, null);
+		turmaSalva.getAlunos().add(aluno);
+		qtdAlunos = turmaSalva.getAlunos().size();
+		turmaSalva.setQuantidadeAlunos(qtdAlunos);
+		
+		when(turmaRep.findById(idTurma)).thenReturn(Optional.of(turmaSalva));
+		when(alunoService.garanteQueAlunoExiste(idAluno)).thenReturn(aluno);
+		
+		turmaService.removeAluno(idTurma, idAluno);
+		
+		assertEquals(qtdAlunos-1, turmaSalva.getQuantidadeAlunos());
+		assertEquals(0, turmaSalva.getAlunos().size());
+		verify(turmaRep).save(Mockito.any(Turma.class));
+	}
 	
 	private void compareExpectedTurmaDtoWithActual(TurmaDto expected, TurmaDto result) {
 		assertEquals(expected.getId(), result.getId());
