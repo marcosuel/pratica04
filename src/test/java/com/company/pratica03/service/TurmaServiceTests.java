@@ -23,6 +23,7 @@ import com.company.pratica04.dto.turma.TurmaItemListaDto;
 import com.company.pratica04.dto.turma.TurmaPatchForm;
 import com.company.pratica04.dto.turma.TurmaPostForm;
 import com.company.pratica04.exception.DomainException;
+import com.company.pratica04.mapper.AlunoMapper;
 import com.company.pratica04.mapper.TurmaMapper;
 import com.company.pratica04.model.Aluno;
 import com.company.pratica04.model.Mentor;
@@ -40,6 +41,8 @@ public class TurmaServiceTests {
 	private AlunoService alunoService;
 	@Mock
 	private TurmaMapper mapper;
+	@Mock
+	private AlunoMapper alunoMapper;
 	@InjectMocks
 	private TurmaService turmaService;
 	
@@ -190,6 +193,23 @@ public class TurmaServiceTests {
 		});
 		verify(turmaRep, never()).save(Mockito.any(Turma.class));
 	}
+	
+	@Test
+	void givenIdTurmaAndIdAlunoWhenAddAlunoThenSuccesss() {
+		initTurma();
+		var idAluno = 2L;
+		var aluno = new Aluno(idAluno, "Pedro", "Pedroso", 9846L, null, null);
+		when(turmaRep.findById(idTurma)).thenReturn(Optional.of(turmaSalva));
+		when(alunoService.garanteQueAlunoExiste(idAluno)).thenReturn(aluno);
+		
+		turmaService.adicionaAluno(idTurma, idAluno);
+		
+		assertEquals(idAluno, turmaSalva.getAlunos().get(0).getId());
+		assertEquals(qtdAlunos+1, turmaSalva.getQuantidadeAlunos());
+		verify(turmaRep).save(Mockito.any(Turma.class));
+	}
+	
+	
 	
 	private void compareExpectedTurmaDtoWithActual(TurmaDto expected, TurmaDto result) {
 		assertEquals(expected.getId(), result.getId());
