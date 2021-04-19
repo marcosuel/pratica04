@@ -96,10 +96,12 @@ public class TurmaService {
 	public void removeAluno(Long idTurma, Long idAluno) {
 		Turma turma = garanteQueTurmaExiste(idTurma);
 		Aluno aluno = alunoService.garanteQueAlunoExiste(idAluno);
-	
+		
 		List<Aluno> alunos = turma.getAlunos();
 		aluno.setMentor(null);
-		alunos.remove(aluno);
+		if(!alunos.remove(aluno))
+			throw new DomainException("O aluno com id "+aluno.getId()+" não pertence a esta turma.", HttpStatus.BAD_REQUEST);
+		
 		turma.setQuantidadeAlunos(turma.getQuantidadeAlunos()-1);
 		turmaRep.save(turma);
 	}
