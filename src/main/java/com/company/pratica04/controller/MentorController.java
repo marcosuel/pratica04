@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.company.pratica04.dto.aluno.AlunoDto;
@@ -36,6 +37,7 @@ public class MentorController {
 	@Autowired
 	private MentorServiceImpl service;
 	
+	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Cadastra um novo mentor.")
 	@PostMapping
 	public ResponseEntity<MentorDto> cadastra(@Valid @RequestBody MentorPostForm form) {
@@ -45,12 +47,14 @@ public class MentorController {
 		return new ResponseEntity<MentorDto>(dto, HttpStatus.CREATED);
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Lista mentores cadastrados.")
 	@GetMapping
 	public ResponseEntity<Page<ItemListaMentorDto>> buscaTodos(Pageable pageable) {
 		return ResponseEntity.ok(service.buscaTodos(pageable));
 	}
 	
+	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Inicia mentoriauma mentoria.")
 	@PostMapping("/{id}/mentorados")
 	public ResponseEntity<MentorDto> mentoraAluno(@Parameter(description = "Id do mentor") @PathVariable(name = "id") Long idMentor, 
@@ -60,6 +64,7 @@ public class MentorController {
 		return new ResponseEntity<MentorDto>(dto, HttpStatus.CREATED);
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Lista mentorados de um mentor.")
 	@GetMapping("/{id}/mentorados")
 	public ResponseEntity<List<AlunoDto>> listaMentorados(@Parameter(description = "Id do mentor")
@@ -68,6 +73,7 @@ public class MentorController {
 		return ResponseEntity.ok(dto);
 	}
 	
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ApiOperation(value = "Encerra uma mentoria.")
 	@DeleteMapping("/{id}/mentorados/{idAluno}")
 	public ResponseEntity<MentorDto> encerraMentoria(@Parameter(description = "Id do mentor") @PathVariable(name = "id") Long idMentor, 
@@ -76,6 +82,7 @@ public class MentorController {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Busca um mentor pelo Id.")
 	@GetMapping("/{id}")
 	public ResponseEntity<MentorDto> buscaPorId(@Parameter(description = "Id do mentor") @PathVariable Long id){
@@ -83,6 +90,7 @@ public class MentorController {
 		return ResponseEntity.ok(dto);
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Atualiza um mentor.")
 	@PatchMapping("/{id}")
 	public ResponseEntity<MentorDto> atualiza(@Parameter(description = "Id do mentor") @PathVariable Long id, 
@@ -91,6 +99,7 @@ public class MentorController {
 		return ResponseEntity.ok(dto);
 	}
 	
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ApiOperation(value = "Deleta um mentor.")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deletaPorId(@Parameter(description = "Id do mentor") @PathVariable Long id) {

@@ -18,10 +18,11 @@ public class SpringFoxConfig {
 	public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)  
                 .select()                           
-                .apis(RequestHandlerSelectors.basePackage("com.company.pratica04"))              
+                .apis(RequestHandlerSelectors.basePackage("com.company.pratica04.controller"))              
                 .paths(PathSelectors.any())
                 .build()
-                .apiInfo(apiInfo());
+                .apiInfo(apiInfo())
+                .useDefaultResponseMessages(true);
 	}
 	
 	private ApiInfo apiInfo() {
@@ -34,5 +35,29 @@ public class SpringFoxConfig {
 				.licenseUrl("https://opensource.org/licenses/ISC")
 				.build();
 	}
+	
+	/*
+	private List<Response> responseMessageDefault(){
+		List<Response> list = new ArrayList<Response>();
+		list.addAll(Arrays.asList(
+				new ResponseBuilder()
+	        		.code("400")
+	        		.description("Bad Request")
+	        		.build(),
+				new ResponseBuilder()
+	        		.code("403")
+	        		.description("Forbbiden")
+	        		.build(),
+	        	new ResponseBuilder()
+	        		.code("404")
+	        		.description("Not found")
+	        		.build(),
+	        	new ResponseBuilder()
+	        		.code("500")
+	        		.description("Internal Server Error")
+	        		.build())
+	);
+	    return list;
+	}*/
 	
 }

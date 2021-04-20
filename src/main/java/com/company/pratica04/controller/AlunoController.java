@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.company.pratica04.dto.aluno.AlunoDto;
@@ -30,7 +31,8 @@ public class AlunoController {
 	
 	@Autowired
 	private AlunoServiceImpl service;
-
+	
+	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Cadastra um novo aluno.")
 	@PostMapping
 	public ResponseEntity<AlunoDto> cadastra(@Valid @RequestBody AlunoPostForm form){
@@ -38,6 +40,7 @@ public class AlunoController {
 		return new ResponseEntity<AlunoDto>(dto, HttpStatus.CREATED);
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Atualiza um aluno.")
 	@PatchMapping("/{id}")
 	public ResponseEntity<AlunoDto> atualiza(@Parameter(description = "Id do aluno") @PathVariable Long id, @Valid @RequestBody AlunoPatchForm form){
@@ -45,18 +48,21 @@ public class AlunoController {
 		return ResponseEntity.ok(dto);
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Lista alunos cadastrados.")
 	@GetMapping
 	public ResponseEntity<Page<AlunoDto>> buscaTodos(Pageable pageable){
 		return ResponseEntity.ok(service.buscaTodos(pageable));
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Busca um aluno pelo Id.")
 	@GetMapping("/{id}")
 	public ResponseEntity<AlunoDto> buscaPorId(@Parameter(description = "Id do aluno") @PathVariable Long id){
 		return ResponseEntity.ok(service.buscaPorId(id));
 	}
 	
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ApiOperation(value = "Deleta um aluno pelo Id.")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleta(@Parameter(description = "Id do aluno") @PathVariable Long id){

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.company.pratica04.dto.aluno.AlunoIdForm;
@@ -36,6 +37,7 @@ public class TurmaController {
 	@Autowired
 	private TurmaServiceImpl service;
 	
+	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Cadastra uma turma.")
 	@PostMapping
 	public ResponseEntity<TurmaDto> cadastra(@Valid @RequestBody TurmaPostForm form){
@@ -43,6 +45,7 @@ public class TurmaController {
 		return new ResponseEntity<TurmaDto>(dto, HttpStatus.CREATED);
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Atualiza uma turma.")
 	@PatchMapping("/{id}")
 	public ResponseEntity<TurmaItemListaDto> atualiza(@Parameter(description = "Id da turma") @PathVariable Long id, 
@@ -51,18 +54,21 @@ public class TurmaController {
 		return ResponseEntity.ok(dto);
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Lista turmas cadastradas.")
 	@GetMapping
 	public ResponseEntity<Page<TurmaItemListaDto>> buscaTodos(Pageable pageable){
 		return ResponseEntity.ok(service.buscaTodos(pageable));
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Busca uma turma pelo Id.")
 	@GetMapping("/{id}")
 	public ResponseEntity<TurmaDto> buscaPorId(@Parameter(description = "Id da turma") @PathVariable Long id){
 		return ResponseEntity.ok(service.buscaPorId(id));
 	}
 	
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ApiOperation(value = "Deleta uma turma.")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<TurmaDto> deleta(@Parameter(description = "Id da turma") @PathVariable Long id){
@@ -70,6 +76,7 @@ public class TurmaController {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ApiOperation(value = "Remove aluno de uma turma.")
 	@DeleteMapping("/{id}/alunos/{idAluno}")
 	public ResponseEntity<TurmaDto> removeAluno(@Parameter(description = "Id da turma") @PathVariable(name = "id") Long idTurma, 
@@ -78,6 +85,7 @@ public class TurmaController {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Adiciona aluno em uma turma.")
 	@PostMapping("/{id}/alunos")
 	public ResponseEntity<AlunoItemListaTurmaDto> adicionaAluno(@Parameter(description = "Id da turma") @PathVariable(name = "id") Long idTurma, 
@@ -86,6 +94,7 @@ public class TurmaController {
 		return new ResponseEntity<>(dto, HttpStatus.CREATED);
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Lista alunos de uma turma.")
 	@GetMapping("/{id}/alunos")
 	public ResponseEntity<List<AlunoItemListaTurmaDto>> listaAlunos(@Parameter(description = "Id da turma") @PathVariable Long id){
