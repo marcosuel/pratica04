@@ -5,21 +5,75 @@ import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.Getter;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter @NoArgsConstructor
+@Setter @NoArgsConstructor
+@ApiModel("ExceptionResponse")
 public class ExceptionResponse {
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	@JsonProperty("timestamp")
 	private LocalDateTime timestamp;
+	@JsonProperty("status")
 	private int status;
+	@JsonProperty("error")
 	private String error;
+	@JsonProperty("message")
 	private String message;
+	@JsonProperty("path")
 	private String path;
 	
+	/**
+	 * Get timestamp
+	 * @return timestamp
+	**/
+	@ApiModelProperty(value = "")
+	public LocalDateTime getTimestamp() {
+		return timestamp;
+	}
+
+	/**
+	   * Get status
+	   * @return status
+	**/
+	@ApiModelProperty(value = "")
+	public int getStatus() {
+		return status;
+	}
+
+	/**
+	   * Get error
+	   * @return error
+	**/
+	@ApiModelProperty(value = "")
+	public String getError() {
+		return error;
+	}
+
+	/**
+	   * Get message
+	   * @return message
+	**/
+	@ApiModelProperty(value = "")
+	public String getMessage() {
+		return message;
+	}
+	
+	/**
+	  * Get path
+	  * @return path
+	**/
+	@ApiModelProperty(value = "")
+	public String getPath() {
+		return path;
+	}
+
+
 	public static final class ExceptionResponseBuilder {
 		private HttpStatus status;
 		private String error;

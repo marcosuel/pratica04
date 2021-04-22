@@ -19,10 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.company.pratica04.dto.aluno.AlunoDto;
 import com.company.pratica04.dto.aluno.AlunoPostForm;
+import com.company.pratica04.exception.ExceptionResponse;
 import com.company.pratica04.service.impl.AlunoServiceImpl;
 import com.company.pratica04.dto.aluno.AlunoPatchForm;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController
@@ -55,8 +58,12 @@ public class AlunoController {
 		return ResponseEntity.ok(service.buscaTodos(pageable));
 	}
 	
-	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Busca um aluno pelo Id.")
+    @ApiResponses(value = { 
+            @ApiResponse(code = 200, message = "OK", response = AlunoDto.class),
+            @ApiResponse(code = 404, message = "Not Found", response = ExceptionResponse.class),
+            @ApiResponse(code = 500, message = "Foi gerada uma exceção", response = ExceptionResponse.class)
+    })
 	@GetMapping("/{id}")
 	public ResponseEntity<AlunoDto> buscaPorId(@Parameter(description = "Id do aluno") @PathVariable Long id){
 		return ResponseEntity.ok(service.buscaPorId(id));

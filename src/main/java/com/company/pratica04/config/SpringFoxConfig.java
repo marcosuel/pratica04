@@ -22,7 +22,7 @@ public class SpringFoxConfig {
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo())
-                .useDefaultResponseMessages(true);
+                .useDefaultResponseMessages(false);
 	}
 	
 	private ApiInfo apiInfo() {
