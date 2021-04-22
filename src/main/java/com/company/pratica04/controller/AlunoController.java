@@ -26,7 +26,6 @@ import com.company.pratica04.dto.aluno.AlunoPatchForm;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController
 @RequestMapping("/alunos")
@@ -37,6 +36,11 @@ public class AlunoController {
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Cadastra um novo aluno.")
+    @ApiResponses(value = { 
+    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@PostMapping
 	public ResponseEntity<AlunoDto> cadastra(@Valid @RequestBody AlunoPostForm form){
 		AlunoDto dto = service.cadastra(form);
@@ -45,14 +49,24 @@ public class AlunoController {
 	
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Atualiza um aluno.")
+    @ApiResponses(value = { 
+    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@PatchMapping("/{id}")
-	public ResponseEntity<AlunoDto> atualiza(@Parameter(description = "Id do aluno") @PathVariable Long id, @Valid @RequestBody AlunoPatchForm form){
+	public ResponseEntity<AlunoDto> atualiza(@PathVariable Long id, @Valid @RequestBody AlunoPatchForm form){
 		AlunoDto dto = service.atualiza(id, form);
 		return ResponseEntity.ok(dto);
 	}
 	
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Lista alunos cadastrados.")
+    @ApiResponses(value = { 
+    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@GetMapping
 	public ResponseEntity<Page<AlunoDto>> buscaTodos(Pageable pageable){
 		return ResponseEntity.ok(service.buscaTodos(pageable));
@@ -60,19 +74,24 @@ public class AlunoController {
 	
 	@ApiOperation(value = "Busca um aluno pelo Id.")
     @ApiResponses(value = { 
-            @ApiResponse(code = 200, message = "OK", response = AlunoDto.class),
-            @ApiResponse(code = 404, message = "Not Found", response = ExceptionResponse.class),
-            @ApiResponse(code = 500, message = "Foi gerada uma exceção", response = ExceptionResponse.class)
+    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
     })
 	@GetMapping("/{id}")
-	public ResponseEntity<AlunoDto> buscaPorId(@Parameter(description = "Id do aluno") @PathVariable Long id){
+	public ResponseEntity<AlunoDto> buscaPorId(@PathVariable Long id){
 		return ResponseEntity.ok(service.buscaPorId(id));
 	}
 	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ApiOperation(value = "Deleta um aluno pelo Id.")
+    @ApiResponses(value = { 
+    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleta(@Parameter(description = "Id do aluno") @PathVariable Long id){
+	public ResponseEntity<?> deleta(@PathVariable Long id){
 		service.deleta(id);
 		return ResponseEntity.noContent().build();
 	}

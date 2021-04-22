@@ -25,10 +25,12 @@ import com.company.pratica04.dto.mentor.MentorPatchForm;
 import com.company.pratica04.dto.mentor.ItemListaMentorDto;
 import com.company.pratica04.dto.mentor.MentorDto;
 import com.company.pratica04.dto.mentor.MentorPostForm;
+import com.company.pratica04.exception.ExceptionResponse;
 import com.company.pratica04.service.impl.MentorServiceImpl;
 
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/mentores")
@@ -39,6 +41,11 @@ public class MentorController {
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Cadastra um novo mentor.")
+    @ApiResponses(value = { 
+    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@PostMapping
 	public ResponseEntity<MentorDto> cadastra(@Valid @RequestBody MentorPostForm form) {
 		
@@ -49,6 +56,10 @@ public class MentorController {
 	
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Lista mentores cadastrados.")
+    @ApiResponses(value = { 
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@GetMapping
 	public ResponseEntity<Page<ItemListaMentorDto>> buscaTodos(Pageable pageable) {
 		return ResponseEntity.ok(service.buscaTodos(pageable));
@@ -56,8 +67,13 @@ public class MentorController {
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Inicia mentoriauma mentoria.")
+    @ApiResponses(value = { 
+    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@PostMapping("/{id}/mentorados")
-	public ResponseEntity<MentorDto> mentoraAluno(@Parameter(description = "Id do mentor") @PathVariable(name = "id") Long idMentor, 
+	public ResponseEntity<MentorDto> mentoraAluno(@PathVariable(name = "id") Long idMentor, 
 													@Valid @RequestBody AlunoIdForm form) {
 
 		MentorDto dto = service.mentoraAluno(idMentor, form.getIdAluno());
@@ -66,34 +82,52 @@ public class MentorController {
 	
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Lista mentorados de um mentor.")
+    @ApiResponses(value = { 
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@GetMapping("/{id}/mentorados")
-	public ResponseEntity<List<AlunoDto>> listaMentorados(@Parameter(description = "Id do mentor")
-											@PathVariable(name = "id") Long id) {
+	public ResponseEntity<List<AlunoDto>> listaMentorados(@PathVariable(name = "id") Long id) {
 		List<AlunoDto> dto = service.buscaMentorados(id);
 		return ResponseEntity.ok(dto);
 	}
 	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ApiOperation(value = "Encerra uma mentoria.")
+    @ApiResponses(value = { 
+    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@DeleteMapping("/{id}/mentorados/{idAluno}")
-	public ResponseEntity<MentorDto> encerraMentoria(@Parameter(description = "Id do mentor") @PathVariable(name = "id") Long idMentor, 
-														@Parameter(description = "Id do mentorado")	@PathVariable Long idAluno) {
+	public ResponseEntity<MentorDto> encerraMentoria(@PathVariable(name = "id") Long idMentor, 
+														@PathVariable Long idAluno) {
 		service.encerraMentoria(idMentor, idAluno);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Busca um mentor pelo Id.")
+    @ApiResponses(value = { 
+    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@GetMapping("/{id}")
-	public ResponseEntity<MentorDto> buscaPorId(@Parameter(description = "Id do mentor") @PathVariable Long id){
+	public ResponseEntity<MentorDto> buscaPorId(@PathVariable Long id){
 		MentorDto dto = service.buscaPorId(id);
 		return ResponseEntity.ok(dto);
 	}
 	
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Atualiza um mentor.")
+    @ApiResponses(value = { 
+    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@PatchMapping("/{id}")
-	public ResponseEntity<MentorDto> atualiza(@Parameter(description = "Id do mentor") @PathVariable Long id, 
+	public ResponseEntity<MentorDto> atualiza(@PathVariable Long id, 
 										@Valid @RequestBody MentorPatchForm form){
 		MentorDto dto = service.atualiza(id, form);
 		return ResponseEntity.ok(dto);
@@ -101,8 +135,13 @@ public class MentorController {
 	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ApiOperation(value = "Deleta um mentor.")
+    @ApiResponses(value = { 
+    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deletaPorId(@Parameter(description = "Id do mentor") @PathVariable Long id) {
+	public ResponseEntity<?> deletaPorId(@PathVariable Long id) {
 		service.deleta(id);
 		return ResponseEntity.noContent().build();
 	}

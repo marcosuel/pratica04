@@ -23,12 +23,14 @@ import com.company.pratica04.dto.aluno.AlunoIdForm;
 import com.company.pratica04.dto.aluno.AlunoItemListaTurmaDto;
 import com.company.pratica04.dto.turma.TurmaDto;
 import com.company.pratica04.dto.turma.TurmaPostForm;
+import com.company.pratica04.exception.ExceptionResponse;
 import com.company.pratica04.service.impl.TurmaServiceImpl;
 import com.company.pratica04.dto.turma.TurmaItemListaDto;
 import com.company.pratica04.dto.turma.TurmaPatchForm;
 
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/turmas")
@@ -39,6 +41,11 @@ public class TurmaController {
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Cadastra uma turma.")
+    @ApiResponses(value = { 
+    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@PostMapping
 	public ResponseEntity<TurmaDto> cadastra(@Valid @RequestBody TurmaPostForm form){
 		TurmaDto dto = service.cadastra(form);
@@ -47,8 +54,13 @@ public class TurmaController {
 	
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Atualiza uma turma.")
+    @ApiResponses(value = { 
+    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@PatchMapping("/{id}")
-	public ResponseEntity<TurmaItemListaDto> atualiza(@Parameter(description = "Id da turma") @PathVariable Long id, 
+	public ResponseEntity<TurmaItemListaDto> atualiza(@PathVariable Long id, 
 										@Valid @RequestBody TurmaPatchForm form){
 		TurmaItemListaDto dto = service.atualiza(id, form);
 		return ResponseEntity.ok(dto);
@@ -56,6 +68,11 @@ public class TurmaController {
 	
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Lista turmas cadastradas.")
+    @ApiResponses(value = { 
+    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@GetMapping
 	public ResponseEntity<Page<TurmaItemListaDto>> buscaTodos(Pageable pageable){
 		return ResponseEntity.ok(service.buscaTodos(pageable));
@@ -63,32 +80,52 @@ public class TurmaController {
 	
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Busca uma turma pelo Id.")
+    @ApiResponses(value = { 
+    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@GetMapping("/{id}")
-	public ResponseEntity<TurmaDto> buscaPorId(@Parameter(description = "Id da turma") @PathVariable Long id){
+	public ResponseEntity<TurmaDto> buscaPorId(@PathVariable Long id){
 		return ResponseEntity.ok(service.buscaPorId(id));
 	}
 	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ApiOperation(value = "Deleta uma turma.")
+    @ApiResponses(value = { 
+    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@DeleteMapping("/{id}")
-	public ResponseEntity<TurmaDto> deleta(@Parameter(description = "Id da turma") @PathVariable Long id){
+	public ResponseEntity<TurmaDto> deleta(@PathVariable Long id){
 		service.deletaPorId(id);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ApiOperation(value = "Remove aluno de uma turma.")
+    @ApiResponses(value = { 
+    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@DeleteMapping("/{id}/alunos/{idAluno}")
-	public ResponseEntity<TurmaDto> removeAluno(@Parameter(description = "Id da turma") @PathVariable(name = "id") Long idTurma, 
-												@Parameter(description = "Id do aluno") @PathVariable Long idAluno){
+	public ResponseEntity<TurmaDto> removeAluno(@PathVariable(name = "id") Long idTurma, 
+												@PathVariable Long idAluno){
 		service.removeAluno(idTurma, idAluno);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Adiciona aluno em uma turma.")
+    @ApiResponses(value = { 
+    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@PostMapping("/{id}/alunos")
-	public ResponseEntity<AlunoItemListaTurmaDto> adicionaAluno(@Parameter(description = "Id da turma") @PathVariable(name = "id") Long idTurma, 
+	public ResponseEntity<AlunoItemListaTurmaDto> adicionaAluno(@PathVariable(name = "id") Long idTurma, 
 											@Valid @RequestBody AlunoIdForm form){
 		AlunoItemListaTurmaDto dto = service.adicionaAluno(idTurma, form.getIdAluno());
 		return new ResponseEntity<>(dto, HttpStatus.CREATED);
@@ -96,8 +133,13 @@ public class TurmaController {
 	
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Lista alunos de uma turma.")
+    @ApiResponses(value = { 
+    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
 	@GetMapping("/{id}/alunos")
-	public ResponseEntity<List<AlunoItemListaTurmaDto>> listaAlunos(@Parameter(description = "Id da turma") @PathVariable Long id){
+	public ResponseEntity<List<AlunoItemListaTurmaDto>> listaAlunos(@PathVariable Long id){
 		List<AlunoItemListaTurmaDto> dto = service.listaAlunos(id);
 		return ResponseEntity.ok(dto);
 	}
