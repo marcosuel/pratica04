@@ -1,4 +1,4 @@
-package com.company.pratica03.service;
+package com.company.pratica04.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.never;
@@ -143,6 +143,7 @@ class AlunoServiceTests {
 	void givenIdWhenFindByIdThenSuccess() {
 		var id = alunoSalvo.getId();
 		when(alunoRep.findById(id)).thenReturn(Optional.of(alunoSalvo));
+		when(alunoMapper.toDto(alunoSalvo)).thenReturn(alunoDto);
 		
 		var result = service.buscaPorId(id);
 		var expected = new AlunoDto(alunoSalvo.getId(), alunoSalvo.getNome(), alunoSalvo.getSobrenome(), alunoSalvo.getMatricula(), turmaItem);

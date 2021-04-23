@@ -1,4 +1,4 @@
-package com.company.pratica03;
+package com.company.pratica04;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -56,7 +56,7 @@ public class AlunoServiceImpl implements AlunoService{
 	@Override
 	public AlunoDto buscaPorId(Long id) {
 		Aluno aluno = garanteQueAlunoExiste(id);
-		return AlunoMapper.INSTANCE.toDto(aluno);
+		return mapper.toDto(aluno);
 	}
 	
 	@Override
