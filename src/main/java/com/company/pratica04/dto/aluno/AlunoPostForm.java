@@ -10,7 +10,6 @@ import lombok.Setter;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class AlunoPostForm {
-	@NotBlank
 	private String nome;
 	@NotBlank
 	private String sobrenome;
