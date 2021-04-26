@@ -9,4 +9,6 @@ public interface UsuarioService {
 
 	public UsuarioDto cadastra(UsuarioPostForm form);
 	public UsuarioDto buscaUsuarioLogado(HttpServletRequest request);
+	public void deleta(Long id);
+	
 }

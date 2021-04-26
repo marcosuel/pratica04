@@ -19,6 +19,7 @@ import com.company.pratica04.model.Usuario;
 import com.company.pratica04.repository.PerfilRepository;
 import com.company.pratica04.repository.UsuarioRepository;
 import com.company.pratica04.service.UsuarioService;
+import com.company.pratica04.util.Autorities;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
@@ -41,8 +42,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 		Optional<Usuario> usuarioOpt = userRep.findByEmail(form.getEmail());
 		if(usuarioOpt.isPresent())
 			throw new DomainException("Email já cadastrado.", HttpStatus.BAD_REQUEST);
-		if(listaPerfis.contains(1L))
-			throw new DomainException("Perfil inválido.", HttpStatus.BAD_REQUEST);
+		if(listaPerfis.contains(Autorities.ADMIN.getCode()))
+			throw new DomainException("Access Denied", HttpStatus.FORBIDDEN);
 		listaPerfis.forEach(perfil -> {
 			var temp = perfilRep.findById(perfil);
 			temp.ifPresent(perfis::add);
@@ -60,6 +61,24 @@ public class UsuarioServiceImpl implements UsuarioService {
 		Long idUsuario = tokenService.getIdUsuario(token);
 		Optional<Usuario> usuarioOpt = userRep.findById(idUsuario);
 		return mapper.toDto(usuarioOpt.get());
+	}
+
+	@Override
+	public void deleta(Long id) {
+		Usuario usuario = garanteQueUsuarioExiste(id);
+		usuario.getAuthorities().forEach(a -> {
+			var perfil = (Perfil) a;
+			if(perfil.getId().equals(Autorities.ADMIN.getCode()))
+				throw new DomainException("Access Denied", HttpStatus.FORBIDDEN);
+		});
+		userRep.delete(usuario);
+	}
+	
+	private Usuario garanteQueUsuarioExiste(Long id) {
+		Optional<Usuario> usuarioOpt = userRep.findById(id);
+		if(usuarioOpt.isEmpty())
+			throw new DomainException("Não existe um usuário com o id: " + id, HttpStatus.NOT_FOUND);
+		return usuarioOpt.get();
 	}
 	
 }
