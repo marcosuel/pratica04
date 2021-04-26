@@ -3,10 +3,13 @@ package com.company.pratica04.service.impl;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.company.pratica04.config.security.TokenService;
 import com.company.pratica04.dto.usuario.UsuarioDto;
 import com.company.pratica04.dto.usuario.UsuarioPostForm;
 import com.company.pratica04.exception.DomainException;
@@ -24,6 +27,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 	private UsuarioRepository userRep;
 	@Autowired
 	private PerfilRepository perfilRep;
+	@Autowired
+	private TokenService tokenService;
 	
 	private UsuarioMapper mapper = UsuarioMapper.INSTANCE;
 
@@ -48,4 +53,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 		return mapper.toDto(usuario);
 	}
+
+	@Override
+	public UsuarioDto buscaUsuarioLogado(HttpServletRequest request) {
+		String token = tokenService.recuperarToken(request);
+		Long idUsuario = tokenService.getIdUsuario(token);
+		Optional<Usuario> usuarioOpt = userRep.findById(idUsuario);
+		return mapper.toDto(usuarioOpt.get());
+	}
+	
 }
