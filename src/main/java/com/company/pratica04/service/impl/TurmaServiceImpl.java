@@ -60,7 +60,7 @@ public class TurmaServiceImpl implements TurmaService{
 	
 	@Override
 	public Page<TurmaItemListaDto> buscaTodos(Pageable pageable) {
-		return turmaRep.findAll(pageable).map(turma -> mapper.toItemListaDto(turma));
+		return turmaRep.findAll(pageable).map(mapper::toItemListaDto);
 	}
 	
 	@Override

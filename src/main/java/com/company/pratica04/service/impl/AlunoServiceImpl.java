@@ -50,7 +50,7 @@ public class AlunoServiceImpl implements AlunoService{
 
 	@Override
 	public Page<AlunoDto> buscaTodos(Pageable pageable) {
-		return alunoRep.findAll(pageable).map(a -> mapper.toDto(a));
+		return alunoRep.findAll(pageable).map(mapper::toDto);
 	}
 	
 	@Override

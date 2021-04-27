@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,5 +51,11 @@ public class UsuarioController {
 	public ResponseEntity<?> atualizaSenha(@Valid @RequestBody NovaSenhaForm form, HttpServletRequest request){
 		service.atualizaSenha(form, request);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@GetMapping
+	public ResponseEntity<Page<UsuarioDto>> buscaTodos(Pageable pageable){
+		var page = service.buscaTodos(pageable);
+		return ResponseEntity.ok(page);
 	}
 }

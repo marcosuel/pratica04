@@ -65,7 +65,7 @@ public class MentorServiceImpl implements MentorService{
 	
 	@Override
 	public Page<ItemListaMentorDto> buscaTodos(Pageable pageable){
-		return mentorRep.findAll(pageable).map(mentor -> mapper.toItemListaDto(mentor));
+		return mentorRep.findAll(pageable).map(mapper::toItemListaDto);
 	}
 	
 	@Override

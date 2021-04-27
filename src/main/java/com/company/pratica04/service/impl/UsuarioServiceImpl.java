@@ -6,6 +6,8 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -88,6 +90,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 		
 		userRep.save(usuario);
 	}
+
+	@Override
+	public Page<UsuarioDto> buscaTodos(Pageable pageable) {
+		return userRep.findAll(pageable).map(mapper::toDto);
+	}
 	
 	private Optional<Usuario> retornaUsuarioLogado(HttpServletRequest request){
 		String token = tokenService.recuperarToken(request);
@@ -101,6 +108,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 			throw new DomainException("Não existe um usuário com o id: " + id, HttpStatus.NOT_FOUND);
 		return usuarioOpt.get();
 	}
+
 
 	
 }
