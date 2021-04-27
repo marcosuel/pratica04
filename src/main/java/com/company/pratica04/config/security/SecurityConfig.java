@@ -41,11 +41,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-			.antMatchers(HttpMethod.GET, "/alunos/*").permitAll()
-			.antMatchers(HttpMethod.GET, "/mentores/*").permitAll()
-			.antMatchers(HttpMethod.GET, "/turmas/*").permitAll()
+			.antMatchers(HttpMethod.POST, "/alunos").hasAnyAuthority("admin", "secretario")
+			.antMatchers(HttpMethod.DELETE, "/alunos/*").hasAnyAuthority("admin", "secretario")
+			.antMatchers(HttpMethod.PATCH, "/alunos/*").hasAnyAuthority("admin", "secretario")
+			//------------------------------------------------------------------------------------
+			.antMatchers(HttpMethod.POST, "/mentores").hasAnyAuthority("admin", "secretario")
+			.antMatchers(HttpMethod.POST, "/mentores/*/mentorados").hasAnyAuthority("admin", "mentor")
+			.antMatchers(HttpMethod.DELETE, "/mentores/*").hasAnyAuthority("admin", "secretario")
+			.antMatchers(HttpMethod.DELETE, "/mentores/*/mentorados/*").hasAnyAuthority("admin", "mentor")
+			.antMatchers(HttpMethod.PATCH, "/mentores/*").hasAnyAuthority("admin", "secretario")
+			//------------------------------------------------------------------------------------
+			.antMatchers(HttpMethod.POST, "/turmas").hasAnyAuthority("admin", "secretario")
+			.antMatchers(HttpMethod.POST, "/turmas/*/alunos").hasAnyAuthority("admin", "secretario")
+			.antMatchers(HttpMethod.DELETE, "/turmas/*").hasAnyAuthority("admin", "secretario")
+			.antMatchers(HttpMethod.DELETE, "/turmas/*/alunos/*").hasAnyAuthority("admin", "secretario")
+			.antMatchers(HttpMethod.PATCH, "/turmas/*").hasAnyAuthority("admin", "secretario")
+			//------------------------------------------------------------------------------------
+			.antMatchers(HttpMethod.GET, "/usuarios").hasAnyAuthority("admin", "secretario")
 			.antMatchers(HttpMethod.POST, "/usuarios").hasAnyAuthority("admin", "secretario")
 			.antMatchers(HttpMethod.DELETE, "/usuarios/*").hasAnyAuthority("admin", "secretario")
+			//------------------------------------------------------------------------------------
 			.antMatchers(HttpMethod.POST, "/auth").permitAll()
 			.anyRequest().authenticated()
 			.and().csrf().disable()

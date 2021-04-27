@@ -66,7 +66,7 @@ public class MentorController {
 	}
 	
 	@ResponseStatus(HttpStatus.CREATED)
-	@ApiOperation(value = "Inicia mentoriauma mentoria.")
+	@ApiOperation(value = "Inicia uma mentoria.")
     @ApiResponses(value = { 
     		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
             @ApiResponse(code = 404, message = "Not Found"),
