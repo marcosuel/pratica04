@@ -7,10 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.company.pratica04.config.security.TokenService;
 import com.company.pratica04.dto.usuario.UsuarioDto;
+import com.company.pratica04.dto.usuario.NovaSenhaForm;
 import com.company.pratica04.dto.usuario.UsuarioPostForm;
 import com.company.pratica04.exception.DomainException;
 import com.company.pratica04.mapper.UsuarioMapper;
@@ -19,10 +21,11 @@ import com.company.pratica04.model.Usuario;
 import com.company.pratica04.repository.PerfilRepository;
 import com.company.pratica04.repository.UsuarioRepository;
 import com.company.pratica04.service.UsuarioService;
-import com.company.pratica04.util.Autorities;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
+	
+	private final Long ADMIN = 1L;
 	
 	@Autowired
 	private UsuarioRepository userRep;
@@ -36,13 +39,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	public UsuarioDto cadastra(UsuarioPostForm form) {
 		var usuario = mapper.toUsuario(form);
+		usuario.setSenha(new BCryptPasswordEncoder().encode(usuario.getPassword()));
 		var listaPerfis = form.getListaPerfis(); 
 		var perfis = new ArrayList<Perfil>();
 		
 		Optional<Usuario> usuarioOpt = userRep.findByEmail(form.getEmail());
 		if(usuarioOpt.isPresent())
 			throw new DomainException("Email já cadastrado.", HttpStatus.BAD_REQUEST);
-		if(listaPerfis.contains(Autorities.ADMIN.getCode()))
+		if(listaPerfis.contains(ADMIN))
 			throw new DomainException("Access Denied", HttpStatus.FORBIDDEN);
 		listaPerfis.forEach(perfil -> {
 			var temp = perfilRep.findById(perfil);
@@ -57,10 +61,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Override
 	public UsuarioDto buscaUsuarioLogado(HttpServletRequest request) {
-		String token = tokenService.recuperarToken(request);
-		Long idUsuario = tokenService.getIdUsuario(token);
-		Optional<Usuario> usuarioOpt = userRep.findById(idUsuario);
-		return mapper.toDto(usuarioOpt.get());
+		Usuario usuario = retornaUsuarioLogado(request).get();
+		return mapper.toDto(usuario);
 	}
 
 	@Override
@@ -68,10 +70,29 @@ public class UsuarioServiceImpl implements UsuarioService {
 		Usuario usuario = garanteQueUsuarioExiste(id);
 		usuario.getAuthorities().forEach(a -> {
 			var perfil = (Perfil) a;
-			if(perfil.getId().equals(Autorities.ADMIN.getCode()))
+			if(perfil.getId().equals(ADMIN))
 				throw new DomainException("Access Denied", HttpStatus.FORBIDDEN);
 		});
 		userRep.delete(usuario);
+	}
+	
+	@Override
+	public void atualizaSenha(NovaSenhaForm form, HttpServletRequest request) {
+		Usuario usuario = retornaUsuarioLogado(request).get();
+		var bcrypt = new BCryptPasswordEncoder();
+		if(!bcrypt.matches(form.getSenhaAtual(), usuario.getPassword()))
+			throw new DomainException("Senha incorreta.", HttpStatus.UNAUTHORIZED);
+		
+		var novaSenha = bcrypt.encode(form.getNovaSenha());
+		usuario.setSenha(novaSenha);
+		
+		userRep.save(usuario);
+	}
+	
+	private Optional<Usuario> retornaUsuarioLogado(HttpServletRequest request){
+		String token = tokenService.recuperarToken(request);
+		Long idUsuario = tokenService.getIdUsuario(token);
+		return userRep.findById(idUsuario);
 	}
 	
 	private Usuario garanteQueUsuarioExiste(Long id) {
@@ -80,5 +101,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 			throw new DomainException("Não existe um usuário com o id: " + id, HttpStatus.NOT_FOUND);
 		return usuarioOpt.get();
 	}
+
 	
 }
