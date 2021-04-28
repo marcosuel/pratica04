@@ -43,7 +43,7 @@ public class TurmaController {
 	@ApiOperation(value = "Cadastra uma turma.")
     @ApiResponses(value = { 
     		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
-            @ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
 	@PostMapping
@@ -56,6 +56,7 @@ public class TurmaController {
 	@ApiOperation(value = "Atualiza uma turma.")
     @ApiResponses(value = { 
     		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+    		@ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
@@ -70,7 +71,7 @@ public class TurmaController {
 	@ApiOperation(value = "Lista turmas cadastradas.")
     @ApiResponses(value = { 
     		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
-            @ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
 	@GetMapping
@@ -82,6 +83,7 @@ public class TurmaController {
 	@ApiOperation(value = "Busca uma turma pelo Id.")
     @ApiResponses(value = { 
     		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+    		@ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
@@ -94,6 +96,7 @@ public class TurmaController {
 	@ApiOperation(value = "Deleta uma turma.")
     @ApiResponses(value = { 
     		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+    		@ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
@@ -107,6 +110,7 @@ public class TurmaController {
 	@ApiOperation(value = "Remove aluno de uma turma.")
     @ApiResponses(value = { 
     		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+    		@ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
@@ -121,6 +125,7 @@ public class TurmaController {
 	@ApiOperation(value = "Adiciona aluno em uma turma.")
     @ApiResponses(value = { 
     		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+    		@ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
@@ -135,6 +140,7 @@ public class TurmaController {
 	@ApiOperation(value = "Lista alunos de uma turma.")
     @ApiResponses(value = { 
     		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+    		@ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })

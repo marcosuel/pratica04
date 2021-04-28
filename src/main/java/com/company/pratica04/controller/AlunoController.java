@@ -38,7 +38,7 @@ public class AlunoController {
 	@ApiOperation(value = "Cadastra um novo aluno.")
     @ApiResponses(value = { 
     		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
-            @ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
 	@PostMapping
@@ -51,6 +51,7 @@ public class AlunoController {
 	@ApiOperation(value = "Atualiza um aluno.")
     @ApiResponses(value = { 
     		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+    		@ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
@@ -63,7 +64,7 @@ public class AlunoController {
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Lista alunos cadastrados.")
     @ApiResponses(value = { 
-            @ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 403, message = "Forbidden", response = ExceptionResponse.class),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
 	@GetMapping
@@ -74,6 +75,7 @@ public class AlunoController {
 	@ApiOperation(value = "Busca um aluno pelo Id.")
     @ApiResponses(value = { 
     		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+    		@ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
@@ -86,6 +88,7 @@ public class AlunoController {
 	@ApiOperation(value = "Deleta um aluno pelo Id.")
     @ApiResponses(value = { 
     		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
+    		@ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
