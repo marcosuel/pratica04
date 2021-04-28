@@ -63,7 +63,6 @@ public class AlunoController {
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Lista alunos cadastrados.")
     @ApiResponses(value = { 
-    		@ApiResponse(code = 400, message = "Bad Request", response = ExceptionResponse.class),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
